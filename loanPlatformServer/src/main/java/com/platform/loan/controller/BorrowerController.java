@@ -28,6 +28,11 @@ public class BorrowerController {
         result.setResultCode(ResultCode.SUCCESS.getCode());
 
         result.setResultMessage(borrowerLoginRequest.toString());
+
+        borrowerLoginRequest.getImageCode();
+
+        //TODO  这里需要验证图片验证码，手机验证码2个
+
         return result;
     }
 

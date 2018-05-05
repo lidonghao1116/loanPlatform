@@ -17,14 +17,14 @@ public class BorrowerLoginRequest extends BaseRequest {
     public String SMSCode;
 
     /**  图片验证码 */
-    public String captcha;
+    public String imageCode;
 
-    public String getCaptcha() {
-        return captcha;
+    public String getImageCode() {
+        return imageCode;
     }
 
-    public void setCaptcha(String captcha) {
-        this.captcha = captcha;
+    public void setImageCode(String imageCode) {
+        this.imageCode = imageCode;
     }
 
     public String getPhoneNo() {
@@ -41,15 +41,6 @@ public class BorrowerLoginRequest extends BaseRequest {
 
     public void setSMSCode(String SMSCode) {
         this.SMSCode = SMSCode;
-    }
-
-    public static void main(String[] args) {
-        BorrowerLoginRequest request = new BorrowerLoginRequest();
-
-        request.setPhoneNo("12345667");
-
-        System.out.println(request);
-
     }
 
 }
