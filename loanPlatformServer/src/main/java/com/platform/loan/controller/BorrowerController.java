@@ -3,7 +3,7 @@
  */
 package com.platform.loan.controller;
 
-import com.platform.loan.constant.ResultCode;
+import com.platform.loan.constant.ResultCodeEnum;
 import com.platform.loan.pojo.request.BorrowerLoginRequest;
 import com.platform.loan.pojo.result.BaseResult;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +25,7 @@ public class BorrowerController {
 
         BaseResult result = new BaseResult();
         result.setSuccess(Boolean.TRUE.toString());
-        result.setResultCode(ResultCode.SUCCESS.getCode());
+        result.setResultCode(ResultCodeEnum.SUCCESS.getCode());
 
         result.setResultMessage(borrowerLoginRequest.toString());
 

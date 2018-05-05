@@ -3,10 +3,7 @@
  */
 package com.platform.loan.pojo.modle;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  *  借款人发布的订单
@@ -14,8 +11,18 @@ import javax.persistence.Id;
  * @version $Id: OrderDo.java, v 0.1 2018-05-05 下午5:48 caogu.wyp Exp $$
  */
 @Entity
+@Table(name = "order")
 public class OrderDo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

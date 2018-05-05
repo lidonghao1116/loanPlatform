@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class BaseResult implements Serializable {
 
     /** true or false **/
-    private String success;
+    private String success = "true";
 
     /**  结果码，用于判断问题，参考ResultCode */
     private String resultCode;

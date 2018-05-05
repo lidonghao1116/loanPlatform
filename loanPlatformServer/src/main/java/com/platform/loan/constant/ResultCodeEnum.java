@@ -6,9 +6,9 @@ package com.platform.loan.constant;
 /**
  *  错误码
  * @author caogu.wyp
- * @version $Id: ResultCode.java, v 0.1 2018-05-05 下午6:19 caogu.wyp Exp $$
+ * @version $Id: ResultCodeEnum.java, v 0.1 2018-05-05 下午6:19 caogu.wyp Exp $$
  */
-public enum ResultCode {
+public enum ResultCodeEnum {
 
     SUCCESS("001", "", "请求成功");
 
@@ -16,7 +16,7 @@ public enum ResultCode {
     private String errorMessage;
     private String detail;
 
-    private ResultCode(String code, String errorMessage, String detail) {
+    private ResultCodeEnum(String code, String errorMessage, String detail) {
         this.code = code;
         this.errorMessage = errorMessage;
         this.detail = detail;

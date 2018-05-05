@@ -3,10 +3,12 @@
  */
 package com.platform.loan.controller;
 
-import com.platform.loan.constant.ResultCode;
+import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.pojo.request.OTPRequest;
 import com.platform.loan.pojo.result.BaseResult;
+import com.platform.loan.service.OtpService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,15 +21,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OTPController {
 
+    @Autowired
+    private OtpService otpService;
+
     @ApiOperation(value = "发送手机验证码", notes = "给手机发送验证码，用于登录")
     @RequestMapping(value = "/sms/send", method = RequestMethod.POST)
     public BaseResult sendOtp(OTPRequest otpRequst) {
-
         BaseResult result = new BaseResult();
-        result.setSuccess(Boolean.FALSE.toString());
-        result.setResultCode(ResultCode.SUCCESS.getCode());
 
-        result.setResultMessage(otpRequst.toString());
+        try {
+            otpService.sendOtp(otpRequst.getPhoneNo());
+
+        } catch (LoanPlatformException e) {
+            e.printStackTrace();
+
+            result.setSuccess(Boolean.FALSE.toString());
+            result.setResultMessage(e.getMessage());
+        }
 
         return result;
     }
