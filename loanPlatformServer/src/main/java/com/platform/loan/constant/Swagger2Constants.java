@@ -11,11 +11,11 @@ package com.platform.loan.constant;
 public class Swagger2Constants {
     public static String SCAN_PACKAGE_NAME = "com.platform.loan.controller";
 
-    public static String TITLE             = "loanPlatform";
+    public static String TITLE             = "借贷撮合平台V1.0";
 
-    public static String DESCRIPTION       = "description";
+    public static String DESCRIPTION       = "Api调试";
 
-    public static String API_VERSION_1     = "0.1";
+    public static String API_VERSION_1     = "1.0";
 
     public static String URL               = "http://www.baidu.com";
 

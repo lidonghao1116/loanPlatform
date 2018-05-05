@@ -15,6 +15,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 /**
  *  自动生成api文档，调试
+ *  http://localhost:5555/swagger-ui.html
+ *  
  * @author caogu.wyp
  * @version $Id: Swagger2.java, v 0.1 2018-05-05 上午1:14 caogu.wyp Exp $$
  */
