@@ -1,18 +1,14 @@
 package com.platform.loan;
 
-/**
-* Alipay.com Inc. Copyright (c) 2004-2018 All Rights Reserved.
-*/
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- *
- * @author caogu.wyp
- * @version $Id: Main.java, v 0.1 2018-03-08 下午5:14 caogu.wyp Exp $$
+ * 19890921@qq.com
  */
 @SpringBootApplication
+@EnableSwagger2
 public class Starter {
 
     public static void main(String[] args) {
