@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 
 /**
@@ -24,7 +23,7 @@ import java.awt.image.BufferedImage;
 @Controller
 public class ImageCodeController {
 
-    @ApiOperation(value = "申请图片验证码", notes = "申请图片验证码，图片写进response流中，Response Hearder中")
+    @ApiOperation(value = "申请图片验证码", notes = "申请图片验证码，图片写进response流中，Response Hearder中取IMAGE_CODE_HEADER_KEY")
     @RequestMapping(value = "/imagecode/generate", method = RequestMethod.GET)
     public void generateImageCode(HttpServletResponse response) {
 
@@ -53,9 +52,8 @@ public class ImageCodeController {
     }
 
     @RequestMapping(value = "/imagecode.html", method = RequestMethod.GET)
-    public String imageCodeView(HttpSession session) {
+    public String imageCodeView() {
 
-        System.out.println("imageCodeView,sessionId" + session.getId());
         return "imagecode";
     }
 
