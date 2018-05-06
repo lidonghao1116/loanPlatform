@@ -9,4 +9,6 @@ package com.platform.loan.constant;
  * @version $Id: CommonConstants.java, v 0.1 2018-05-05 上午11:04 caogu.wyp Exp $$
  */
 public class CommonConstants {
+
+    public static final String IMAGE_CODE_HEADER_KEY = "IMAGE_CODE_HEADER_KEY";
 }

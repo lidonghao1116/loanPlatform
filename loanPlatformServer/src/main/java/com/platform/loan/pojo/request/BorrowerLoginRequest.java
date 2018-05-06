@@ -19,6 +19,17 @@ public class BorrowerLoginRequest extends BaseRequest {
     /**  图片验证码 */
     public String imageCode;
 
+    /** 在请求生成验证码时，下发给前端的token，在header中 */
+    public String imageCodeToken;
+
+    public String getImageCodeToken() {
+        return imageCodeToken;
+    }
+
+    public void setImageCodeToken(String imageCodeToken) {
+        this.imageCodeToken = imageCodeToken;
+    }
+
     public String getImageCode() {
         return imageCode;
     }

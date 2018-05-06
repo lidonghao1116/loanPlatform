@@ -4,6 +4,7 @@
 package com.platform.loan.pojo.modle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *  信贷经理个人信息
@@ -12,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "credit_manager")
-public class CreditManagerDo {
+public class CreditManagerDo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

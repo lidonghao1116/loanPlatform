@@ -26,24 +26,14 @@ public class ChuangLanOptServiceImpl implements OtpService {
      * @return
      */
     @Override
-    public void sendOtp(String phoneNo) throws LoanPlatformException {
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(SystemConfigurationUtil
-            .getSystemConfigurationValueByKey(SystemConfigurationEnum.CHUANG_LAN_SMS_TEMP));
-
-        //验证码随机6位数
-        int random = (int) ((Math.random() * 9 + 1) * 100000);
-
-        sb.append(random);
+    public void sendOtp(String phoneNo, String SMSMessage) throws LoanPlatformException {
 
         SmsSendRequest smsSingleRequest = new SmsSendRequest(
             SystemConfigurationUtil
                 .getSystemConfigurationValueByKey(SystemConfigurationEnum.CHUANG_LAN_ACCOUNT),
             SystemConfigurationUtil
-                .getSystemConfigurationValueByKey(SystemConfigurationEnum.CHUANG_LAN_PASSWORD), sb
-                .toString(), phoneNo, "true");
+                .getSystemConfigurationValueByKey(SystemConfigurationEnum.CHUANG_LAN_PASSWORD),
+            SMSMessage, phoneNo, "true");
 
         String requestJson = JSON.toJSONString(smsSingleRequest);
 

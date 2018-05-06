@@ -16,6 +16,6 @@ public interface OtpService {
      * @param phoneNo
      * @return
      */
-    public void sendOtp(String phoneNo) throws LoanPlatformException;
+    public void sendOtp(String phoneNo, String SMSMessage) throws LoanPlatformException;
 
 }

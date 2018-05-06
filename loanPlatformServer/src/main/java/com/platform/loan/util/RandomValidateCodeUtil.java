@@ -3,9 +3,14 @@
  */
 package com.platform.loan.util;
 
+import com.platform.loan.cache.SimpleCacheUtil;
+import com.platform.loan.constant.CommonConstants;
+
+import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  *  图片验证码生成
@@ -52,7 +57,7 @@ public class RandomValidateCodeUtil {
     /**
      * 生成随机图片
      */
-    public static BufferedImage getRandcode() {
+    public static BufferedImage getRandcode(HttpServletResponse response) {
 
         // BufferedImage类是具有缓冲区的Image类,Image类是用于描述图像信息的类
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR);
@@ -70,9 +75,18 @@ public class RandomValidateCodeUtil {
         for (int i = 1; i <= stringNum; i++) {
             randomString = drowString(g, randomString, i);
         }
-        g.dispose();
 
+        processImageCode(response, randomString);
+
+        g.dispose();
         return image;
+
+    }
+
+    private static void processImageCode(HttpServletResponse response, String randomString) {
+        UUID imageCodeToken = UUID.randomUUID();
+        response.addHeader(CommonConstants.IMAGE_CODE_HEADER_KEY, imageCodeToken.toString());
+        SimpleCacheUtil.addImageCode(imageCodeToken.toString(), randomString);
 
     }
 
