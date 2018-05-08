@@ -2,6 +2,7 @@ package com.platform.loan.pojo.modle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  *  借款人个人信息
@@ -13,6 +14,7 @@ import java.io.Serializable;
 public class SysConfigurationDo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
+    private Integer   id;
+    private Timestamp createTime;
+    private Timestamp modifyTime;
 }

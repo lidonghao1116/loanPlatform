@@ -4,8 +4,7 @@
 package com.platform.loan.pojo.modle;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *  借款人个人信息
@@ -14,56 +13,44 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "borrower")
-public class BorrowerDo implements Serializable {
+public class BorrowerDo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Integer   id;
+    private Timestamp createTime;
+    private Timestamp modifyTime;
 
-    private String  idNo;
+    private String    idNo;
 
-    private String  name;
+    private String    name;
 
-    private String  phoneNo;
+    private String    phoneNo;
 
-    private String  eduLevel;
+    private String    eduLevel;
 
-    private String  profession;
+    private String    profession;
+    /** 公积金 */
+    private String    providentFund;
+    /** 社保 */
+    private String    socialSecurity;
 
-    private String  providentFund;
+    private String    monthlyIncome;
 
-    private String  socialSecurity;
-
-    private String  monthlyIncome;
-
-    private String  incomeType;
+    private String    incomeType;
     /** 信用记录 */
-    private String  creditRecord;
+    private String    creditRecord;
     /** 信用卡额度 */
-    private String  creditLimit;
+    private String    creditLimit;
 
-    private String  haveHouse;
+    private String    haveHouse;
 
-    private String  haveCar;
+    private String    haveCar;
 
-    private String  insuranceCompany;
+    private String    insuranceCompany;
 
-    private String  insuranceCoverage;
+    private String    insuranceCoverage;
 
-    private String  ext_field;
-
-    private String  creditDetai;
-
-    private Date    createTime;
-
-    private Date    modifyTime;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private String    extData;
 
     public String getIdNo() {
         return idNo;
@@ -185,35 +172,35 @@ public class BorrowerDo implements Serializable {
         this.insuranceCoverage = insuranceCoverage;
     }
 
-    public String getExt_field() {
-        return ext_field;
+    public String getExtData() {
+        return extData;
     }
 
-    public void setExt_field(String ext_field) {
-        this.ext_field = ext_field;
+    public void setExtData(String extData) {
+        this.extData = extData;
     }
 
-    public String getCreditDetai() {
-        return creditDetai;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCreditDetai(String creditDetai) {
-        this.creditDetai = creditDetai;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 
-    public Date getModifyTime() {
+    public Timestamp getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Date modifyTime) {
+    public void setModifyTime(Timestamp modifyTime) {
         this.modifyTime = modifyTime;
     }
 }

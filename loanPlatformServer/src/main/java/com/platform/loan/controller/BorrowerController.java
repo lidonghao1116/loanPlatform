@@ -4,12 +4,17 @@
 package com.platform.loan.controller;
 
 import com.platform.loan.cache.SimpleCacheUtil;
+import com.platform.loan.constant.LoanTypeEnum;
 import com.platform.loan.dao.BorrowerRepository;
 import com.platform.loan.exception.LoanPlatformException;
+import com.platform.loan.jwt.JwtUtil;
+import com.platform.loan.pojo.LoginSession;
 import com.platform.loan.pojo.modle.BorrowerDo;
 import com.platform.loan.pojo.request.BorrowerLoginRequest;
-import com.platform.loan.pojo.result.BaseResult;
+import com.platform.loan.pojo.result.BorrowerLoginResult;
+import com.platform.loan.pojo.result.LoanTypeResult;
 import com.platform.loan.util.RequestCheckUtil;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 借款人接口
@@ -30,22 +38,22 @@ public class BorrowerController {
     private BorrowerRepository borrowerRepository;
 
     @ApiOperation(value = "借款人登录接口", notes = "输入手机号，短信验证码，图片验证码，验证成功即可登录")
-    //@ApiImplicitParam(name = "borrowerLoginRequest", value = "borrowerLoginRequest", required = true, dataType = "BorrowerLoginRequest")
-    @RequestMapping(value = "/borrowers/login", method = RequestMethod.POST)
-    public BaseResult login(BorrowerLoginRequest borrowerLoginRequest, HttpSession httpSession) {
+    @RequestMapping(value = "/borrower/login", method = RequestMethod.POST)
+    public BorrowerLoginResult login(BorrowerLoginRequest request) {
 
-        System.out.println("login,sessionId" + httpSession.getId());
-
-        BaseResult result = new BaseResult();
+        BorrowerLoginResult result = new BorrowerLoginResult();
 
         try {
-            RequestCheckUtil.checkBorrowerLoginRequest(borrowerLoginRequest);
+            //请求参数判空
+            RequestCheckUtil.checkBorrowerLoginRequest(request);
             //校验图片验证码
-            verifyImageCode(borrowerLoginRequest);
+            verifyImageCode(request);
             //校验短信
-            verifyOTP(borrowerLoginRequest);
+            verifyOTP(request);
             //更新用户信息
-            updateBorrowerInfo(borrowerLoginRequest);
+            updateBorrowerInfo(request);
+            //下发token
+            initAccessToken(result, request);
 
         } catch (Exception e) {
 
@@ -57,20 +65,38 @@ public class BorrowerController {
         return result;
     }
 
+    @ApiOperation(value = "获取借款类型列表", notes = "借款人登录后进入的借款类型列表")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
+    @RequestMapping(value = "/borrower/loantypes", method = RequestMethod.GET)
+    public LoanTypeResult queryLoanTypes(HttpServletRequest request) {
+
+        System.out.println("headers.Authorization : " + request.getHeader("Authorization"));
+        LoanTypeResult loanTypeResult = new LoanTypeResult();
+
+        List<String> loans = new ArrayList<String>();
+
+        for (LoanTypeEnum loanTypeEnum : LoanTypeEnum.values()) {
+            loans.add(loanTypeEnum.getLoanName());
+        }
+
+        loanTypeResult.setLoanTypes(loans);
+
+        return loanTypeResult;
+    }
+
     /**
      *
-     * @param borrowerLoginRequest
+     * @param request
      */
-    private void verifyImageCode(BorrowerLoginRequest borrowerLoginRequest)
-                                                                           throws LoanPlatformException {
-        String imageCode = SimpleCacheUtil.getImageCode(borrowerLoginRequest.getImageCodeToken());
+    private void verifyImageCode(BorrowerLoginRequest request) throws LoanPlatformException {
+        String imageCode = SimpleCacheUtil.getImageCode(request.getImageCodeToken());
 
-        if (!StringUtils.endsWith(imageCode, borrowerLoginRequest.getImageCode())) {
+        if (!StringUtils.endsWith(imageCode, request.getImageCode())) {
             throw new LoanPlatformException("图片验证码验证失败！");
         }
 
         //验证通过，清空缓存
-        SimpleCacheUtil.removeImageCode(borrowerLoginRequest.getImageCodeToken());
+        SimpleCacheUtil.removeImageCode(request.getImageCodeToken());
     }
 
     /**
@@ -101,4 +127,15 @@ public class BorrowerController {
         borrowerRepository.save(borrowerDo);
 
     }
+
+    private void initAccessToken(BorrowerLoginResult result, BorrowerLoginRequest request)
+                                                                                          throws UnsupportedEncodingException {
+
+        LoginSession loginSession = new LoginSession();
+        loginSession.setPhoneNo(request.getPhoneNo());
+        loginSession.setBiz("borrower");
+        result.setAccessToken(JwtUtil.createJwt(loginSession));
+
+    }
+
 }

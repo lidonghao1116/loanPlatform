@@ -6,6 +6,7 @@ package com.platform.loan.pojo.modle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "borrower_order")
@@ -14,6 +15,8 @@ public class BorrowerOrderDo implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer    id;
 
+    private Timestamp  createTime;
+    private Timestamp  modifyTime;
     private String     borrowerIdNo;
 
     private String     loanLimit;
@@ -102,5 +105,21 @@ public class BorrowerOrderDo implements Serializable {
 
     public void setOrderType(String orderType) {
         this.orderType = orderType;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
+
+    public Timestamp getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Timestamp modifyTime) {
+        this.modifyTime = modifyTime;
     }
 }

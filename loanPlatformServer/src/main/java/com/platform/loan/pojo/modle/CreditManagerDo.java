@@ -5,6 +5,7 @@ package com.platform.loan.pojo.modle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  *  信贷经理个人信息
@@ -16,7 +17,9 @@ import java.io.Serializable;
 public class CreditManagerDo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Integer   id;
+    private Timestamp createTime;
+    private Timestamp modifyTime;
 
     public Integer getId() {
         return id;

@@ -11,4 +11,6 @@ package com.platform.loan.constant;
 public class CommonConstants {
 
     public static final String IMAGE_CODE_HEADER_KEY = "IMAGE_CODE_HEADER_KEY";
+
+    public static final String JWT_SECRETKEY         = "loanPlatform~!@#$%^&*()";
 }

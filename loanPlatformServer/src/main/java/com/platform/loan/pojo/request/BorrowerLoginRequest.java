@@ -3,6 +3,8 @@
  */
 package com.platform.loan.pojo.request;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  *  借款人登录请求
  * @author caogu.wyp
@@ -10,16 +12,17 @@ package com.platform.loan.pojo.request;
  */
 public class BorrowerLoginRequest extends BaseRequest {
 
+    @ApiModelProperty(value = "登录手机号", name = "phoneNo", required = true)
     /** 手机号 */
     public String phoneNo;
-
+    @ApiModelProperty(value = "短信验证码", name = "SMSCode", required = true)
     /** 短信验证码 */
     public String SMSCode;
-
+    @ApiModelProperty(value = "图片验证码", name = "imageCode", required = true)
     /**  图片验证码 */
     public String imageCode;
-
-    /** 在请求生成验证码时，下发给前端的token，在header中 */
+    @ApiModelProperty(value = "图片验证码token", name = "imageCodeToken", required = true)
+    /** 在请求生成验证码时，下发给前端的token，在response header中 CommonConstants.IMAGE_CODE_HEADER_KEY*/
     public String imageCodeToken;
 
     public String getImageCodeToken() {
