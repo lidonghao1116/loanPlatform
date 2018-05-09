@@ -24,11 +24,11 @@ import java.awt.image.BufferedImage;
 public class ImageCodeController {
 
     @ApiOperation(value = "申请图片验证码", notes = "申请图片验证码，图片写进response流中，Response Hearder中取IMAGE_CODE_HEADER_KEY")
-    @RequestMapping(value = "/imagecode/generate", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/imagecode/generate", method = RequestMethod.GET)
     public void generateImageCode(HttpServletResponse response) {
 
         BaseResult result = new BaseResult();
-
+        // response.setHeader("Access-Control-Allow-Origin", "*");
         BufferedImage image = RandomValidateCodeUtil.getRandcode(response);
 
         try {
@@ -37,7 +37,6 @@ public class ImageCodeController {
             ImageIO.write(image, "JPEG", response.getOutputStream());
 
         } catch (Exception e) {
-
             e.printStackTrace();
             result.setSuccess(Boolean.FALSE.toString());
             result.setResultMessage(e.getMessage());

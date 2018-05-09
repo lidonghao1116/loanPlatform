@@ -29,7 +29,7 @@ public class OTPController {
     private OtpService otpService;
 
     @ApiOperation(value = "发送手机验证码", notes = "给手机发送验证码，用于登录")
-    @RequestMapping(value = "/sms/send", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/sms/send", method = RequestMethod.POST)
     public BaseResult sendOtp(OTPRequest otpRequst) {
 
         BaseResult result = new BaseResult();

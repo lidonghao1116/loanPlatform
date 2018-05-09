@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +39,10 @@ public class BorrowerController {
     private BorrowerRepository borrowerRepository;
 
     @ApiOperation(value = "借款人登录接口", notes = "输入手机号，短信验证码，图片验证码，验证成功即可登录")
-    @RequestMapping(value = "/borrower/login", method = RequestMethod.POST)
-    public BorrowerLoginResult login(BorrowerLoginRequest request) {
+    @RequestMapping(value = "/api/borrower/login", method = RequestMethod.POST)
+    public BorrowerLoginResult login(BorrowerLoginRequest request, HttpServletResponse response) {
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
         BorrowerLoginResult result = new BorrowerLoginResult();
 
         try {
@@ -56,7 +58,6 @@ public class BorrowerController {
             initAccessToken(result, request);
 
         } catch (Exception e) {
-
             e.printStackTrace();
             result.setSuccess(Boolean.FALSE.toString());
             result.setResultMessage(e.getMessage());
@@ -67,10 +68,9 @@ public class BorrowerController {
 
     @ApiOperation(value = "获取借款类型列表", notes = "借款人登录后进入的借款类型列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
-    @RequestMapping(value = "/borrower/loantypes", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/borrower/loantypes", method = RequestMethod.GET)
     public LoanTypeResult queryLoanTypes(HttpServletRequest request) {
 
-        System.out.println("headers.Authorization : " + request.getHeader("Authorization"));
         LoanTypeResult loanTypeResult = new LoanTypeResult();
 
         List<String> loans = new ArrayList<String>();
