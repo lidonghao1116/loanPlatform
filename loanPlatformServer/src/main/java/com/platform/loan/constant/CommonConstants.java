@@ -10,7 +10,15 @@ package com.platform.loan.constant;
  */
 public class CommonConstants {
 
-    public static final String IMAGE_CODE_HEADER_KEY = "IMAGE_CODE_HEADER_KEY";
+    public static final String IMAGE_CODE_HEADER_KEY     = "IMAGE_CODE_HEADER_KEY";
 
-    public static final String JWT_SECRETKEY         = "loanPlatform~!@#$%^&*()";
+    public static final String JWT_SECRETKEY             = "loanPlatform~!@#$%^&*()";
+
+    public static final String AUTHORIZATION_HEARDER_KEY = "Authorization";
+
+    public static final String CLAIM_LOGININFO_KEY       = "CLAIM_LOGININFO_KEY";
+
+    //jwt失效时间，毫秒
+    public static final long   JWT_EXPIRES_TIME          = 3600000L;
+
 }

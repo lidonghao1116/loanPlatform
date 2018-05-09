@@ -4,6 +4,7 @@
 package com.platform.loan.pojo.result;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  *
@@ -13,13 +14,24 @@ import java.io.Serializable;
 public class BaseResult implements Serializable {
 
     /** true or false **/
-    private String success = "true";
+    private String              success = "true";
 
     /**  结果码，用于判断问题，参考ResultCode */
-    private String resultCode;
+    private String              resultCode;
 
     /**  结果信息 */
-    private String resultMessage;
+    private String              resultMessage;
+
+    /** 扩展数据 */
+    private Map<String, String> extDatas;
+
+    public Map<String, String> getExtDatas() {
+        return extDatas;
+    }
+
+    public void setExtDatas(Map<String, String> extDatas) {
+        this.extDatas = extDatas;
+    }
 
     public String getSuccess() {
         return success;
