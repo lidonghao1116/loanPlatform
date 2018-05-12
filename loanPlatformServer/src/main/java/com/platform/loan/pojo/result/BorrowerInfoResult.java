@@ -1,5 +1,7 @@
 package com.platform.loan.pojo.result;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  *
  * @author caogu.wyp
@@ -12,6 +14,28 @@ public class BorrowerInfoResult extends BaseResult {
     private String name;
 
     private String phoneNo;
+
+    @ApiModelProperty(value = "公积金认证时间,没有值则表示未认证", name = "providentFundVerifyTime")
+    private String providentFundVerifyTime;
+
+    @ApiModelProperty(value = "社保认证时间,没有值则表示未认证", name = "socialSecurityVerifyTime")
+    private String socialSecurityVerifyTime;
+
+    public String getProvidentFundVerifyTime() {
+        return providentFundVerifyTime;
+    }
+
+    public void setProvidentFundVerifyTime(String providentFundVerifyTime) {
+        this.providentFundVerifyTime = providentFundVerifyTime;
+    }
+
+    public String getSocialSecurityVerifyTime() {
+        return socialSecurityVerifyTime;
+    }
+
+    public void setSocialSecurityVerifyTime(String socialSecurityVerifyTime) {
+        this.socialSecurityVerifyTime = socialSecurityVerifyTime;
+    }
 
     public String getIdNo() {
         return idNo;

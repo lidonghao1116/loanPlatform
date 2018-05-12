@@ -1,18 +1,15 @@
-/**
- * Alipay.com Inc. Copyright (c) 2004-2018 All Rights Reserved.
- */
 package com.platform.loan.controller;
 
+import com.platform.loan.pojo.request.BaseRequest;
 import com.platform.loan.pojo.result.BaseResult;
-import com.platform.loan.util.RandomValidateCodeUtil;
+import com.platform.loan.template.LoanPlatformTemplate;
+import com.platform.loan.template.processor.GenerateImageProcessor;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
 
 /**
  *  图片验证码
@@ -25,29 +22,10 @@ public class ImageCodeController {
 
     @ApiOperation(value = "申请图片验证码", notes = "图片写进response流中，Response Hearder中取IMAGE_CODE_HEADER_KEY")
     @RequestMapping(value = "/api/imagecode/generate", method = RequestMethod.GET)
-    public void generateImageCode(HttpServletResponse response) {
+    public void generateImageCode(BaseRequest request, HttpServletResponse response) {
 
-        BaseResult result = new BaseResult();
-        BufferedImage image = RandomValidateCodeUtil.getRandcode(response);
+        LoanPlatformTemplate.run(new GenerateImageProcessor(), request, new BaseResult(), response);
 
-        try {
-
-            initResponse(response);
-            ImageIO.write(image, "JPEG", response.getOutputStream());
-
-        } catch (Exception e) {
-
-            System.out.println(e.getMessage());
-            result.setSuccess(Boolean.FALSE.toString());
-            result.setResultMessage(e.getMessage());
-        }
-    }
-
-    private void initResponse(HttpServletResponse response) {
-        response.setContentType("image/jpeg");//设置相应类型,告诉浏览器输出的内容为图片
-        response.setHeader("Pragma", "No-cache");//设置响应头信息，告诉浏览器不要缓存此内容
-        response.setHeader("Cache-Control", "no-cache");
-        response.setDateHeader("Expire", 0);
     }
 
     @ApiOperation(value = "图片验证码示例", notes = "图片验证码生成示例，用于参考")
