@@ -3,6 +3,9 @@
  */
 package com.platform.loan.pojo.modle;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -17,7 +20,9 @@ public class BorrowerDo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer   id;
+
     private Timestamp createTime;
+
     private Timestamp modifyTime;
 
     private String    idNo;
@@ -27,28 +32,32 @@ public class BorrowerDo {
     private String    phoneNo;
 
     private String    eduLevel;
-
+    /** 职业 */
     private String    profession;
-    /** 公积金 */
-    private String    providentFund;
-    /** 社保 */
-    private String    socialSecurity;
 
+    /** 公积金认证时间 */
+    private Timestamp providentFundVerifyTime;
+
+    /** 社保认证时间 */
+    private Timestamp socialSecurityVerifyTime;
+    /** 月收入  */
     private String    monthlyIncome;
-
+    /** 收入形式，现金发放，转帐工资，银行代发 */
     private String    incomeType;
     /** 信用记录 */
     private String    creditRecord;
     /** 信用卡额度 */
     private String    creditLimit;
 
-    private String    haveHouse;
+    private String    houseInfo;
 
-    private String    haveCar;
+    private String    carInfo;
 
     private String    insuranceCompany;
 
     private String    insuranceCoverage;
+    /** 个人保险时间,eg . 无/2年 */
+    private String    personalnsurance;
 
     private String    extData;
 
@@ -92,20 +101,20 @@ public class BorrowerDo {
         this.profession = profession;
     }
 
-    public String getProvidentFund() {
-        return providentFund;
+    public Timestamp getProvidentFundVerifyTime() {
+        return providentFundVerifyTime;
     }
 
-    public void setProvidentFund(String providentFund) {
-        this.providentFund = providentFund;
+    public void setProvidentFundVerifyTime(Timestamp providentFundVerifyTime) {
+        this.providentFundVerifyTime = providentFundVerifyTime;
     }
 
-    public String getSocialSecurity() {
-        return socialSecurity;
+    public Timestamp getSocialSecurityVerifyTime() {
+        return socialSecurityVerifyTime;
     }
 
-    public void setSocialSecurity(String socialSecurity) {
-        this.socialSecurity = socialSecurity;
+    public void setSocialSecurityVerifyTime(Timestamp socialSecurityVerifyTime) {
+        this.socialSecurityVerifyTime = socialSecurityVerifyTime;
     }
 
     public String getMonthlyIncome() {
@@ -140,20 +149,28 @@ public class BorrowerDo {
         this.creditLimit = creditLimit;
     }
 
-    public String getHaveHouse() {
-        return haveHouse;
+    public String getHouseInfo() {
+        return houseInfo;
     }
 
-    public void setHaveHouse(String haveHouse) {
-        this.haveHouse = haveHouse;
+    public void setHouseInfo(String houseInfo) {
+        this.houseInfo = houseInfo;
     }
 
-    public String getHaveCar() {
-        return haveCar;
+    public String getCarInfo() {
+        return carInfo;
     }
 
-    public void setHaveCar(String haveCar) {
-        this.haveCar = haveCar;
+    public void setCarInfo(String carInfo) {
+        this.carInfo = carInfo;
+    }
+
+    public String getPersonalnsurance() {
+        return personalnsurance;
+    }
+
+    public void setPersonalnsurance(String personalnsurance) {
+        this.personalnsurance = personalnsurance;
     }
 
     public String getInsuranceCompany() {
@@ -202,5 +219,10 @@ public class BorrowerDo {
 
     public void setModifyTime(Timestamp modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 }

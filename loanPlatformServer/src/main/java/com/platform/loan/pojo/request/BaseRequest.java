@@ -17,14 +17,14 @@ import java.util.Map;
 public class BaseRequest implements Serializable {
 
     /** 请求扩展参数 */
-    private Map<String, String> extParms;
+    private Map<String, String> extRequestParms;
 
-    public Map<String, String> getExtParms() {
-        return extParms;
+    public Map<String, String> getExtRequestParms() {
+        return extRequestParms;
     }
 
-    public void setExtParms(Map<String, String> extParms) {
-        this.extParms = extParms;
+    public void setExtRequestParms(Map<String, String> extRequestParms) {
+        this.extRequestParms = extRequestParms;
     }
 
     @Override

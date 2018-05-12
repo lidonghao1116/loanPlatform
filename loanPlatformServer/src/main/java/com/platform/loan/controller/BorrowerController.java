@@ -37,7 +37,7 @@ public class BorrowerController {
 
     @ApiOperation(value = "获取借款类型列表", notes = "借款人登录后进入的借款类型列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
-    @RequestMapping(value = "/api/borrower/loantypes", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/borrower/loan/types", method = RequestMethod.GET)
     public LoanTypeResult queryLoanTypes() {
 
         LoanTypeResult loanTypeResult = new LoanTypeResult();

@@ -16,21 +16,18 @@ public class BaseResult implements Serializable {
     /** true or false **/
     private String              success = "true";
 
-    /**  结果码，用于判断问题，参考ResultCode */
-    private String              resultCode;
-
     /**  结果信息 */
     private String              resultMessage;
 
     /** 扩展数据 */
-    private Map<String, String> extDatas;
+    private Map<String, String> extResultData;
 
-    public Map<String, String> getExtDatas() {
-        return extDatas;
+    public Map<String, String> getExtResultData() {
+        return extResultData;
     }
 
-    public void setExtDatas(Map<String, String> extDatas) {
-        this.extDatas = extDatas;
+    public void setExtResultData(Map<String, String> extResultData) {
+        this.extResultData = extResultData;
     }
 
     public String getSuccess() {
@@ -39,14 +36,6 @@ public class BaseResult implements Serializable {
 
     public void setSuccess(String success) {
         this.success = success;
-    }
-
-    public String getResultCode() {
-        return resultCode;
-    }
-
-    public void setResultCode(String resultCode) {
-        this.resultCode = resultCode;
     }
 
     public String getResultMessage() {

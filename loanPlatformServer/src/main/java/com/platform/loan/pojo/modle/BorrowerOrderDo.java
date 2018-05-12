@@ -3,6 +3,9 @@
  */
 package com.platform.loan.pojo.modle;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,7 +21,7 @@ public class BorrowerOrderDo implements Serializable {
     private Timestamp  createTime;
     private Timestamp  modifyTime;
     private String     borrowerIdNo;
-
+    /**  要贷多少钱，单位万 **/
     private String     loanLimit;
 
     private String     loanDeadline;
@@ -26,7 +29,7 @@ public class BorrowerOrderDo implements Serializable {
     private String     loanPurpose;
 
     private String     loanCity;
-
+    /** 该笔单子价格 */
     private BigDecimal price;
 
     /**  待抢，已抢，取消，过期，完成，无效 */
@@ -121,5 +124,10 @@ public class BorrowerOrderDo implements Serializable {
 
     public void setModifyTime(Timestamp modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 }

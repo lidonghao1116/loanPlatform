@@ -23,12 +23,11 @@ import java.awt.image.BufferedImage;
 @Controller
 public class ImageCodeController {
 
-    @ApiOperation(value = "申请图片验证码", notes = "申请图片验证码，图片写进response流中，Response Hearder中取IMAGE_CODE_HEADER_KEY")
+    @ApiOperation(value = "申请图片验证码", notes = "图片写进response流中，Response Hearder中取IMAGE_CODE_HEADER_KEY")
     @RequestMapping(value = "/api/imagecode/generate", method = RequestMethod.GET)
     public void generateImageCode(HttpServletResponse response) {
 
         BaseResult result = new BaseResult();
-        // response.setHeader("Access-Control-Allow-Origin", "*");
         BufferedImage image = RandomValidateCodeUtil.getRandcode(response);
 
         try {
@@ -37,7 +36,8 @@ public class ImageCodeController {
             ImageIO.write(image, "JPEG", response.getOutputStream());
 
         } catch (Exception e) {
-            e.printStackTrace();
+
+            System.out.println(e.getMessage());
             result.setSuccess(Boolean.FALSE.toString());
             result.setResultMessage(e.getMessage());
         }
@@ -50,6 +50,7 @@ public class ImageCodeController {
         response.setDateHeader("Expire", 0);
     }
 
+    @ApiOperation(value = "图片验证码示例", notes = "图片验证码生成示例，用于参考")
     @RequestMapping(value = "/imagecode.html", method = RequestMethod.GET)
     public String imageCodeView() {
 
