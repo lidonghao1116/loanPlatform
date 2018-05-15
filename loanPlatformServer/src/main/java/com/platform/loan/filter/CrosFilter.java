@@ -1,5 +1,6 @@
 package com.platform.loan.filter;
 
+import com.platform.loan.constant.CommonConstants;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -26,14 +27,17 @@ public class CrosFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
                                                                                           throws IOException,
                                                                                           ServletException {
+        String all = CommonConstants.IMAGE_CODE_HEADER_KEY + ","
+                     + CommonConstants.AUTHORIZATION_HEARDER_KEY + ",*";
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", all);
+        response.setHeader("Access-Control-Expose-Headers", all);
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "*");
 
         if (request.getMethod().equals("OPTIONS")) {
 

@@ -26,4 +26,5 @@ public class LoanApplyController {
         return LoanPlatformTemplate.run(new LoanApplyProcessor(), request, new LoanApplyResult());
 
     }
+
 }

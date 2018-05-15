@@ -1,7 +1,7 @@
 package com.platform.loan.controller;
 
 import com.platform.loan.pojo.request.BaseRequest;
-import com.platform.loan.pojo.result.BaseResult;
+import com.platform.loan.pojo.result.ImageCodeResult;
 import com.platform.loan.template.LoanPlatformTemplate;
 import com.platform.loan.template.processor.GenerateImageProcessor;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +24,8 @@ public class ImageCodeController {
     @RequestMapping(value = "/api/imagecode/generate", method = RequestMethod.GET)
     public void generateImageCode(BaseRequest request, HttpServletResponse response) {
 
-        LoanPlatformTemplate.run(new GenerateImageProcessor(), request, new BaseResult(), response);
+        LoanPlatformTemplate.run(new GenerateImageProcessor(), request, new ImageCodeResult(),
+            response);
 
     }
 

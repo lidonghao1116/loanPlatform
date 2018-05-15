@@ -13,8 +13,8 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
     @Override
     public void process(LoanApplyRequest request, LoanApplyResult loanApplyResult, Object... others)
                                                                                                     throws Exception {
-        //TODO 
-        System.out.println(request);
+
+        //TODO
 
     }
 }

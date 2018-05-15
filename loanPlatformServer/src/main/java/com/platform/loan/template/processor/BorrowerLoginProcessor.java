@@ -47,9 +47,16 @@ public class BorrowerLoginProcessor implements Processor<BorrowerLoginRequest, B
         /**
          * 将借款人的手机号存入数据库
          */
-        BorrowerDo borrowerDo = new BorrowerDo();
-        borrowerDo.setPhoneNo(borrowerLoginRequest.getPhoneNo());
-        borrowerRepository.save(borrowerDo);
+
+        if (null != borrowerRepository.findBorrowerDoByPhoneNo(borrowerLoginRequest.getPhoneNo())) {
+
+            BorrowerDo borrowerDo = new BorrowerDo();
+
+            borrowerDo.setPhoneNo(borrowerLoginRequest.getPhoneNo());
+
+            borrowerRepository.save(borrowerDo);
+
+        }
 
     }
 
