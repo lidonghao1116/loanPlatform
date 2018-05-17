@@ -10,6 +10,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.platform.loan.constant.CommonConstants;
 import com.platform.loan.pojo.LoginSession;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
@@ -44,15 +45,27 @@ public class JwtUtil {
         return JWT.require(algorithm).build().verify(token);
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException,
-                                          InterruptedException {
-        LoginSession session = new LoginSession();
-        session.setPhoneNo("15170004409");
-        String token = JwtUtil.createJwt(session);
-        System.out.println(token);
+    public static LoginSession getLoginSession(HttpServletRequest request)
+                                                                          throws UnsupportedEncodingException {
 
-        Thread.sleep(4000);
+        String jwtToken = request.getHeader(CommonConstants.AUTHORIZATION_HEARDER_KEY);
 
-        System.out.println(JwtUtil.verifyJwt(token));
+        DecodedJWT jwt = verifyJwt(jwtToken);
+
+        return JSONObject.parseObject(jwt.getClaim(CommonConstants.CLAIM_LOGININFO_KEY).asString(),
+            LoginSession.class);
+
     }
+
+    //public static void main(String[] args) throws UnsupportedEncodingException,
+    //                                      InterruptedException {
+    //    LoginSession session = new LoginSession();
+    //    session.setPhoneNo("15170004409");
+    //    String token = JwtUtil.createJwt(session);
+    //    System.out.println(token);
+    //
+    //    System.out.println(JwtUtil.verifyJwt(token));
+    //}
+
+    //eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJDTEFJTV9MT0dJTklORk9fS0VZIjoie1wicGhvbmVOb1wiOlwiMTUxNzAwMDQ0MDlcIn0iLCJleHAiOjE1NjI1Nzc2MzJ9.93_A2VNnhpY1XSOg6ad7BiyPsrK-mkewXZFGGTxVR0Y
 }

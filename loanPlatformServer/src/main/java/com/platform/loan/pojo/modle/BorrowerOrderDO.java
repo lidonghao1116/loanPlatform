@@ -13,14 +13,14 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "borrower_order")
-public class BorrowerOrderDo implements Serializable {
+public class BorrowerOrderDO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer    id;
 
     private Timestamp  createTime;
     private Timestamp  modifyTime;
-    private String     borrowerIdNo;
+    private String     borrowerPhoneNo;
     /**  要贷多少钱，单位万 **/
     private String     loanLimit;
 
@@ -38,20 +38,20 @@ public class BorrowerOrderDo implements Serializable {
     /** 类型，社保借款，公积金借款等 */
     private String     orderType;
 
+    public String getBorrowerPhoneNo() {
+        return borrowerPhoneNo;
+    }
+
+    public void setBorrowerPhoneNo(String borrowerPhoneNo) {
+        this.borrowerPhoneNo = borrowerPhoneNo;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getBorrowerIdNo() {
-        return borrowerIdNo;
-    }
-
-    public void setBorrowerIdNo(String borrowerIdNo) {
-        this.borrowerIdNo = borrowerIdNo;
     }
 
     public String getLoanLimit() {

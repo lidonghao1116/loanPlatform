@@ -3,13 +3,10 @@
  */
 package com.platform.loan.template.processor;
 
-import com.alibaba.fastjson.JSONObject;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.platform.loan.constant.CommonConstants;
 import com.platform.loan.dao.BorrowerRepository;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.LoginSession;
-import com.platform.loan.pojo.modle.BorrowerDo;
+import com.platform.loan.pojo.modle.BorrowerDO;
 import com.platform.loan.pojo.request.BaseRequest;
 import com.platform.loan.pojo.result.BorrowerInfoResult;
 import com.platform.loan.template.Processor;
@@ -31,21 +28,17 @@ public class QueryBorrowerInfoByAccessTokenProcessor implements
         HttpServletRequest httpRequest = (HttpServletRequest) others[0];
         BorrowerRepository borrowerRepository = (BorrowerRepository) others[1];
 
-        String jwtToken = httpRequest.getHeader(CommonConstants.AUTHORIZATION_HEARDER_KEY);
+        LoginSession loginSession = JwtUtil.getLoginSession(httpRequest);
 
-        DecodedJWT jwt = JwtUtil.verifyJwt(jwtToken);
-
-        initResult(jwt, borrowerInfoResult, borrowerRepository);
+        initResult(loginSession, borrowerInfoResult, borrowerRepository);
 
     }
 
-    private void initResult(DecodedJWT jwt, BorrowerInfoResult result,
+    private void initResult(LoginSession loginSession, BorrowerInfoResult result,
                             BorrowerRepository borrowerRepository) {
 
-        LoginSession ls = JSONObject.parseObject(jwt.getClaim(CommonConstants.CLAIM_LOGININFO_KEY)
-            .asString(), LoginSession.class);
-
-        BorrowerDo borrowerDo = borrowerRepository.findBorrowerDoByPhoneNo(ls.getPhoneNo());
+        BorrowerDO borrowerDo = borrowerRepository.findBorrowerDoByPhoneNo(loginSession
+            .getPhoneNo());
 
         if (null == borrowerDo) {
             return;

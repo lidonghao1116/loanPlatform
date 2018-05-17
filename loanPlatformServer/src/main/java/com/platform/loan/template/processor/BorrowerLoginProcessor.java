@@ -8,11 +8,12 @@ import com.platform.loan.dao.BorrowerRepository;
 import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.LoginSession;
-import com.platform.loan.pojo.modle.BorrowerDo;
+import com.platform.loan.pojo.modle.BorrowerDO;
 import com.platform.loan.pojo.request.BorrowerLoginRequest;
 import com.platform.loan.pojo.result.BorrowerLoginResult;
 import com.platform.loan.template.Processor;
 import com.platform.loan.util.RequestCheckUtil;
+import com.platform.loan.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -44,17 +45,13 @@ public class BorrowerLoginProcessor implements Processor<BorrowerLoginRequest, B
 
     private void updateBorrowerInfo(BorrowerLoginRequest borrowerLoginRequest,
                                     BorrowerRepository borrowerRepository) {
-        /**
-         * 将借款人的手机号存入数据库
-         */
 
-        if (null != borrowerRepository.findBorrowerDoByPhoneNo(borrowerLoginRequest.getPhoneNo())) {
+        if (null == borrowerRepository.findBorrowerDoByPhoneNo(borrowerLoginRequest.getPhoneNo())) {
 
-            BorrowerDo borrowerDo = new BorrowerDo();
-
-            borrowerDo.setPhoneNo(borrowerLoginRequest.getPhoneNo());
-
-            borrowerRepository.save(borrowerDo);
+            BorrowerDO newBorrower = new BorrowerDO();
+            newBorrower.setPhoneNo(borrowerLoginRequest.getPhoneNo());
+            newBorrower.setCreateTime(TimeUtil.getCurrentTimestamp());
+            borrowerRepository.save(newBorrower);
 
         }
 

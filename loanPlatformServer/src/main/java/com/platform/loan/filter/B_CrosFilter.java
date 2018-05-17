@@ -15,8 +15,8 @@ import java.io.IOException;
  * @version $Id: AccessTokenFilter.java, v 0.1 2018-05-09 下午6:05 caogu.wyp Exp $$
  */
 @Component
-@WebFilter(filterName = "crosFilter", urlPatterns = "/api/*")
-public class CrosFilter implements Filter {
+@WebFilter(filterName = "B_CrosFilter", urlPatterns = "/api/*")
+public class B_CrosFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

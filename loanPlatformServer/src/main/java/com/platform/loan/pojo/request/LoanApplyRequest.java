@@ -63,6 +63,28 @@ public class LoanApplyRequest extends BaseRequest {
     @ApiModelProperty(value = "个人保险，值服务端下发维护 ", name = "personalnsurance", required = false)
     private String personalnsurance;
 
+    @ApiModelProperty(value = "微粒贷总额", name = "weiLiDaiTotal", required = false)
+    private String weiLiDaiTotal;
+
+    @ApiModelProperty(value = "微粒贷可借额度", name = "weiLiDaiKeJie", required = false)
+    private String weiLiDaiKeJie;
+
+    public String getWeiLiDaiTotal() {
+        return weiLiDaiTotal;
+    }
+
+    public void setWeiLiDaiTotal(String weiLiDaiTotal) {
+        this.weiLiDaiTotal = weiLiDaiTotal;
+    }
+
+    public String getWeiLiDaiKeJie() {
+        return weiLiDaiKeJie;
+    }
+
+    public void setWeiLiDaiKeJie(String weiLiDaiKeJie) {
+        this.weiLiDaiKeJie = weiLiDaiKeJie;
+    }
+
     public String getLoanType() {
         return loanType;
     }

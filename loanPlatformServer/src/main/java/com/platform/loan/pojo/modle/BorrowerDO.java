@@ -16,7 +16,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "borrower")
-public class BorrowerDo {
+public class BorrowerDO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer   id;
@@ -36,10 +36,10 @@ public class BorrowerDo {
     private String    profession;
 
     /** 公积金认证时间 */
-    private Timestamp providentFundVerifyTime;
+    private String    providentFundVerifyTime;
 
     /** 社保认证时间 */
-    private Timestamp socialSecurityVerifyTime;
+    private String    socialSecurityVerifyTime;
     /** 月收入  */
     private String    monthlyIncome;
     /** 收入形式，现金发放，转帐工资，银行代发 */
@@ -59,7 +59,27 @@ public class BorrowerDo {
     /** 个人保险时间,eg . 无/2年 */
     private String    personalnsurance;
 
-    private String    extData;
+    private String    weiLiDaiTotal;
+
+    private String    weiLiDaiKeJie;
+
+    public String getWeiLiDaiTotal() {
+        return weiLiDaiTotal;
+    }
+
+    public void setWeiLiDaiTotal(String weiLiDaiTotal) {
+        this.weiLiDaiTotal = weiLiDaiTotal;
+    }
+
+    public String getWeiLiDaiKeJie() {
+        return weiLiDaiKeJie;
+    }
+
+    public void setWeiLiDaiKeJie(String weiLiDaiKeJie) {
+        this.weiLiDaiKeJie = weiLiDaiKeJie;
+    }
+
+    private String extData;
 
     public String getIdNo() {
         return idNo;
@@ -101,19 +121,19 @@ public class BorrowerDo {
         this.profession = profession;
     }
 
-    public Timestamp getProvidentFundVerifyTime() {
+    public String getProvidentFundVerifyTime() {
         return providentFundVerifyTime;
     }
 
-    public void setProvidentFundVerifyTime(Timestamp providentFundVerifyTime) {
+    public void setProvidentFundVerifyTime(String providentFundVerifyTime) {
         this.providentFundVerifyTime = providentFundVerifyTime;
     }
 
-    public Timestamp getSocialSecurityVerifyTime() {
+    public String getSocialSecurityVerifyTime() {
         return socialSecurityVerifyTime;
     }
 
-    public void setSocialSecurityVerifyTime(Timestamp socialSecurityVerifyTime) {
+    public void setSocialSecurityVerifyTime(String socialSecurityVerifyTime) {
         this.socialSecurityVerifyTime = socialSecurityVerifyTime;
     }
 

@@ -3,6 +3,9 @@
  */
 package com.platform.loan.pojo;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  *  放jwt playload中的，不建议太多字段，仅放需要的
  * @author caogu.wyp
@@ -29,5 +32,10 @@ public class LoginSession {
 
     public void setBiz(String biz) {
         this.biz = biz;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 }
