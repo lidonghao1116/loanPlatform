@@ -3,6 +3,8 @@
  */
 package com.platform.loan.pojo.request;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  *  手机验证码
  * @author caogu.wyp
@@ -11,6 +13,29 @@ package com.platform.loan.pojo.request;
 public class OTPRequest extends BaseRequest {
 
     private String phoneNo;
+
+    @ApiModelProperty(value = "图片验证码", name = "imageCode", required = true)
+    /**  图片验证码 */
+    public String  imageCode;
+    @ApiModelProperty(value = "图片验证码token,下发图片验证码时，放在hearders中的，key为IMAGE_CODE_HEADER_KEY", name = "imageCodeToken", required = true)
+    /** 在请求生成验证码时，下发给前端的token，在response header中 CommonConstants.IMAGE_CODE_HEADER_KEY*/
+    public String  imageCodeToken;
+
+    public String getImageCode() {
+        return imageCode;
+    }
+
+    public void setImageCode(String imageCode) {
+        this.imageCode = imageCode;
+    }
+
+    public String getImageCodeToken() {
+        return imageCodeToken;
+    }
+
+    public void setImageCodeToken(String imageCodeToken) {
+        this.imageCodeToken = imageCodeToken;
+    }
 
     public String getPhoneNo() {
         return phoneNo;

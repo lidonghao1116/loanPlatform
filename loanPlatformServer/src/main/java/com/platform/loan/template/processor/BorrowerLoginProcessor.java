@@ -33,8 +33,6 @@ public class BorrowerLoginProcessor implements Processor<BorrowerLoginRequest, B
 
         //请求参数判空
         RequestCheckUtil.checkBorrowerLoginRequest(request);
-        //校验图片验证码
-        verifyImageCode(request);
         //校验短信
         verifyOTP(request);
         //更新用户信息
@@ -65,21 +63,6 @@ public class BorrowerLoginProcessor implements Processor<BorrowerLoginRequest, B
         loginSession.setBiz("borrower");
         result.setAccessToken(JwtUtil.createJwt(loginSession));
 
-    }
-
-    /**
-     *
-     * @param request
-     */
-    private void verifyImageCode(BorrowerLoginRequest request) throws LoanPlatformException {
-        String imageCode = SimpleCacheUtil.getImageCode(request.getImageCodeToken());
-
-        if (!StringUtils.endsWith(imageCode, request.getImageCode())) {
-            throw new LoanPlatformException("图片验证码验证失败！");
-        }
-
-        //验证通过，清空缓存
-        SimpleCacheUtil.removeImageCode(request.getImageCodeToken());
     }
 
     /**

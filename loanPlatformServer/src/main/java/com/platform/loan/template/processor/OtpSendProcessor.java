@@ -2,12 +2,14 @@ package com.platform.loan.template.processor;
 
 import com.platform.loan.cache.SimpleCacheUtil;
 import com.platform.loan.constant.SystemConfigurationEnum;
+import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.pojo.request.OTPRequest;
 import com.platform.loan.pojo.result.BaseResult;
 import com.platform.loan.service.OtpService;
 import com.platform.loan.template.Processor;
 import com.platform.loan.util.RequestCheckUtil;
 import com.platform.loan.util.SystemConfigurationUtil;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -21,6 +23,9 @@ public class OtpSendProcessor implements Processor<OTPRequest, BaseResult> {
         OtpService otpService = (OtpService) others[0];
 
         RequestCheckUtil.checkOtpRequst(request);
+
+        //校验图片验证码
+        verifyImageCode(request);
 
         String SMSCode = getSMSCode();
         otpService.sendOtp(request.getPhoneNo(), getSMSMessage(SMSCode));
@@ -47,4 +52,18 @@ public class OtpSendProcessor implements Processor<OTPRequest, BaseResult> {
         return sb.toString();
     }
 
+    /**
+     *
+     * @param request
+     */
+    private void verifyImageCode(OTPRequest request) throws LoanPlatformException {
+        String imageCode = SimpleCacheUtil.getImageCode(request.getImageCodeToken());
+
+        if (!StringUtils.endsWith(imageCode, request.getImageCode())) {
+            throw new LoanPlatformException("图片验证码验证失败！");
+        }
+
+        //验证通过，清空缓存
+        SimpleCacheUtil.removeImageCode(request.getImageCodeToken());
+    }
 }
