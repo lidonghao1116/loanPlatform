@@ -7,6 +7,7 @@ import com.platform.loan.template.LoanPlatformTemplate;
 import com.platform.loan.template.processor.OtpSendProcessor;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class OTPController {
 
     @ApiOperation(value = "发送手机验证码", notes = "给手机发送验证码，用于登录")
     @RequestMapping(value = "/api/sms/send", method = RequestMethod.POST)
-    public BaseResult sendOtp(OTPRequest otpRequst) {
+    public BaseResult sendOtp(@RequestBody OTPRequest otpRequst) {
 
         return LoanPlatformTemplate.run(new OtpSendProcessor(), otpRequst, new BaseResult(),
             otpService);

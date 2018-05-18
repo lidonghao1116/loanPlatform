@@ -7,6 +7,7 @@ import com.platform.loan.template.LoanPlatformTemplate;
 import com.platform.loan.template.processor.BorrowerLoginProcessor;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,9 +25,9 @@ public class BorrowerLoginController {
 
     @ApiOperation(value = "借款人登录接口", notes = "输入手机号，短信验证码，图片验证码，验证成功即可登录")
     @RequestMapping(value = "/api/borrower/login", method = RequestMethod.POST)
-    public BorrowerLoginResult login(BorrowerLoginRequest request) {
+    public BorrowerLoginResult login(@RequestBody BorrowerLoginRequest borrowerLoginRequest) {
 
-        return LoanPlatformTemplate.run(new BorrowerLoginProcessor(), request,
+        return LoanPlatformTemplate.run(new BorrowerLoginProcessor(), borrowerLoginRequest,
             new BorrowerLoginResult(), borrowerRepository);
 
     }
