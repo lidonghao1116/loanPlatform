@@ -38,8 +38,12 @@ public class BorrowerDO {
     /** 公积金认证时间 */
     private String    providentFundVerifyTime;
 
+    private String    providentFundCity;
+
     /** 社保认证时间 */
     private String    socialSecurityVerifyTime;
+
+    private String    socialSecurityCity;
     /** 月收入  */
     private String    monthlyIncome;
     /** 收入形式，现金发放，转帐工资，银行代发 */
@@ -62,6 +66,22 @@ public class BorrowerDO {
     private String    weiLiDaiTotal;
 
     private String    weiLiDaiKeJie;
+
+    public String getProvidentFundCity() {
+        return providentFundCity;
+    }
+
+    public void setProvidentFundCity(String providentFundCity) {
+        this.providentFundCity = providentFundCity;
+    }
+
+    public String getSocialSecurityCity() {
+        return socialSecurityCity;
+    }
+
+    public void setSocialSecurityCity(String socialSecurityCity) {
+        this.socialSecurityCity = socialSecurityCity;
+    }
 
     public String getWeiLiDaiTotal() {
         return weiLiDaiTotal;

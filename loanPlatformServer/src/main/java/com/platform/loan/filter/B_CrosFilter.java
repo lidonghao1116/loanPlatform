@@ -27,16 +27,20 @@ public class B_CrosFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
                                                                                           throws IOException,
                                                                                           ServletException {
-        String all = CommonConstants.IMAGE_CODE_HEADER_KEY + ","
-                     + CommonConstants.AUTHORIZATION_HEARDER_KEY + ",*";
+        StringBuilder sb = new StringBuilder();
+        sb.append(CommonConstants.IMAGE_CODE_HEADER_KEY);
+        sb.append(",");
+        sb.append(CommonConstants.AUTHORIZATION_HEARDER_KEY);
+        sb.append(",");
+        sb.append(CommonConstants.CONTENT_TYPE_HEADER_KEY);
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Allow-Headers", all);
-        response.setHeader("Access-Control-Expose-Headers", all);
+        response.setHeader("Access-Control-Allow-Headers", sb.toString());
+        response.setHeader("Access-Control-Expose-Headers", sb.toString());
         response.setHeader("Access-Control-Max-Age", "3600");
 
         if (request.getMethod().equals("OPTIONS")) {

@@ -18,8 +18,30 @@ public class BorrowerInfoResult extends BaseResult {
     @ApiModelProperty(value = "公积金认证时间,没有值则表示未认证", name = "providentFundVerifyTime")
     private String providentFundVerifyTime;
 
-    @ApiModelProperty(value = "社保认证时间,没有值则表示未认证", name = "socialSecurityVerifyTime")
+    @ApiModelProperty(value = "社保认证时间,没有值则表示未认证", name = "providentFundVerifyTime")
     private String socialSecurityVerifyTime;
+
+    @ApiModelProperty(value = "公积金城市", name = "providentFundCity")
+    private String providentFundCity;
+
+    @ApiModelProperty(value = "社保城市", name = "socialSecurityCity")
+    private String socialSecurityCity;
+
+    public String getProvidentFundCity() {
+        return providentFundCity;
+    }
+
+    public void setProvidentFundCity(String providentFundCity) {
+        this.providentFundCity = providentFundCity;
+    }
+
+    public String getSocialSecurityCity() {
+        return socialSecurityCity;
+    }
+
+    public void setSocialSecurityCity(String socialSecurityCity) {
+        this.socialSecurityCity = socialSecurityCity;
+    }
 
     public String getProvidentFundVerifyTime() {
         return providentFundVerifyTime;

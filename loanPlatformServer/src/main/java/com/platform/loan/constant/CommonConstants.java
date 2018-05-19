@@ -16,6 +16,8 @@ public class CommonConstants {
 
     public static final String AUTHORIZATION_HEARDER_KEY = "Authorization";
 
+    public static final String CONTENT_TYPE_HEADER_KEY   = "Content-Type";
+
     public static final String CLAIM_LOGININFO_KEY       = "CLAIM_LOGININFO_KEY";
 
     //jwt失效时间，毫秒

@@ -27,7 +27,7 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
 
         LoginSession loginSession = JwtUtil.getLoginSession(httpServletRequest);
 
-        if (verifyIdNoPass(request)) {
+        if (verifyPass(request)) {
 
             BorrowerDO borrowerDo = borrowerRepository.findBorrowerDoByPhoneNo(loginSession
                 .getPhoneNo());
@@ -43,7 +43,7 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
 
     }
 
-    private boolean verifyIdNoPass(VerifyIdNoRequest request) {
+    private boolean verifyPass(VerifyIdNoRequest request) {
         //mock
         return true;
     }

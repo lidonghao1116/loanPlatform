@@ -46,9 +46,10 @@ public class QueryBorrowerInfoByAccessTokenProcessor implements
         result.setPhoneNo(borrowerDo.getPhoneNo());
         result.setIdNo(borrowerDo.getIdNo());
         result.setName(borrowerDo.getName());
+        result.setProvidentFundCity(borrowerDo.getProvidentFundCity());
+        result.setSocialSecurityCity(borrowerDo.getSocialSecurityCity());
 
         if (null != borrowerDo.getProvidentFundVerifyTime()) {
-
             result.setProvidentFundVerifyTime(borrowerDo.getProvidentFundVerifyTime().toString());
         }
 
