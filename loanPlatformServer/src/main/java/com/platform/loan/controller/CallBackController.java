@@ -96,13 +96,18 @@ public class CallBackController {
         ProvidentFundDO providentFundDO = providentFundRepository.findProvidentFundDoByPhoneNo(callBackRequest.getUser_id());
         if(null != providentFundDO){
             providentFundDO.setModifyTime(TimeUtil.getCurrentTimestamp());
+            providentFundDO.setPhoneNo(callBackRequest.getUser_id());
             providentFundDO.setExtData(jsonResponse);
+            providentFundRepository.save(providentFundDO);
         }else {
             ProvidentFundDO newProvidentFundDO = new ProvidentFundDO();
             newProvidentFundDO.setExtData(jsonResponse);
+            newProvidentFundDO.setPhoneNo(callBackRequest.getUser_id());
             newProvidentFundDO.setCreateTime(TimeUtil.getCurrentTimestamp());
-            newProvidentFundDO.setExtData(jsonResponse);
+            newProvidentFundDO.setModifyTime(TimeUtil.getCurrentTimestamp());
+            providentFundRepository.save(newProvidentFundDO);
         }
+
         //最后才响应成功
         response.setStatus(201);
     }
@@ -165,13 +170,17 @@ public class CallBackController {
 
         SocialSecurityDO socialSecurityDO = socialSecurityRepository.findSocialSecurityDoByPhoneNo(callBackRequest.getUser_id());
         if(null != socialSecurityDO){
+            socialSecurityDO.setPhoneNo(callBackRequest.getUser_id());
             socialSecurityDO.setModifyTime(TimeUtil.getCurrentTimestamp());
             socialSecurityDO.setExtData(jsonResponse);
+            socialSecurityRepository.save(socialSecurityDO);
         }else {
             SocialSecurityDO newSocialSecurityDO = new SocialSecurityDO();
-            newSocialSecurityDO.setExtData(jsonResponse);
+            newSocialSecurityDO.setPhoneNo(callBackRequest.getUser_id());
             newSocialSecurityDO.setCreateTime(TimeUtil.getCurrentTimestamp());
+            newSocialSecurityDO.setModifyTime(TimeUtil.getCurrentTimestamp());
             newSocialSecurityDO.setExtData(jsonResponse);
+            socialSecurityRepository.save(newSocialSecurityDO);
         }
         //最后才响应成功
         response.setStatus(201);

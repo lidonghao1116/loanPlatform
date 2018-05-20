@@ -7,10 +7,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.platform.loan.constant.ResultCodeEnum;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.result.BaseResult;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,9 +18,8 @@ import java.io.OutputStream;
  * @author caogu.wyp
  * @version $Id: LoginCheckFilter.java, v 0.1 2018-05-17 下午11:57 caogu.wyp Exp $$
  */
-@Component
-@WebFilter(filterName = "B_LoginCheckFilter", urlPatterns = "/api/*")
-public class B_LoginCheckFilter implements Filter {
+public class LoginCheckFilter implements Filter {
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 

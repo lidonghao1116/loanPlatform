@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version $Id: OTPController.java, v 0.1 2018-05-05 下午8:44 caogu.wyp Exp $$
  */
 @RestController
-public class OTPController {
+public class OtpController {
 
     @Autowired
     private OtpService otpService;

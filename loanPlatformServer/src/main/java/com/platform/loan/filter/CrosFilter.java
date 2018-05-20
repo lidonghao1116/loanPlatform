@@ -1,10 +1,8 @@
 package com.platform.loan.filter;
 
 import com.platform.loan.constant.CommonConstants;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,9 +12,8 @@ import java.io.IOException;
  * @author caogu.wyp
  * @version $Id: AccessTokenFilter.java, v 0.1 2018-05-09 下午6:05 caogu.wyp Exp $$
  */
-@Component
-@WebFilter(filterName = "A_CrosFilter", urlPatterns = "/api/*")
-public class A_CrosFilter implements Filter {
+public class CrosFilter implements Filter {
+
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

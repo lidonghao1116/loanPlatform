@@ -20,9 +20,10 @@ public class SocialSecurityDO {
     private Timestamp createTime;
     private Timestamp modifyTime;
 
-    //关联用户的手机号
+    /** 关联用户的手机号 */
     private String    phoneNo;
 
+    @Column(columnDefinition="TEXT")
     private String extData;
 
     public String getExtData() {

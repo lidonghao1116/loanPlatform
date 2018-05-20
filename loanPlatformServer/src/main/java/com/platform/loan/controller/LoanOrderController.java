@@ -1,5 +1,6 @@
 package com.platform.loan.controller;
 
+import com.platform.loan.pojo.request.LoanOrderResult;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -9,6 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class LoanOrderController {
+
+
+
+
+    public LoanOrderResult queryLoanOrderList(){
+        return  null;
+    }
+
 
 
 
