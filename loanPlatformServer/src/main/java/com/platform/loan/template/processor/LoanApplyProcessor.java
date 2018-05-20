@@ -60,8 +60,6 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         BorrowerDO borrower = borrowerRepository.findBorrowerDoByPhoneNo(phoneNo);
 
         borrower.setModifyTime(TimeUtil.getCurrentTimestamp());
-        borrower.setProvidentFundVerifyTime(request.getProvidentFundVerifyTime());
-        borrower.setSocialSecurityVerifyTime(request.getSocialSecurityVerifyTime());
         borrower.setEduLevel(request.getEduLevel());
         borrower.setProfession(request.getProfession());
         borrower.setMonthlyIncome(request.getMonthlyIncome());

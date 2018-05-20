@@ -23,6 +23,17 @@ public class ProvidentFundDO {
     //关联用户的手机号
     private String    phoneNo;
 
+    /** 公积金中心查询来的数据，json格式 */
+    private String extData;
+
+    public String getExtData() {
+        return extData;
+    }
+
+    public void setExtData(String extData) {
+        this.extData = extData;
+    }
+
     public Integer getId() {
         return id;
     }

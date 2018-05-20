@@ -35,15 +35,6 @@ public class BorrowerDO {
     /** 职业 */
     private String    profession;
 
-    /** 公积金认证时间 */
-    private String    providentFundVerifyTime;
-
-    private String    providentFundCity;
-
-    /** 社保认证时间 */
-    private String    socialSecurityVerifyTime;
-
-    private String    socialSecurityCity;
     /** 月收入  */
     private String    monthlyIncome;
     /** 收入形式，现金发放，转帐工资，银行代发 */
@@ -67,21 +58,6 @@ public class BorrowerDO {
 
     private String    weiLiDaiKeJie;
 
-    public String getProvidentFundCity() {
-        return providentFundCity;
-    }
-
-    public void setProvidentFundCity(String providentFundCity) {
-        this.providentFundCity = providentFundCity;
-    }
-
-    public String getSocialSecurityCity() {
-        return socialSecurityCity;
-    }
-
-    public void setSocialSecurityCity(String socialSecurityCity) {
-        this.socialSecurityCity = socialSecurityCity;
-    }
 
     public String getWeiLiDaiTotal() {
         return weiLiDaiTotal;
@@ -139,22 +115,6 @@ public class BorrowerDO {
 
     public void setProfession(String profession) {
         this.profession = profession;
-    }
-
-    public String getProvidentFundVerifyTime() {
-        return providentFundVerifyTime;
-    }
-
-    public void setProvidentFundVerifyTime(String providentFundVerifyTime) {
-        this.providentFundVerifyTime = providentFundVerifyTime;
-    }
-
-    public String getSocialSecurityVerifyTime() {
-        return socialSecurityVerifyTime;
-    }
-
-    public void setSocialSecurityVerifyTime(String socialSecurityVerifyTime) {
-        this.socialSecurityVerifyTime = socialSecurityVerifyTime;
     }
 
     public String getMonthlyIncome() {

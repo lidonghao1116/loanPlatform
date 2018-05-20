@@ -4,6 +4,8 @@
 package com.platform.loan.controller;
 
 import com.platform.loan.dao.BorrowerRepository;
+import com.platform.loan.dao.ProvidentFundRepository;
+import com.platform.loan.dao.SocialSecurityRepository;
 import com.platform.loan.pojo.request.BaseRequest;
 import com.platform.loan.pojo.request.VerifyIdNoRequest;
 import com.platform.loan.pojo.result.BaseResult;
@@ -33,6 +35,13 @@ public class BorrowerController {
     @Autowired
     private BorrowerRepository borrowerRepository;
 
+    @Autowired
+    private ProvidentFundRepository providentFundRepository;
+
+    @Autowired
+    private SocialSecurityRepository socialSecurityRepository;
+
+
     @ApiOperation(value = "获取借款类型列表", notes = "借款人登录后进入的借款类型列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
     @RequestMapping(value = "/api/borrower/loan/types", method = RequestMethod.GET)
@@ -49,7 +58,7 @@ public class BorrowerController {
                                                              HttpServletRequest request) {
 
         return LoanPlatformTemplate.run(new QueryBorrowerInfoByAccessTokenProcessor(), baseRequest,
-            new BorrowerInfoResult(), request, borrowerRepository);
+            new BorrowerInfoResult(), request, borrowerRepository,providentFundRepository,socialSecurityRepository);
 
     }
 

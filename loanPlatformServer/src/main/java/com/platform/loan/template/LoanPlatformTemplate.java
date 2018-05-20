@@ -5,8 +5,7 @@ package com.platform.loan.template;
 
 import com.platform.loan.pojo.request.BaseRequest;
 import com.platform.loan.pojo.result.BaseResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.platform.loan.util.LoanLogUtil;
 
 /**
  *
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
  * @version $Id: LoanPlatformTemplate.java, v 0.1 2018-05-12 下午1:13 caogu.wyp Exp $$
  */
 public class LoanPlatformTemplate {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoanPlatformTemplate.class);
 
     public static <T extends BaseResult> T run(Processor processor, BaseRequest request, T result,
                                                Object... others) {
@@ -24,7 +22,7 @@ public class LoanPlatformTemplate {
             processor.process(request, result, others);
 
         } catch (Exception e) {
-            LOGGER.error("processor.process error", e);
+            LoanLogUtil.getLogger(LoanPlatformTemplate.class).error("processor.process error", e);
             result.setSuccess(Boolean.FALSE.toString());
             result.setResultMessage(e.getMessage());
         }

@@ -23,6 +23,17 @@ public class SocialSecurityDO {
     //关联用户的手机号
     private String    phoneNo;
 
+    private String extData;
+
+    public String getExtData() {
+        return extData;
+    }
+
+    public void setExtData(String extData) {
+        this.extData = extData;
+    }
+
+
     public Integer getId() {
         return id;
     }
