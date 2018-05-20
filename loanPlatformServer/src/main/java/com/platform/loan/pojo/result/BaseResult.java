@@ -16,6 +16,9 @@ import java.util.Map;
  */
 public class BaseResult implements Serializable {
 
+    /** 结果码 */
+    private String              resultCode;
+
     /** true or false **/
     private String              success = "true";
 
@@ -24,6 +27,14 @@ public class BaseResult implements Serializable {
 
     /** 扩展数据 */
     private Map<String, String> extResultData;
+
+    public String getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(String resultCode) {
+        this.resultCode = resultCode;
+    }
 
     public Map<String, String> getExtResultData() {
         return extResultData;

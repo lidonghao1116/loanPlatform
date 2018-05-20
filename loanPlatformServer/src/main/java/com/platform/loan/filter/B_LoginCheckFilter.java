@@ -4,6 +4,7 @@
 package com.platform.loan.filter;
 
 import com.alibaba.fastjson.JSONArray;
+import com.platform.loan.constant.ResultCodeEnum;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.result.BaseResult;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,8 @@ import java.io.OutputStream;
  * @version $Id: LoginCheckFilter.java, v 0.1 2018-05-17 下午11:57 caogu.wyp Exp $$
  */
 @Component
-@WebFilter(filterName = "A_LoginCheckFilter", urlPatterns = "/api/*")
-public class A_LoginCheckFilter implements Filter {
+@WebFilter(filterName = "B_LoginCheckFilter", urlPatterns = "/api/*")
+public class B_LoginCheckFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -31,8 +32,13 @@ public class A_LoginCheckFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
 
+
+
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse res = (HttpServletResponse) servletResponse;
+
+        System.out.println("===========B_LoginCheckFilter"+req.getRequestURI());
+
 
         if (needCheck(req)) {
             //非登录页面进行验证
@@ -77,6 +83,7 @@ public class A_LoginCheckFilter implements Filter {
         OutputStream out = httpServletResponse.getOutputStream();
         BaseResult result = new BaseResult();
         result.setResultMessage("登录验证失败！");
+        result.setResultCode(ResultCodeEnum.TOKEN_VERIFY_FAILED.getCode());
         result.setSuccess("false");
         out.write(JSONArray.toJSONString(result).getBytes());
         out.flush();

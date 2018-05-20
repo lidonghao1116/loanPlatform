@@ -35,7 +35,7 @@ public class RequestCheckUtil {
     public static void checkBorrowerLoginRequest(BorrowerLoginRequest request)
                                                                               throws LoanPlatformException {
 
-        if (isIllegal(request.getPhoneNo(), request.getSMSCode())) {
+        if (isIllegal(request.getPhoneNo(), request.getSmsCode())) {
             throw new LoanPlatformException("请求参数异常：" + request.toString());
         }
 

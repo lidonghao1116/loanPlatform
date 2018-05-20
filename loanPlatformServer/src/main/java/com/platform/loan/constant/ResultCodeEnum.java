@@ -10,7 +10,8 @@ package com.platform.loan.constant;
  */
 public enum ResultCodeEnum {
 
-    SUCCESS("001", "", "请求成功");
+    TOKEN_VERIFY_FAILED("001", "token验证失败", "token验证失败"),
+    SUCCESS("002", "请求成功", "请求成功");
 
     private String code;
     private String errorMessage;

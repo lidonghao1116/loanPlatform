@@ -15,8 +15,8 @@ import java.io.IOException;
  * @version $Id: AccessTokenFilter.java, v 0.1 2018-05-09 下午6:05 caogu.wyp Exp $$
  */
 @Component
-@WebFilter(filterName = "B_CrosFilter", urlPatterns = "/api/*")
-public class B_CrosFilter implements Filter {
+@WebFilter(filterName = "A_CrosFilter", urlPatterns = "/api/*")
+public class A_CrosFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -36,6 +36,7 @@ public class B_CrosFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
+        System.out.println("===========A_CrosFilter"+((HttpServletRequest) req).getRequestURI());
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE");

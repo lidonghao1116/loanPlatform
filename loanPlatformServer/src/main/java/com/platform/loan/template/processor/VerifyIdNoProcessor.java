@@ -43,6 +43,10 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
             BorrowerDO borrowerDo = borrowerRepository.findBorrowerDoByPhoneNo(loginSession
                 .getPhoneNo());
 
+            if(null == borrowerDo){
+                throw new Exception("未在数据库中找到该用户，请重新正常流程登录！");
+
+            }
             borrowerDo.setIdNo(request.getIdNo());
             borrowerDo.setName(request.getName());
 

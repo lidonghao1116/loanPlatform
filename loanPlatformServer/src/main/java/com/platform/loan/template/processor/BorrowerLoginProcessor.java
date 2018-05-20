@@ -73,7 +73,7 @@ public class BorrowerLoginProcessor implements Processor<BorrowerLoginRequest, B
 
         String SMSCode = SimpleCacheUtil.getSMSCode(borrowerLoginRequest.getPhoneNo());
 
-        if (!StringUtils.endsWith(SMSCode, borrowerLoginRequest.getSMSCode())) {
+        if (!StringUtils.endsWith(SMSCode, borrowerLoginRequest.getSmsCode())) {
             throw new LoanPlatformException("短信验证码验证失败！");
         }
         //验证通过，清空缓存

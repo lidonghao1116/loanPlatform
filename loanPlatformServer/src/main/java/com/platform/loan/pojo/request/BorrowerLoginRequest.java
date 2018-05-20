@@ -17,7 +17,7 @@ public class BorrowerLoginRequest extends BaseRequest {
     public String phoneNo;
     @ApiModelProperty(value = "短信验证码", name = "SMSCode", required = true)
     /** 短信验证码 */
-    public String SMSCode;
+    public String smsCode;
 
     public String getPhoneNo() {
         return phoneNo;
@@ -27,12 +27,11 @@ public class BorrowerLoginRequest extends BaseRequest {
         this.phoneNo = phoneNo;
     }
 
-    public String getSMSCode() {
-        return SMSCode;
+    public String getSmsCode() {
+        return smsCode;
     }
 
-    public void setSMSCode(String SMSCode) {
-        this.SMSCode = SMSCode;
+    public void setSmsCode(String smsCode) {
+        this.smsCode = smsCode;
     }
-
 }
