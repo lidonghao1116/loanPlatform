@@ -13,12 +13,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author caogu.wyp
  * @version $Id: LoginCheckFilter.java, v 0.1 2018-05-17 下午11:57 caogu.wyp Exp $$
  */
 public class LoginCheckFilter implements Filter {
+
+    private static Set<String> noNeedCheckUrl = new HashSet<String>();
+
+    static {
+        //不需要登陆验证的url
+        noNeedCheckUrl.add("/api/borrower/login");
+        noNeedCheckUrl.add("/api/imagecode/");
+        noNeedCheckUrl.add("/api/sms/send");
+        noNeedCheckUrl.add("/api/manager/order/grab");
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -57,19 +69,9 @@ public class LoginCheckFilter implements Filter {
         if (!req.getRequestURI().startsWith("/api")) {
             return false;
         }
-
-        if (req.getRequestURI().contains("/api/borrower/login")) {
+        if (noNeedCheckUrl.contains(req.getRequestURI())){
             return false;
         }
-
-        if (req.getRequestURI().contains("/api/imagecode/")) {
-            return false;
-        }
-
-        if (req.getRequestURI().contains("/api/sms/send")) {
-            return false;
-        }
-
         return true;
 
     }

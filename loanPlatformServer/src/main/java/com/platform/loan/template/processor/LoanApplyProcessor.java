@@ -87,7 +87,7 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         borrowerOrderDO.setLoanPurpose(request.getLoanPurpose());
         borrowerOrderDO.setOrderType(request.getLoanType());
         borrowerOrderDO.setPrice(LoanPriceUtil.getPrice(request));
-        borrowerOrderDO.setOrderStatus(BorrowerOrderStatusEnum.INIT.getStatus());
+        borrowerOrderDO.setOrderStatus(BorrowerOrderStatusEnum.AUDIT.getStatus());
         borrowerOrderRepository.save(borrowerOrderDO);
     }
 }

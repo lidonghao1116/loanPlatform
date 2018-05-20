@@ -32,7 +32,7 @@ public class BorrowerOrderDO implements Serializable {
     /** 该笔单子价格 */
     private BigDecimal price;
 
-    /**  待抢，已抢，取消，过期，完成，无效 */
+    /**  待审核，待抢，已抢，取消，过期，完成，无效*/
     private String     orderStatus;
 
     /** 类型，社保借款，公积金借款等 */
