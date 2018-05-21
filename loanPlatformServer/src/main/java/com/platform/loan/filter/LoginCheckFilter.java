@@ -30,6 +30,7 @@ public class LoginCheckFilter implements Filter {
         noNeedCheckUrl.add("/api/imagecode/");
         noNeedCheckUrl.add("/api/sms/send");
         noNeedCheckUrl.add("/api/manager/order/grab");
+        noNeedCheckUrl.add("/api/imagecode/generate");
     }
 
     @Override

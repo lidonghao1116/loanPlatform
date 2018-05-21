@@ -54,12 +54,17 @@ public class LoanOrderController {
             model.setMaskPhoneNo(borrowerOrderDO.getBorrowerPhoneNo()+"***");
             model.setPrice(borrowerOrderDO.getPrice().toString());
             model.setOrderType(borrowerOrderDO.getOrderType());
-
+            model.setLoanLimit(borrowerOrderDO.getLoanLimit());
+            model.setOrderStatus(borrowerOrderDO.getOrderStatus());
             //查人信息
             BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(borrowerOrderDO.getBorrowerPhoneNo());
             if(null != borrowerDO){
                 model.setMaskBorrowerName(borrowerDO.getName()+"***");
                 model.setProfession(borrowerDO.getProfession());
+                model.setMonthlyIncome(borrowerDO.getMonthlyIncome());
+                model.setIncomeType(borrowerDO.getIncomeType());
+                model.setHouseInfo(borrowerDO.getHouseInfo());
+                model.setCarInfo(borrowerDO.getCarInfo());
             }
             list.add(model);
         });
