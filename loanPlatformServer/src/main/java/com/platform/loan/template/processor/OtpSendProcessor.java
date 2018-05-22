@@ -30,7 +30,7 @@ public class OtpSendProcessor implements Processor<OTPRequest, BaseResult> {
         String SMSCode = getSMSCode();
         otpService.sendOtp(request.getPhoneNo(), getSMSMessage(SMSCode));
         //放缓存中等登录时取出来验证
-        SimpleCacheUtil.addSMSCode(request.getPhoneNo(), SMSCode);
+        SimpleCacheUtil.addSMSCode(request.getPhoneNo(),request.getBizType(), SMSCode);
     }
 
     private String getSMSCode() {

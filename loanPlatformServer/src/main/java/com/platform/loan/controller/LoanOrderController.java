@@ -1,20 +1,23 @@
 package com.platform.loan.controller;
 
-import com.platform.loan.dao.BorrowerOrderRepository;
 import com.platform.loan.dao.BorrowerRepository;
-import com.platform.loan.pojo.LoanOrderViewModel;
-import com.platform.loan.pojo.modle.BorrowerDO;
-import com.platform.loan.pojo.modle.BorrowerOrderDO;
+import com.platform.loan.dao.ManagerRepository;
+import com.platform.loan.dao.OrderRepository;
+import com.platform.loan.pojo.request.GrabLoanOrderRequest;
 import com.platform.loan.pojo.request.LoanOrderRequest;
 import com.platform.loan.pojo.request.LoanOrderResult;
+import com.platform.loan.pojo.result.GrabLoanOrderResult;
+import com.platform.loan.template.LoanPlatformTemplate;
+import com.platform.loan.template.processor.GrabLoanOrderProcessor;
+import com.platform.loan.template.processor.LoanOrderProcessor;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -25,53 +28,29 @@ import java.util.List;
 public class LoanOrderController {
 
     @Autowired
-    private BorrowerOrderRepository borrowerOrderRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
     private BorrowerRepository borrowerRepository;
 
-    @ApiOperation(value = "查询可抢状态的订单", notes = "此查询接口不需要做登陆校验")
-    @RequestMapping(value = "/api/manager/order/grab", method = RequestMethod.GET)
+    @Autowired
+    private ManagerRepository managerRepository;
+
+    @ApiOperation(value = "查询可抢状态的订单", notes = "查询可抢状态的订单,此查询接口不需要做登陆校验")
+    @RequestMapping(value = "/api/manager/orders", method = RequestMethod.GET)
     public LoanOrderResult queryInitLoanOrderList(LoanOrderRequest loanOrderRequest){
 
-        System.out.println(loanOrderRequest);
-        /**
-         * 1 查询的订单，状态都是ENABLE_GRAB的，可抢状态
-         * 2 数据脱敏
-         */
-        LoanOrderResult result = new LoanOrderResult();
+        return LoanPlatformTemplate.run(new LoanOrderProcessor(), loanOrderRequest,
+                new LoanOrderResult(), orderRepository, borrowerRepository);
 
-        result.setPageNum(1);
+    }
 
-        Iterable<BorrowerOrderDO> borrowerOrderList = borrowerOrderRepository.findAll();
+    @ApiOperation(value = "抢订单", notes = "抢订单")
+    @RequestMapping(value = "/api/manager/order/grab", method = RequestMethod.POST)
+    public GrabLoanOrderResult grabLoanOrder(@RequestBody  GrabLoanOrderRequest grabLoanOrderRequest, HttpServletRequest httpServletRequest){
 
-        List<LoanOrderViewModel> list = new ArrayList<>();
-
-        borrowerOrderList.forEach(borrowerOrderDO -> {
-
-            LoanOrderViewModel model = new LoanOrderViewModel();
-            model.setApplyTime(borrowerOrderDO.getCreateTime().toString());
-            model.setMaskPhoneNo(borrowerOrderDO.getBorrowerPhoneNo()+"***");
-            model.setPrice(borrowerOrderDO.getPrice().toString());
-            model.setOrderType(borrowerOrderDO.getOrderType());
-            model.setLoanLimit(borrowerOrderDO.getLoanLimit());
-            model.setOrderStatus(borrowerOrderDO.getOrderStatus());
-            //查人信息
-            BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(borrowerOrderDO.getBorrowerPhoneNo());
-            if(null != borrowerDO){
-                model.setMaskBorrowerName(borrowerDO.getName()+"***");
-                model.setProfession(borrowerDO.getProfession());
-                model.setMonthlyIncome(borrowerDO.getMonthlyIncome());
-                model.setIncomeType(borrowerDO.getIncomeType());
-                model.setHouseInfo(borrowerDO.getHouseInfo());
-                model.setCarInfo(borrowerDO.getCarInfo());
-            }
-            list.add(model);
-        });
-
-        result.setViewList(list);
-
-        return  result;
+        return LoanPlatformTemplate.run(new GrabLoanOrderProcessor(), grabLoanOrderRequest,
+                new GrabLoanOrderResult(),httpServletRequest, orderRepository,managerRepository);
     }
 
 

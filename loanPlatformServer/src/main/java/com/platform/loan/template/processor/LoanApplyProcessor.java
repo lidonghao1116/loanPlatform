@@ -2,11 +2,13 @@ package com.platform.loan.template.processor;
 
 import com.platform.loan.constant.BorrowerOrderStatusEnum;
 import com.platform.loan.constant.LoanTypeEnum;
-import com.platform.loan.dao.BorrowerOrderRepository;
+import com.platform.loan.constant.ResultCodeEnum;
 import com.platform.loan.dao.BorrowerRepository;
+import com.platform.loan.dao.OrderRepository;
+import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.modle.BorrowerDO;
-import com.platform.loan.pojo.modle.BorrowerOrderDO;
+import com.platform.loan.pojo.modle.OrderDO;
 import com.platform.loan.pojo.request.LoanApplyRequest;
 import com.platform.loan.pojo.result.LoanApplyResult;
 import com.platform.loan.template.Processor;
@@ -14,6 +16,7 @@ import com.platform.loan.util.LoanPriceUtil;
 import com.platform.loan.util.TimeUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * @author caogu.wyp
@@ -27,9 +30,15 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) others[0];
         BorrowerRepository borrowerRepository = (BorrowerRepository) others[1];
-        BorrowerOrderRepository borrowerOrderRepository = (BorrowerOrderRepository) others[2];
+        OrderRepository borrowerOrderRepository = (OrderRepository) others[2];
 
         String phoneNo = JwtUtil.getLoginSession(httpServletRequest).getPhoneNo();
+
+        //如果申请过类似订单，无法继续重复申请
+        if(isRpeat(borrowerOrderRepository,phoneNo, request.getLoanType())){
+            throw new LoanPlatformException(ResultCodeEnum.LOAN_REPEAT,"重复申请");
+        }
+
         //保存一张新订单
         saveOrder(request, borrowerOrderRepository, phoneNo);
 
@@ -42,6 +51,17 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
             saveWEI_LI_DAIBorrowerInfo(request, borrowerRepository, phoneNo);
         }
 
+    }
+
+    private boolean isRpeat(OrderRepository orderRepository, String phoneNo , String loanTypeCode) {
+
+        OrderDO borrowerOrderDO = orderRepository.findOrderDObyBorrowerPhoneNoAndAndLoanType(phoneNo,loanTypeCode);
+
+        if(null == borrowerOrderDO){
+
+            return false;
+        }
+        return true;
     }
 
     private void saveWEI_LI_DAIBorrowerInfo(LoanApplyRequest request,
@@ -76,8 +96,9 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
     }
 
     private void saveOrder(LoanApplyRequest request,
-                           BorrowerOrderRepository borrowerOrderRepository, String phoneNo) {
-        BorrowerOrderDO borrowerOrderDO = new BorrowerOrderDO();
+                           OrderRepository borrowerOrderRepository, String phoneNo) {
+        OrderDO borrowerOrderDO = new OrderDO();
+        borrowerOrderDO.setOrderId(UUID.randomUUID().toString());
         borrowerOrderDO.setBorrowerPhoneNo(phoneNo);
         borrowerOrderDO.setCreateTime(TimeUtil.getCurrentTimestamp());
         borrowerOrderDO.setModifyTime(TimeUtil.getCurrentTimestamp());
@@ -85,9 +106,10 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         borrowerOrderDO.setLoanDeadline(request.getLoanDeadline());
         borrowerOrderDO.setLoanLimit(request.getLoanLimit());
         borrowerOrderDO.setLoanPurpose(request.getLoanPurpose());
-        borrowerOrderDO.setOrderType(request.getLoanType());
+        borrowerOrderDO.setLoanType(request.getLoanType());
         borrowerOrderDO.setPrice(LoanPriceUtil.getPrice(request));
         borrowerOrderDO.setOrderStatus(BorrowerOrderStatusEnum.AUDIT.getStatus());
         borrowerOrderRepository.save(borrowerOrderDO);
     }
+
 }

@@ -33,7 +33,7 @@ public class CrosFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        System.out.println("===========A_CrosFilter"+((HttpServletRequest) req).getRequestURI());
+        System.out.println("===========A_CrosFilter"+((HttpServletRequest) req).getRequestURI()+",request.getMethod()="+request.getMethod());
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE");

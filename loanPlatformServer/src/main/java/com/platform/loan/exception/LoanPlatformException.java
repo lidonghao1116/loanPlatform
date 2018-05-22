@@ -3,6 +3,8 @@
  */
 package com.platform.loan.exception;
 
+import com.platform.loan.constant.ResultCodeEnum;
+
 /**
  *
  * @author caogu.wyp
@@ -18,6 +20,16 @@ public class LoanPlatformException extends Exception {
      *                permitted, and indicates that the cause is nonexistent or unknown.)
      * @since 1.4
      */
+    private ResultCodeEnum resultCode;
+
+    public ResultCodeEnum getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(ResultCodeEnum resultCode) {
+        this.resultCode = resultCode;
+    }
+
     public LoanPlatformException(String message, Throwable cause) {
         super(message, cause);
     }
@@ -30,5 +42,10 @@ public class LoanPlatformException extends Exception {
      */
     public LoanPlatformException(String message) {
         super(message);
+    }
+
+    public LoanPlatformException(ResultCodeEnum resultCode , String message){
+        super(message);
+        this.resultCode = resultCode;
     }
 }

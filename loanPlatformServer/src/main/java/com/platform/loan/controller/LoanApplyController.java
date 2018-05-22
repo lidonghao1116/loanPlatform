@@ -1,6 +1,6 @@
 package com.platform.loan.controller;
 
-import com.platform.loan.dao.BorrowerOrderRepository;
+import com.platform.loan.dao.OrderRepository;
 import com.platform.loan.dao.BorrowerRepository;
 import com.platform.loan.pojo.request.LoanApplyRequest;
 import com.platform.loan.pojo.result.LoanApplyResult;
@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 public class LoanApplyController {
 
     @Autowired
-    private BorrowerRepository      borrowerRepository;
+    private BorrowerRepository borrowerRepository;
     @Autowired
-    private BorrowerOrderRepository borrowerOrderRepository;
+    private OrderRepository    orderRepository;
 
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
     @ApiOperation(value = "信贷申请接口", notes = "微粒贷，公积金等贷款等方式的申请")
@@ -36,7 +36,7 @@ public class LoanApplyController {
                                      HttpServletRequest httpServletRequest) {
 
         return LoanPlatformTemplate.run(new LoanApplyProcessor(), loanApplyRequest,
-            new LoanApplyResult(), httpServletRequest, borrowerRepository, borrowerOrderRepository);
+            new LoanApplyResult(), httpServletRequest, borrowerRepository, orderRepository);
 
     }
 

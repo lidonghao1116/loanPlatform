@@ -31,14 +31,14 @@ public class LoanOrderViewModel implements Serializable {
         private String price;
         /** BorrowerOrderStatusEnum */
         private String orderStatus;
-        private String orderType;
+        private String loanType;
 
-    public String getOrderType() {
-        return orderType;
+    public String getLoanType() {
+        return loanType;
     }
 
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
+    public void setLoanType(String loanType) {
+        this.loanType = loanType;
     }
 
     public String getMaskBorrowerName() {

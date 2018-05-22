@@ -8,7 +8,7 @@ package com.platform.loan.pojo.result;
  * @author caogu.wyp
  * @version $Id: BorrowerLoginResult.java, v 0.1 2018-05-09 上午12:31 caogu.wyp Exp $$
  */
-public class BorrowerLoginResult extends BaseResult {
+public class LoginResult extends BaseResult {
 
     /** 登录后下发给前端的jwt token */
     private String accessToken;

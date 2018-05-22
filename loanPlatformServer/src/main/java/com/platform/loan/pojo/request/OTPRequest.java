@@ -21,6 +21,18 @@ public class OTPRequest extends BaseRequest {
     /** 在请求生成验证码时，下发给前端的token，在response header中 CommonConstants.IMAGE_CODE_HEADER_KEY*/
     public String  imageCodeToken;
 
+    @ApiModelProperty(value = "发短信业务类型，用户端值为：BORROWER，信贷经理端为：CREDIT_MANAGER", name = "bizType", required = true)
+    /** 业务类型  */
+    public String   bizType;
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
+    }
+
     public String getImageCode() {
         return imageCode;
     }

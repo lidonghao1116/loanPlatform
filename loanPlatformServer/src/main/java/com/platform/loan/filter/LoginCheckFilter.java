@@ -31,6 +31,8 @@ public class LoginCheckFilter implements Filter {
         noNeedCheckUrl.add("/api/sms/send");
         noNeedCheckUrl.add("/api/manager/order/grab");
         noNeedCheckUrl.add("/api/imagecode/generate");
+        //======//
+        noNeedCheckUrl.add("/api/manager/orders");
     }
 
     @Override
@@ -47,7 +49,7 @@ public class LoginCheckFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse res = (HttpServletResponse) servletResponse;
 
-        System.out.println("===========B_LoginCheckFilter"+req.getRequestURI());
+        System.out.println("===========B_LoginCheckFilter"+req.getRequestURI()+",request.getMethod()="+req.getMethod());
 
 
         if (needCheck(req)) {

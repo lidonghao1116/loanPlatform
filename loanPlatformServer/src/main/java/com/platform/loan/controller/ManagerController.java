@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version $Id: CreditManagerController.java, v 0.1 2018-05-20 下午6:29 caogu.wyp Exp $$
  */
 @RestController
-public class CreditManagerController {
+public class ManagerController {
 
 
 }

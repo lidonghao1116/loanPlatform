@@ -5,6 +5,7 @@ package com.platform.loan.util;
 
 import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.pojo.request.BorrowerLoginRequest;
+import com.platform.loan.pojo.request.ManagerLoginRequest;
 import com.platform.loan.pojo.request.OTPRequest;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,6 +35,15 @@ public class RequestCheckUtil {
 
     public static void checkBorrowerLoginRequest(BorrowerLoginRequest request)
                                                                               throws LoanPlatformException {
+
+        if (isIllegal(request.getPhoneNo(), request.getSmsCode())) {
+            throw new LoanPlatformException("请求参数异常：" + request.toString());
+        }
+
+    }
+
+    public static void checkManagerLoginRequest(ManagerLoginRequest request)
+            throws LoanPlatformException {
 
         if (isIllegal(request.getPhoneNo(), request.getSmsCode())) {
             throw new LoanPlatformException("请求参数异常：" + request.toString());

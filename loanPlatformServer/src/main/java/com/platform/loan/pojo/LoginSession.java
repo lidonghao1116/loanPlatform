@@ -16,7 +16,7 @@ public class LoginSession {
     private String phoneNo;
 
     /** 属于哪个业务的登录，目前分借款人及借贷经理 */
-    private String biz;
+    private String loginUserType;
 
     public String getPhoneNo() {
         return phoneNo;
@@ -26,12 +26,12 @@ public class LoginSession {
         this.phoneNo = phoneNo;
     }
 
-    public String getBiz() {
-        return biz;
+    public String getLoginUserType() {
+        return loginUserType;
     }
 
-    public void setBiz(String biz) {
-        this.biz = biz;
+    public void setLoginUserType(String loginUserType) {
+        this.loginUserType = loginUserType;
     }
 
     @Override
