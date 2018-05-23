@@ -23,28 +23,23 @@ import java.util.Map;
  */
 public class LoanHttpUtil {
 
-
-
     private static final CloseableHttpClient client = HttpClientBuilder.create().build();
 
-    public static String sendGet(String url, Map<String,String> headers) throws IOException {
-
+    public static String sendGet(String url, Map<String, String> headers) throws IOException {
 
         HttpGet request = new HttpGet(url);
 
-        for (Map.Entry<String,String> entry : headers.entrySet()){
-            request.setHeader(entry.getKey(),entry.getValue());
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            request.setHeader(entry.getKey(), entry.getValue());
         }
 
         HttpResponse response = client.execute(request);
 
         System.out.println("\nSending 'GET' request to URL : " + url);
-        System.out.println("Response Code : " +
-                           response.getStatusLine().getStatusCode());
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
-
-        BufferedReader rd = new BufferedReader(
-                new InputStreamReader(response.getEntity().getContent()));
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity()
+            .getContent()));
 
         StringBuffer result = new StringBuffer();
         String line = "";
@@ -55,8 +50,7 @@ public class LoanHttpUtil {
         return result.toString();
     }
 
-
-    public static String sendPost(String url ,String jsonData) throws IOException {
+    public static String sendPost(String url, String jsonData) throws IOException {
 
         HttpPost httpPost = new HttpPost(url);
         httpPost.setHeader("Connection", "close");
@@ -66,8 +60,5 @@ public class LoanHttpUtil {
         HttpResponse httpResponse = client.execute(httpPost);
         return EntityUtils.toString(httpResponse.getEntity());
     }
-
-
-
 
 }

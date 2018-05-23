@@ -26,8 +26,8 @@ import java.security.NoSuchAlgorithmException;
  */
 public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseResult> {
 
-    private static String fformatStr = "/dsp-front/4.1/dsp-front/default/pubkey/%s/" +
-                                       "product_code/%s/out_order_id/%s/signature/%s";
+    private static String fformatStr = "/dsp-front/4.1/dsp-front/default/pubkey/%s/"
+                                       + "product_code/%s/out_order_id/%s/signature/%s";
 
     @Override
     public void process(VerifyIdNoRequest request, BaseResult result, Object... others)
@@ -43,7 +43,7 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
             BorrowerDO borrowerDo = borrowerRepository.findBorrowerDoByPhoneNo(loginSession
                 .getPhoneNo());
 
-            if(null == borrowerDo){
+            if (null == borrowerDo) {
                 throw new Exception("未在数据库中找到该用户，请重新正常流程登录！");
 
             }
@@ -58,24 +58,25 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
 
     }
 
-    private boolean verifyPass(VerifyIdNoRequest request) throws IOException, NoSuchAlgorithmException {
-
+    private boolean verifyPass(VerifyIdNoRequest request) throws IOException,
+                                                         NoSuchAlgorithmException {
 
         String url = "https://api4.udcredit.com";
         VerifyIdNoModel model = new VerifyIdNoModel();
         model.setId_name(request.getName());
         model.setId_no(request.getIdNo());
         String bodyStr = JSONObject.toJSONString(model);
-        String signature = md5( bodyStr+ "|" + "2b2fcaf0-9c75-48a0-b53b-af56f5415c0f");
-        url += String.format(fformatStr, "d0f5910c-3cf2-4cf5-8643-1dc6adc8cd19", "O1001S0201", System.currentTimeMillis(), signature);
+        String signature = md5(bodyStr + "|" + "2b2fcaf0-9c75-48a0-b53b-af56f5415c0f");
+        url += String.format(fformatStr, "d0f5910c-3cf2-4cf5-8643-1dc6adc8cd19", "O1001S0201",
+            System.currentTimeMillis(), signature);
         System.out.println("requestUrl=>" + url);
         System.out.println("request parameter body=>" + bodyStr);
-        String jsonRespon = LoanHttpUtil.sendPost(url,bodyStr);
-        System.out.println("身份认证请求结果："+jsonRespon);
-        JSONObject jsonObject =JSONObject.parseObject(jsonRespon);
+        String jsonRespon = LoanHttpUtil.sendPost(url, bodyStr);
+        System.out.println("身份认证请求结果：" + jsonRespon);
+        JSONObject jsonObject = JSONObject.parseObject(jsonRespon);
         String resultCode = jsonObject.getJSONObject("header").getString("ret_code");
 
-        if("000000".equals(resultCode)){
+        if ("000000".equals(resultCode)) {
             //请求成功
             String status = jsonObject.getJSONObject("body").getString("status");
             /**
@@ -84,7 +85,7 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
              2-认证不一致，
              3-无结果（查询不到此身份证号）
              */
-            if("1".equals(status)){
+            if ("1".equals(status)) {
                 return true;
             }
 
@@ -97,16 +98,20 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
      *字节转换为16进制字符串
      */
     private static String byteToHex(byte ch) {
-        String str[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
+        String str[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E",
+                "F" };
         return str[ch >> 4 & 0xF] + str[ch & 0xF];
     }
+
     private static String bytesToHex(byte[] ch) {
         StringBuffer ret = new StringBuffer("");
         for (int i = 0; i < ch.length; i++)
             ret.append(byteToHex(ch[i]));
         return ret.toString();
     }
-    private static String md5(String data) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+    private static String md5(String data) throws NoSuchAlgorithmException,
+                                          UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(data.toString().getBytes("utf-8"));
         return bytesToHex(md.digest());

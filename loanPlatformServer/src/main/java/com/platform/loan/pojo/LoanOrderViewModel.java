@@ -15,23 +15,23 @@ import java.io.Serializable;
  */
 public class LoanOrderViewModel implements Serializable {
 
-        private String maskBorrowerName;
-        private String maskPhoneNo;
+    private String  maskBorrowerName;
+    private String  maskPhoneNo;
 
-        private String applyTime;
-        private String loanCity;
-        private String loanLimit;
-        private String profession;
-        private String  monthlyIncome;
-        private String  incomeType;
-        private boolean haveProvidentFund;
-        private boolean haveSocialSecurity;
-        private String houseInfo;
-        private String carInfo;
-        private String price;
-        /** BorrowerOrderStatusEnum */
-        private String orderStatus;
-        private String loanType;
+    private String  applyTime;
+    private String  loanCity;
+    private String  loanLimit;
+    private String  profession;
+    private String  monthlyIncome;
+    private String  incomeType;
+    private boolean haveProvidentFund;
+    private boolean haveSocialSecurity;
+    private String  houseInfo;
+    private String  carInfo;
+    private String  price;
+    /** BorrowerOrderStatusEnum */
+    private String  orderStatus;
+    private String  loanType;
 
     public String getLoanType() {
         return loanType;

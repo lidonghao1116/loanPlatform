@@ -39,11 +39,11 @@ public class OrderDO implements Serializable {
     /** 类型，社保借款，公积金借款等 */
     private String     loanType;
     /** 该单子被哪个信贷经理抢了的 */
-    private String      managerPhoneNo;
+    private String     managerPhoneNo;
     /** 订单号 */
-    private String      orderId;
+    private String     orderId;
     /** 红包被抢时间 */
-    private Timestamp      grabTime;
+    private Timestamp  grabTime;
 
     public Timestamp getGrabTime() {
         return grabTime;

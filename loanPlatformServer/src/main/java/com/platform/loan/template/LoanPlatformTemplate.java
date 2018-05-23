@@ -33,9 +33,9 @@ public class LoanPlatformTemplate {
     }
 
     private static <T extends BaseResult> void initExceptionResult(T result, Exception e) {
-        if(e instanceof LoanPlatformException){
-            LoanPlatformException LoanPlatformException = (LoanPlatformException)e;
-            if(null != LoanPlatformException.getResultCode()){
+        if (e instanceof LoanPlatformException) {
+            LoanPlatformException LoanPlatformException = (LoanPlatformException) e;
+            if (null != LoanPlatformException.getResultCode()) {
                 result.setResultCode(LoanPlatformException.getResultCode().getCode());
             }
         }

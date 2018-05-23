@@ -22,18 +22,20 @@ public class BorrowerLoginProcessor implements Processor<BorrowerLoginRequest, L
 
     @Override
     public void process(BorrowerLoginRequest request, LoginResult result, Object... others)
-                                                                                                   throws Exception {
+                                                                                           throws Exception {
 
         BorrowerRepository borrowerRepository = (BorrowerRepository) others[0];
 
         //请求参数判空
         RequestCheckUtil.checkBorrowerLoginRequest(request);
         //校验短信
-        CommonMethod.verifyOTP(request.getPhoneNo(),LoginUserTypeEnum.BORROWER.getCode(),request.getSmsCode());
+        CommonMethod.verifyOTP(request.getPhoneNo(), LoginUserTypeEnum.BORROWER.getCode(),
+            request.getSmsCode());
         //更新用户信息
         updateBorrowerInfo(request, borrowerRepository);
         //下发登陆token
-        result.setAccessToken(CommonMethod.buildLoginAccessToken(request.getPhoneNo(),LoginUserTypeEnum.BORROWER.getCode()));
+        result.setAccessToken(CommonMethod.buildLoginAccessToken(request.getPhoneNo(),
+            LoginUserTypeEnum.BORROWER.getCode()));
 
     }
 

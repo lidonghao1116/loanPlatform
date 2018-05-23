@@ -4,6 +4,7 @@
 package com.platform.loan.dao;
 
 import com.platform.loan.pojo.modle.OrderDO;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -13,10 +14,10 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface OrderRepository extends CrudRepository<OrderDO, Integer> {
 
-    public OrderDO findOrderDOByBorrowerPhoneNo(String borrowerPhoneNo);
+    @Query(value = "select o from OrderDO o where o.borrowerPhoneNo =?1 and o.loanType=?2")
+    OrderDO findOrderDO(String borrowerPhoneNo, String loanType);
 
-    public OrderDO findOrderDObyBorrowerPhoneNoAndAndLoanType(String borrowerPhoneNo,String loanType);
-
-    public OrderDO findOrderDOByOrderId(String orderId);
+    @Query(value = "select o from OrderDO o where o.orderId =?1")
+    OrderDO findOrderDO(String orderId);
 
 }

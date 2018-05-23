@@ -33,20 +33,20 @@ public class QueryBorrowerInfoByAccessTokenProcessor implements
 
         HttpServletRequest httpRequest = (HttpServletRequest) others[0];
         BorrowerRepository borrowerRepository = (BorrowerRepository) others[1];
-        ProvidentFundRepository  providentFundRepository = (ProvidentFundRepository)others[2];
-        SocialSecurityRepository socialSecurityRepository = (SocialSecurityRepository)others[3];
-
-
+        ProvidentFundRepository providentFundRepository = (ProvidentFundRepository) others[2];
+        SocialSecurityRepository socialSecurityRepository = (SocialSecurityRepository) others[3];
 
         LoginSession loginSession = JwtUtil.getLoginSession(httpRequest);
 
-
-        initResult(loginSession, borrowerInfoResult, borrowerRepository,providentFundRepository,socialSecurityRepository);
+        initResult(loginSession, borrowerInfoResult, borrowerRepository, providentFundRepository,
+            socialSecurityRepository);
 
     }
 
     private void initResult(LoginSession loginSession, BorrowerInfoResult result,
-                            BorrowerRepository borrowerRepository,ProvidentFundRepository providentFundRepository,SocialSecurityRepository socialSecurityRepository) {
+                            BorrowerRepository borrowerRepository,
+                            ProvidentFundRepository providentFundRepository,
+                            SocialSecurityRepository socialSecurityRepository) {
 
         BorrowerDO borrowerDo = borrowerRepository.findBorrowerDoByPhoneNo(loginSession
             .getPhoneNo());
@@ -59,18 +59,20 @@ public class QueryBorrowerInfoByAccessTokenProcessor implements
         result.setName(borrowerDo.getName());
 
         //====查询公积金认证情况
-        ProvidentFundDO  providentFundDO = providentFundRepository.findProvidentFundDoByPhoneNo(borrowerDo.getPhoneNo());
-        if(null != providentFundDO){
+        ProvidentFundDO providentFundDO = providentFundRepository
+            .findProvidentFundDoByPhoneNo(borrowerDo.getPhoneNo());
+        if (null != providentFundDO) {
 
-            String jsonStr =  providentFundDO.getExtData();
+            String jsonStr = providentFundDO.getExtData();
             JSONObject object = JSONArray.parseObject(jsonStr);
             String city = object.getString("city");
             result.setProvidentFundCity(city);
             result.setProvidentFundVerifyTime(providentFundDO.getCreateTime().toString());
         }
         //====查询社保认证情况
-        SocialSecurityDO socialSecurityDO = socialSecurityRepository.findSocialSecurityDoByPhoneNo(borrowerDo.getPhoneNo());
-        if(null != socialSecurityDO){
+        SocialSecurityDO socialSecurityDO = socialSecurityRepository
+            .findSocialSecurityDoByPhoneNo(borrowerDo.getPhoneNo());
+        if (null != socialSecurityDO) {
             String jsonStr = socialSecurityDO.getExtData();
             JSONObject object = JSONArray.parseObject(jsonStr);
             String city = object.getString("city");

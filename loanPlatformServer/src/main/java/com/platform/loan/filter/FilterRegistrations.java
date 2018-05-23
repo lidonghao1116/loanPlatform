@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilterRegistrations {
 
-
     @Bean
     public FilterRegistrationBean someFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
@@ -35,6 +34,5 @@ public class FilterRegistrations {
         registration.setOrder(2);
         return registration;
     }
-
 
 }

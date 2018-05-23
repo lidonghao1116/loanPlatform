@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -20,11 +21,56 @@ import java.sql.Timestamp;
 public class CreditManagerDO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer   id;
-    private Timestamp createTime;
-    private Timestamp modifyTime;
+    private Integer    id;
+    private Timestamp  createTime;
+    private Timestamp  modifyTime;
     //=====//
-    private String phoneNo;
+    private String     phoneNo;
+    //信贷经理所在公司
+    private String     company;
+    //余额
+    private BigDecimal balance;
+    //城市
+    private String     city;
+    //微信号
+    private String     webChatNo;
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public BigDecimal getBalance() {
+
+        if (null == balance) {
+            return new BigDecimal(0);
+        }
+
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getWebChatNo() {
+        return webChatNo;
+    }
+
+    public void setWebChatNo(String webChatNo) {
+        this.webChatNo = webChatNo;
+    }
 
     public Timestamp getCreateTime() {
         return createTime;

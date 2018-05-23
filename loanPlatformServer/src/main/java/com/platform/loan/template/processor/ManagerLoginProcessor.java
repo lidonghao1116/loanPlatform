@@ -19,29 +19,35 @@ import com.platform.loan.util.TimeUtil;
  */
 public class ManagerLoginProcessor implements Processor<ManagerLoginRequest, LoginResult> {
     @Override
-    public void process(ManagerLoginRequest managerLoginRequest, LoginResult loginResult, Object... others) throws Exception {
+    public void process(ManagerLoginRequest managerLoginRequest, LoginResult loginResult,
+                        Object... others) throws Exception {
 
         ManagerRepository managerRepository = (ManagerRepository) others[0];
 
         //请求参数判空
         RequestCheckUtil.checkManagerLoginRequest(managerLoginRequest);
         //校验短信
-        CommonMethod.verifyOTP(managerLoginRequest.getPhoneNo(), LoginUserTypeEnum.CREDIT_MANAGER.getCode(),
-                managerLoginRequest.getSmsCode());
+        CommonMethod.verifyOTP(managerLoginRequest.getPhoneNo(),
+            LoginUserTypeEnum.CREDIT_MANAGER.getCode(), managerLoginRequest.getSmsCode());
         //更新用户信息
         updateManagerInfo(managerLoginRequest, managerRepository);
         //下发token
-        loginResult.setAccessToken(
-                CommonMethod.buildLoginAccessToken(managerLoginRequest.getPhoneNo(), LoginUserTypeEnum.CREDIT_MANAGER.getCode()));
+        loginResult.setAccessToken(CommonMethod.buildLoginAccessToken(
+            managerLoginRequest.getPhoneNo(), LoginUserTypeEnum.CREDIT_MANAGER.getCode()));
     }
 
-    private void updateManagerInfo(ManagerLoginRequest managerLoginRequest, ManagerRepository managerRepository) {
+    private void updateManagerInfo(ManagerLoginRequest managerLoginRequest,
+                                   ManagerRepository managerRepository) {
 
-        if (null == managerRepository.findCreditManagerDOByPhoneNo(managerLoginRequest.getPhoneNo())) {
+        if (null == managerRepository
+            .findCreditManagerDOByPhoneNo(managerLoginRequest.getPhoneNo())) {
 
             CreditManagerDO creditManagerDO = new CreditManagerDO();
             creditManagerDO.setPhoneNo(managerLoginRequest.getPhoneNo());
             creditManagerDO.setCreateTime(TimeUtil.getCurrentTimestamp());
+            creditManagerDO.setModifyTime(TimeUtil.getCurrentTimestamp());
+            creditManagerDO.setCompany(managerLoginRequest.getCompany());
+            creditManagerDO.setCity(managerLoginRequest.getCity());
             managerRepository.save(creditManagerDO);
         }
     }

@@ -44,13 +44,11 @@ public class LoginCheckFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
 
-
-
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse res = (HttpServletResponse) servletResponse;
 
-        System.out.println("===========B_LoginCheckFilter"+req.getRequestURI()+",request.getMethod()="+req.getMethod());
-
+        System.out.println("===========B_LoginCheckFilter" + req.getRequestURI()
+                           + ",request.getMethod()=" + req.getMethod());
 
         if (needCheck(req)) {
             //非登录页面进行验证
@@ -72,7 +70,7 @@ public class LoginCheckFilter implements Filter {
         if (!req.getRequestURI().startsWith("/api")) {
             return false;
         }
-        if (noNeedCheckUrl.contains(req.getRequestURI())){
+        if (noNeedCheckUrl.contains(req.getRequestURI())) {
             return false;
         }
         return true;

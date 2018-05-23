@@ -27,7 +27,7 @@ public class LoginController {
     private BorrowerRepository borrowerRepository;
 
     @Autowired
-    private ManagerRepository managerRepository;
+    private ManagerRepository  managerRepository;
 
     @ApiOperation(value = "借款人登录接口", notes = "输入手机号，短信验证码，图片验证码，验证成功即可登录")
     @RequestMapping(value = "/api/borrower/login", method = RequestMethod.POST)
@@ -42,7 +42,7 @@ public class LoginController {
     public LoginResult managerLogin(@RequestBody ManagerLoginRequest managerLoginRequest) {
 
         return LoanPlatformTemplate.run(new ManagerLoginProcessor(), managerLoginRequest,
-                new LoginResult(), managerRepository);
+            new LoginResult(), managerRepository);
     }
 
 }

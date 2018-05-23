@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
  */
 public class LoanLogUtil {
 
-
     public static Logger getLogger(Class<?> clazz) {
 
         return LoggerFactory.getLogger(LoanPlatformTemplate.class);

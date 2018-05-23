@@ -10,11 +10,12 @@ package com.platform.loan.constant;
  */
 public enum BorrowerOrderStatusEnum {
     /**  待审核，待抢，已抢，完成，无效*/
-    AUDIT("AUDIT", "新创建，待审核订单"),
-    ENABLE_GRAB("ENABLE_GRAB","可抢，待抢状态"),
-    GRAB_FINISH("GRAB_FINISH","已抢"),
-    FINISH("FINISH","完成，信贷经理抢完后，放款成功"),
-    INVIALI("INVIALID","无效状态");
+    AUDIT("AUDIT", "新创建，待审核订单"), ENABLE_GRAB("ENABLE_GRAB", "可抢，待抢状态"), GRAB_FINISH("GRAB_FINISH",
+                                                                                    "已抢"), FINISH(
+                                                                                                  "FINISH",
+                                                                                                  "完成，信贷经理抢完后，放款成功"), INVIALI(
+                                                                                                                              "INVIALID",
+                                                                                                                              "无效状态,垃圾单");
     private String status;
     private String desc;
 

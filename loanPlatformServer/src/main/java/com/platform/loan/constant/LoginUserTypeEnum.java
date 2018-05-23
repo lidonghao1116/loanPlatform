@@ -10,15 +10,13 @@ package com.platform.loan.constant;
  */
 public enum LoginUserTypeEnum {
 
-    BORROWER("BORROWER","借口人登陆"),
-    CREDIT_MANAGER("CREDIT_MANAGER","信贷经理登陆");
-
+    BORROWER("BORROWER", "借口人登陆"), CREDIT_MANAGER("CREDIT_MANAGER", "信贷经理登陆");
 
     private String code;
 
     private String desc;
 
-    private LoginUserTypeEnum(String code , String desc){
+    private LoginUserTypeEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }

@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FrontDataController {
 
-  
-
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
     @ApiOperation(value = "展示数据", notes = "用于前端展示给用户选择的数据")
     @RequestMapping(value = "/api/front/data", method = RequestMethod.GET)

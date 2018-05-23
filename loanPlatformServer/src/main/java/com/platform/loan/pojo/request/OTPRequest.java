@@ -23,7 +23,7 @@ public class OTPRequest extends BaseRequest {
 
     @ApiModelProperty(value = "发短信业务类型，用户端值为：BORROWER，信贷经理端为：CREDIT_MANAGER", name = "bizType", required = true)
     /** 业务类型  */
-    public String   bizType;
+    public String  bizType;
 
     public String getBizType() {
         return bizType;

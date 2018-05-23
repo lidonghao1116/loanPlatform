@@ -43,7 +43,7 @@ public class RequestCheckUtil {
     }
 
     public static void checkManagerLoginRequest(ManagerLoginRequest request)
-            throws LoanPlatformException {
+                                                                            throws LoanPlatformException {
 
         if (isIllegal(request.getPhoneNo(), request.getSmsCode())) {
             throw new LoanPlatformException("请求参数异常：" + request.toString());

@@ -17,21 +17,20 @@ import java.io.UnsupportedEncodingException;
  */
 public class CommonMethod {
 
+    public static void verifyOTP(String phoneNo, String bizType, String smsCode)
+                                                                                throws LoanPlatformException {
 
-    public static void verifyOTP(String phoneNo,String bizType,String smsCode) throws LoanPlatformException {
+        String SMSCode = SimpleCacheUtil.getSMSCode(phoneNo, bizType);
 
-            String SMSCode = SimpleCacheUtil.getSMSCode(phoneNo,bizType);
-
-            if (!StringUtils.endsWith(SMSCode, smsCode)) {
-                throw new LoanPlatformException("短信验证码验证失败！");
-            }
-            //验证通过，清空缓存
-            SimpleCacheUtil.removeSMSCode(phoneNo,bizType);
+        if (!StringUtils.endsWith(SMSCode, smsCode)) {
+            throw new LoanPlatformException("短信验证码验证失败！");
         }
+        //验证通过，清空缓存
+        SimpleCacheUtil.removeSMSCode(phoneNo, bizType);
+    }
 
-
-
-    public static String buildLoginAccessToken(String phoneNo,String bizType) throws   UnsupportedEncodingException {
+    public static String buildLoginAccessToken(String phoneNo, String bizType)
+                                                                              throws UnsupportedEncodingException {
 
         LoginSession loginSession = new LoginSession();
         loginSession.setPhoneNo(phoneNo);

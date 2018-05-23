@@ -44,7 +44,7 @@ public class LoanPlatformException extends Exception {
         super(message);
     }
 
-    public LoanPlatformException(ResultCodeEnum resultCode , String message){
+    public LoanPlatformException(ResultCodeEnum resultCode, String message) {
         super(message);
         this.resultCode = resultCode;
     }

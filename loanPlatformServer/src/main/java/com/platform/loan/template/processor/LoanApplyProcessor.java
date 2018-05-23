@@ -35,8 +35,8 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         String phoneNo = JwtUtil.getLoginSession(httpServletRequest).getPhoneNo();
 
         //如果申请过类似订单，无法继续重复申请
-        if(isRpeat(borrowerOrderRepository,phoneNo, request.getLoanType())){
-            throw new LoanPlatformException(ResultCodeEnum.LOAN_REPEAT,"重复申请");
+        if (isRpeat(borrowerOrderRepository, phoneNo, request.getLoanType())) {
+            throw new LoanPlatformException(ResultCodeEnum.LOAN_REPEAT, "重复申请");
         }
 
         //保存一张新订单
@@ -53,11 +53,11 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
 
     }
 
-    private boolean isRpeat(OrderRepository orderRepository, String phoneNo , String loanTypeCode) {
+    private boolean isRpeat(OrderRepository orderRepository, String phoneNo, String loanTypeCode) {
 
-        OrderDO borrowerOrderDO = orderRepository.findOrderDObyBorrowerPhoneNoAndAndLoanType(phoneNo,loanTypeCode);
+        OrderDO borrowerOrderDO = orderRepository.findOrderDO(phoneNo, loanTypeCode);
 
-        if(null == borrowerOrderDO){
+        if (null == borrowerOrderDO) {
 
             return false;
         }
@@ -95,8 +95,8 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         borrowerRepository.save(borrower);
     }
 
-    private void saveOrder(LoanApplyRequest request,
-                           OrderRepository borrowerOrderRepository, String phoneNo) {
+    private void saveOrder(LoanApplyRequest request, OrderRepository borrowerOrderRepository,
+                           String phoneNo) {
         OrderDO borrowerOrderDO = new OrderDO();
         borrowerOrderDO.setOrderId(UUID.randomUUID().toString());
         borrowerOrderDO.setBorrowerPhoneNo(phoneNo);

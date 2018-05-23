@@ -10,6 +10,4 @@ package com.platform.loan.pojo.result;
  */
 public class VerifyIdNoResult extends BaseResult {
 
-
-
 }

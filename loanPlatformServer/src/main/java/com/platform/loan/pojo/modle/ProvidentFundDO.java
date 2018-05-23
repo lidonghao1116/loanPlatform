@@ -24,8 +24,8 @@ public class ProvidentFundDO {
     private String    phoneNo;
 
     /** 公积金中心查询来的数据，json格式 */
-    @Column(columnDefinition="TEXT")
-    private String extData;
+    @Column(columnDefinition = "TEXT")
+    private String    extData;
 
     public String getExtData() {
         return extData;

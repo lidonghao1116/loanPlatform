@@ -13,11 +13,11 @@ import java.util.List;
  * @author caogu.wyp
  * @version $Id: LoanOrderResult.java, v 0.1 2018-05-20 下午11:15 caogu.wyp Exp $$
  */
-public class LoanOrderResult extends BaseResult{
+public class LoanOrderResult extends BaseResult {
 
     private List<LoanOrderViewModel> viewList;
 
-    private int pageNum;
+    private int                      pageNum;
 
     public List<LoanOrderViewModel> getViewList() {
         return viewList;

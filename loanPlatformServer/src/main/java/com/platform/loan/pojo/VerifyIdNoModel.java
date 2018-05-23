@@ -12,8 +12,8 @@ import java.io.Serializable;
  */
 public class VerifyIdNoModel implements Serializable {
 
-    private  String id_no;
-    private  String id_name;
+    private String id_no;
+    private String id_name;
 
     public String getId_no() {
         return id_no;

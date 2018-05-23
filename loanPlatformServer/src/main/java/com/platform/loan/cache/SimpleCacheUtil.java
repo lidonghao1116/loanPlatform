@@ -20,29 +20,30 @@ public class SimpleCacheUtil {
         imageCodeCache.put(key, value);
     }
 
-    public static void addSMSCode(String phoneNo,String bizType, String value) {
-        SMSCodeCache.put((buildSmsStoreKey(phoneNo,bizType)), value);
+    public static void addSMSCode(String phoneNo, String bizType, String value) {
+        SMSCodeCache.put((buildSmsStoreKey(phoneNo, bizType)), value);
     }
 
     public static String getImageCode(String key) {
         return imageCodeCache.get(key);
     }
 
-    public static String getSMSCode(String phoneNo,String bizType) {
+    public static String getSMSCode(String phoneNo, String bizType) {
 
-        return SMSCodeCache.get((buildSmsStoreKey(phoneNo,bizType)));
+        return SMSCodeCache.get((buildSmsStoreKey(phoneNo, bizType)));
     }
 
-    private static String buildSmsStoreKey(String phoneNo,String bizType){
-        return phoneNo+bizType;
+    private static String buildSmsStoreKey(String phoneNo, String bizType) {
+        return phoneNo + bizType;
     }
+
     public static String removeImageCode(String key) {
         return imageCodeCache.remove(key);
     }
 
-    public static String removeSMSCode(String phoneNo,String bizType) {
+    public static String removeSMSCode(String phoneNo, String bizType) {
 
-        return SMSCodeCache.remove(buildSmsStoreKey(phoneNo,bizType));
+        return SMSCodeCache.remove(buildSmsStoreKey(phoneNo, bizType));
     }
 
 }

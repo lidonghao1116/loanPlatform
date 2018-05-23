@@ -58,7 +58,6 @@ public class BorrowerDO {
 
     private String    weiLiDaiKeJie;
 
-
     public String getWeiLiDaiTotal() {
         return weiLiDaiTotal;
     }

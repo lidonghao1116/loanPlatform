@@ -33,14 +33,13 @@ import javax.servlet.http.HttpServletRequest;
 public class BorrowerController {
 
     @Autowired
-    private BorrowerRepository borrowerRepository;
+    private BorrowerRepository       borrowerRepository;
 
     @Autowired
-    private ProvidentFundRepository providentFundRepository;
+    private ProvidentFundRepository  providentFundRepository;
 
     @Autowired
     private SocialSecurityRepository socialSecurityRepository;
-
 
     @ApiOperation(value = "获取借款类型列表", notes = "借款人登录后进入的借款类型列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
@@ -58,7 +57,8 @@ public class BorrowerController {
                                                              HttpServletRequest request) {
 
         return LoanPlatformTemplate.run(new QueryBorrowerInfoByAccessTokenProcessor(), baseRequest,
-            new BorrowerInfoResult(), request, borrowerRepository,providentFundRepository,socialSecurityRepository);
+            new BorrowerInfoResult(), request, borrowerRepository, providentFundRepository,
+            socialSecurityRepository);
 
     }
 

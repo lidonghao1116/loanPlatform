@@ -23,12 +23,11 @@ import java.util.List;
  */
 public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrderResult> {
     @Override
-    public void process(LoanOrderRequest loanOrderRequest, LoanOrderResult loanOrderResult, Object... others) throws Exception {
+    public void process(LoanOrderRequest loanOrderRequest, LoanOrderResult loanOrderResult,
+                        Object... others) throws Exception {
 
-        OrderRepository orderRepository = (OrderRepository)others[0];
-        BorrowerRepository borrowerRepository =(BorrowerRepository)others[1];
-
-
+        OrderRepository orderRepository = (OrderRepository) others[0];
+        BorrowerRepository borrowerRepository = (BorrowerRepository) others[1];
 
         Iterable<OrderDO> borrowerOrderList = orderRepository.findAll();
 
@@ -44,8 +43,9 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
             model.setLoanLimit(borrowerOrderDO.getLoanLimit());
             model.setOrderStatus(borrowerOrderDO.getOrderStatus());
             //查人信息
-            BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(borrowerOrderDO.getBorrowerPhoneNo());
-            if(null != borrowerDO){
+            BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(borrowerOrderDO
+                .getBorrowerPhoneNo());
+            if (null != borrowerDO) {
                 model.setMaskBorrowerName(maskBorrowerName(borrowerDO));
                 model.setProfession(borrowerDO.getProfession());
                 model.setMonthlyIncome(borrowerDO.getMonthlyIncome());
@@ -63,22 +63,23 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
 
     private String maskBorrowerPhone(OrderDO borrowerOrderDO) {
         //电话号码，取前三位，后面全取*
-        if(StringUtils.isBlank(borrowerOrderDO.getBorrowerPhoneNo())||borrowerOrderDO.getBorrowerPhoneNo().length()<4){
+        if (StringUtils.isBlank(borrowerOrderDO.getBorrowerPhoneNo())
+            || borrowerOrderDO.getBorrowerPhoneNo().length() < 4) {
             return borrowerOrderDO.getBorrowerPhoneNo();
         }
-        return borrowerOrderDO.getBorrowerPhoneNo().substring(0,3)+"********";
+        return borrowerOrderDO.getBorrowerPhoneNo().substring(0, 3) + "********";
     }
 
     private String maskBorrowerName(BorrowerDO borrowerDO) {
         //姓名，取第一个字，后面2个*
 
-        if(StringUtils.isBlank(borrowerDO.getName())){
-            return  borrowerDO.getName();
+        if (StringUtils.isBlank(borrowerDO.getName())) {
+            return borrowerDO.getName();
         }
 
         String name = borrowerDO.getName();
         char first = name.charAt(0);
 
-        return first+"**";
+        return first + "**";
     }
 }
