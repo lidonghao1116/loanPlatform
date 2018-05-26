@@ -18,28 +18,6 @@ public class ManagerLoginRequest extends BaseRequest {
     /** 短信验证码 */
     public String smsCode;
 
-    @ApiModelProperty(value = "信贷经理所在城市", name = "city", required = true)
-    public String city;
-
-    @ApiModelProperty(value = "所在公司公司", name = "company", required = true)
-    public String company;
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
     public String getPhoneNo() {
         return phoneNo;
     }

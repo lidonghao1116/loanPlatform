@@ -9,13 +9,14 @@ package com.platform.loan.constant;
  * @version $Id: ResultCodeEnum.java, v 0.1 2018-05-05 下午6:19 caogu.wyp Exp $$
  */
 public enum ResultCodeEnum {
-    SUCCESS("000", "请求成功", "请求成功"), TOKEN_VERIFY_FAILED("001", "token验证失败", "token验证失败"), LOAN_REPEAT(
-                                                                                                      "002",
-                                                                                                      "重复借款",
-                                                                                                      "一个用户已申请过该类型或者其他类型借款"), NOT_SUFFICIENT_BALANCE(
-                                                                                                                                                     "003",
-                                                                                                                                                     "抢订单时余额不足",
-                                                                                                                                                     "抢订单时余额不足");
+    //
+    SUCCESS("000", "请求成功", "请求成功"),
+    //
+    TOKEN_VERIFY_FAILED("001", "token验证失败", "token验证失败"),
+    //
+    LOAN_REPEAT("002", "重复借款", "一个用户已申请过该类型或者其他类型借款"),
+    //
+    NOT_SUFFICIENT_BALANCE("003", "抢订单时余额不足", "抢订单时余额不足");
 
     private String code;
     private String errorMessage;

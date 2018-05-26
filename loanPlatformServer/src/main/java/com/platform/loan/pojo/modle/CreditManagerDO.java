@@ -35,6 +35,18 @@ public class CreditManagerDO implements Serializable {
     //微信号
     private String     webChatNo;
 
+    /** json格式 */
+    @Column(columnDefinition = "TEXT")
+    private String     extData;
+
+    public String getExtData() {
+        return extData;
+    }
+
+    public void setExtData(String extData) {
+        this.extData = extData;
+    }
+
     public String getCompany() {
         return company;
     }

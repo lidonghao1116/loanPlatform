@@ -15,10 +15,10 @@ public class OTPRequest extends BaseRequest {
     private String phoneNo;
 
     @ApiModelProperty(value = "图片验证码", name = "imageCode", required = true)
-    /**  图片验证码 */
     public String  imageCode;
-    @ApiModelProperty(value = "图片验证码token,下发图片验证码时，放在hearders中的，key为IMAGE_CODE_HEADER_KEY", name = "imageCodeToken", required = true)
+
     /** 在请求生成验证码时，下发给前端的token，在response header中 CommonConstants.IMAGE_CODE_HEADER_KEY*/
+    @ApiModelProperty(value = "图片验证码token,下发图片验证码时，放在hearders中的，key为IMAGE_CODE_HEADER_KEY", name = "imageCodeToken", required = true)
     public String  imageCodeToken;
 
     @ApiModelProperty(value = "发短信业务类型，用户端值为：BORROWER，信贷经理端为：CREDIT_MANAGER", name = "bizType", required = true)

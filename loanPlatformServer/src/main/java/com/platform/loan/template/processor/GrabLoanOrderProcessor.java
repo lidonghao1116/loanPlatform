@@ -52,14 +52,31 @@ public class GrabLoanOrderProcessor implements Processor<GrabLoanOrderRequest, G
 
             throw new LoanPlatformException(ResultCodeEnum.NOT_SUFFICIENT_BALANCE, "余额不足,请充值!");
 
-        } else {
-            //TODO 这里后续要数据库加锁及事务
-            orderDO.setManagerPhoneNo(managerPhoneNo);
-            orderDO.setGrabTime(TimeUtil.getCurrentTimestamp());
-            orderDO.setOrderStatus(BorrowerOrderStatusEnum.GRAB_FINISH.getStatus());
-            creditManagerDO.setBalance(newBalance);
-            orderRepository.save(orderDO);
-            managerRepository.save(creditManagerDO);
         }
+        saveToDb(orderRepository, managerRepository, managerPhoneNo, orderDO, creditManagerDO,
+            newBalance);
+
+        initResult(newBalance, orderDO.getPrice(), grabLoanOrderResult);
+
+    }
+
+    private void initResult(BigDecimal newBalance, BigDecimal price,
+                            GrabLoanOrderResult grabLoanOrderResult) {
+
+        grabLoanOrderResult.setBalance(newBalance.toString());
+        grabLoanOrderResult.setPrice(price.toString());
+
+    }
+
+    private void saveToDb(OrderRepository orderRepository, ManagerRepository managerRepository,
+                          String managerPhoneNo, OrderDO orderDO, CreditManagerDO creditManagerDO,
+                          BigDecimal newBalance) {
+        //TODO 这里后续要数据库加锁及事务
+        orderDO.setManagerPhoneNo(managerPhoneNo);
+        orderDO.setGrabTime(TimeUtil.getCurrentTimestamp());
+        orderDO.setOrderStatus(BorrowerOrderStatusEnum.GRAB_FINISH.getStatus());
+        creditManagerDO.setBalance(newBalance);
+        orderRepository.save(orderDO);
+        managerRepository.save(creditManagerDO);
     }
 }

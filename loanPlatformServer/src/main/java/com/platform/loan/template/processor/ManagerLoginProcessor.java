@@ -46,8 +46,6 @@ public class ManagerLoginProcessor implements Processor<ManagerLoginRequest, Log
             creditManagerDO.setPhoneNo(managerLoginRequest.getPhoneNo());
             creditManagerDO.setCreateTime(TimeUtil.getCurrentTimestamp());
             creditManagerDO.setModifyTime(TimeUtil.getCurrentTimestamp());
-            creditManagerDO.setCompany(managerLoginRequest.getCompany());
-            creditManagerDO.setCity(managerLoginRequest.getCity());
             managerRepository.save(creditManagerDO);
         }
     }

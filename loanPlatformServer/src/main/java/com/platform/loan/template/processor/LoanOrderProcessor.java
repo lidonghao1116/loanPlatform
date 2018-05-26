@@ -5,13 +5,17 @@ package com.platform.loan.template.processor;
 
 import com.platform.loan.dao.BorrowerRepository;
 import com.platform.loan.dao.OrderRepository;
+import com.platform.loan.dao.ProvidentFundRepository;
+import com.platform.loan.dao.SocialSecurityRepository;
 import com.platform.loan.pojo.LoanOrderViewModel;
 import com.platform.loan.pojo.modle.BorrowerDO;
 import com.platform.loan.pojo.modle.OrderDO;
+import com.platform.loan.pojo.modle.ProvidentFundDO;
+import com.platform.loan.pojo.modle.SocialSecurityDO;
 import com.platform.loan.pojo.request.LoanOrderRequest;
 import com.platform.loan.pojo.request.LoanOrderResult;
 import com.platform.loan.template.Processor;
-import org.apache.commons.lang3.StringUtils;
+import com.platform.loan.util.LoanUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,58 +32,51 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
 
         OrderRepository orderRepository = (OrderRepository) others[0];
         BorrowerRepository borrowerRepository = (BorrowerRepository) others[1];
+        ProvidentFundRepository providentFundRepository = (ProvidentFundRepository) others[2];
+        SocialSecurityRepository socialSecurityRepository = (SocialSecurityRepository) others[3];
 
+        //TODO 根据条件分页查
         Iterable<OrderDO> borrowerOrderList = orderRepository.findAll();
 
-        List<LoanOrderViewModel> list = new ArrayList<>();
-
-        borrowerOrderList.forEach(borrowerOrderDO -> {
-
-            LoanOrderViewModel model = new LoanOrderViewModel();
-            model.setApplyTime(borrowerOrderDO.getCreateTime().toString());
-            model.setMaskPhoneNo(maskBorrowerPhone(borrowerOrderDO));
-            model.setPrice(borrowerOrderDO.getPrice().toString());
-            model.setLoanType(borrowerOrderDO.getLoanType());
-            model.setLoanLimit(borrowerOrderDO.getLoanLimit());
-            model.setOrderStatus(borrowerOrderDO.getOrderStatus());
-            //查人信息
-            BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(borrowerOrderDO
-                .getBorrowerPhoneNo());
-            if (null != borrowerDO) {
-                model.setMaskBorrowerName(maskBorrowerName(borrowerDO));
-                model.setProfession(borrowerDO.getProfession());
-                model.setMonthlyIncome(borrowerDO.getMonthlyIncome());
-                model.setIncomeType(borrowerDO.getIncomeType());
-                model.setHouseInfo(borrowerDO.getHouseInfo());
-                model.setCarInfo(borrowerDO.getCarInfo());
-            }
-            list.add(model);
-        });
+        List<LoanOrderViewModel> list = getLoanOrderViewModels(borrowerRepository,
+            providentFundRepository, socialSecurityRepository, borrowerOrderList);
 
         loanOrderResult.setPageNum(1);
+        loanOrderResult.setTotalPageNum(1);
         loanOrderResult.setViewList(list);
 
     }
 
-    private String maskBorrowerPhone(OrderDO borrowerOrderDO) {
-        //电话号码，取前三位，后面全取*
-        if (StringUtils.isBlank(borrowerOrderDO.getBorrowerPhoneNo())
-            || borrowerOrderDO.getBorrowerPhoneNo().length() < 4) {
-            return borrowerOrderDO.getBorrowerPhoneNo();
-        }
-        return borrowerOrderDO.getBorrowerPhoneNo().substring(0, 3) + "********";
-    }
+    private List<LoanOrderViewModel> getLoanOrderViewModels(BorrowerRepository borrowerRepository,
+                                                            ProvidentFundRepository providentFundRepository,
+                                                            SocialSecurityRepository socialSecurityRepository,
+                                                            Iterable<OrderDO> borrowerOrderList) {
+        List<LoanOrderViewModel> list = new ArrayList<>();
 
-    private String maskBorrowerName(BorrowerDO borrowerDO) {
-        //姓名，取第一个字，后面2个*
+        borrowerOrderList.forEach(borrowerOrderDO -> {
 
-        if (StringUtils.isBlank(borrowerDO.getName())) {
-            return borrowerDO.getName();
-        }
+            //查询订单信息
+            LoanOrderViewModel model = LoanUtil.getLoanOrderViewModel(borrowerOrderDO, false);
+            //查询借款人信息
+            BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(borrowerOrderDO
+                .getBorrowerPhoneNo());
+            LoanUtil.initBorrowerInfo(model, borrowerDO, false);
 
-        String name = borrowerDO.getName();
-        char first = name.charAt(0);
+            //查询公积金信息
+            ProvidentFundDO providentFundDO = providentFundRepository
+                .findProvidentFundDoByPhoneNo(borrowerOrderDO.getBorrowerPhoneNo());
+            LoanUtil.initFundInfo(model, providentFundDO);
+            //查询社保信息
+            SocialSecurityDO socialSecurityDO = socialSecurityRepository
+                .findSocialSecurityDoByPhoneNo(borrowerOrderDO.getBorrowerPhoneNo());
+            LoanUtil.initSocialInfo(model, socialSecurityDO);
 
-        return first + "**";
+            //拼描述信息
+            LoanUtil.intBorrowerInfo(model, borrowerDO);
+
+            list.add(model);
+        });
+
+        return list;
     }
 }

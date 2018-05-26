@@ -29,10 +29,12 @@ public class LoginCheckFilter implements Filter {
         noNeedCheckUrl.add("/api/borrower/login");
         noNeedCheckUrl.add("/api/imagecode/");
         noNeedCheckUrl.add("/api/sms/send");
-        noNeedCheckUrl.add("/api/manager/order/grab");
         noNeedCheckUrl.add("/api/imagecode/generate");
-        //======//
+        //===信贷经理===//
         noNeedCheckUrl.add("/api/manager/orders");
+        noNeedCheckUrl.add("/api/manager/login");
+        noNeedCheckUrl.add("/api/front/data");
+
     }
 
     @Override

@@ -9,8 +9,10 @@ package com.platform.loan.constant;
  * @version $Id: LoginUserType.java, v 0.1 2018-05-22 上午12:21 caogu.wyp Exp $$
  */
 public enum LoginUserTypeEnum {
-
-    BORROWER("BORROWER", "借口人登陆"), CREDIT_MANAGER("CREDIT_MANAGER", "信贷经理登陆");
+//
+    BORROWER("BORROWER", "借口人登陆"),
+    //
+    CREDIT_MANAGER("CREDIT_MANAGER", "信贷经理登陆");
 
     private String code;
 

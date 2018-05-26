@@ -13,6 +13,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ProvidentFundRepository extends CrudRepository<ProvidentFundDO, Integer> {
 
-    public ProvidentFundDO findProvidentFundDoByPhoneNo(String phoneNo);
+    ProvidentFundDO findProvidentFundDoByPhoneNo(String phoneNo);
 
 }

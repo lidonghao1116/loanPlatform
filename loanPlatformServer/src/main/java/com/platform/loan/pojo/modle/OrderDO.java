@@ -42,8 +42,29 @@ public class OrderDO implements Serializable {
     private String     managerPhoneNo;
     /** 订单号 */
     private String     orderId;
-    /** 红包被抢时间 */
+    /** 订单被抢时间 */
     private Timestamp  grabTime;
+    /** 处理结果:已重新放款等 */
+    private String     processResult;
+    /** json格式 */
+    @Column(columnDefinition = "TEXT")
+    private String     extData;
+
+    public String getProcessResult() {
+        return processResult;
+    }
+
+    public void setProcessResult(String processResult) {
+        this.processResult = processResult;
+    }
+
+    public String getExtData() {
+        return extData;
+    }
+
+    public void setExtData(String extData) {
+        this.extData = extData;
+    }
 
     public Timestamp getGrabTime() {
         return grabTime;

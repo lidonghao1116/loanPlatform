@@ -7,6 +7,8 @@ import com.platform.loan.pojo.modle.OrderDO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 /**
  *
  * @author caogu.wyp
@@ -19,5 +21,7 @@ public interface OrderRepository extends CrudRepository<OrderDO, Integer> {
 
     @Query(value = "select o from OrderDO o where o.orderId =?1")
     OrderDO findOrderDO(String orderId);
+
+    List<OrderDO> findOrderDOSByManagerPhoneNo(String managerPhone);
 
 }

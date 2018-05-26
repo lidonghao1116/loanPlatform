@@ -15,30 +15,81 @@ import java.io.Serializable;
  */
 public class LoanOrderViewModel implements Serializable {
 
-    private String  maskBorrowerName;
-    private String  maskPhoneNo;
-
-    private String  applyTime;
-    private String  loanCity;
-    private String  loanLimit;
-    private String  profession;
-    private String  monthlyIncome;
-    private String  incomeType;
-    private boolean haveProvidentFund;
-    private boolean haveSocialSecurity;
-    private String  houseInfo;
-    private String  carInfo;
-    private String  price;
+    private String maskBorrowerName;
+    private String maskBorrowerPhoneNo;
+    private String borrowerPhoneNo;
+    private String borrowerName;
+    private String applyTime;
+    private String loanCity;
+    private String loanLimit;
+    private String profession;
+    private String monthlyIncome;
+    private String incomeType;
+    private String houseInfo;
+    private String carInfo;
+    private String price;
     /** BorrowerOrderStatusEnum */
-    private String  orderStatus;
-    private String  loanType;
+    private String orderStatus;
+    private String loanType;
+    /** 公积金taskId,用于显示用户公积金信息 */
+    private String providentFundTaskId;
+    /** 社保taskId,用于显示用户社保信息 */
+    private String socialSecurityTaskId;
+    private String orderId;
+    /** 微粒贷 */
+    private String weiLiDaiKeJie;
+    private String weiLiDaiTotal;
+    private String grabTime;
 
-    public String getLoanType() {
-        return loanType;
+    /** 借贷方简介 */
+    private String borrowerInfoDesc;
+
+    public String getBorrowerInfoDesc() {
+        return borrowerInfoDesc;
     }
 
-    public void setLoanType(String loanType) {
-        this.loanType = loanType;
+    public void setBorrowerInfoDesc(String borrowerInfoDesc) {
+        this.borrowerInfoDesc = borrowerInfoDesc;
+    }
+
+    public String getGrabTime() {
+        return grabTime;
+    }
+
+    public void setGrabTime(String grabTime) {
+        this.grabTime = grabTime;
+    }
+
+    public String getWeiLiDaiKeJie() {
+        return weiLiDaiKeJie;
+    }
+
+    public void setWeiLiDaiKeJie(String weiLiDaiKeJie) {
+        this.weiLiDaiKeJie = weiLiDaiKeJie;
+    }
+
+    public String getWeiLiDaiTotal() {
+        return weiLiDaiTotal;
+    }
+
+    public void setWeiLiDaiTotal(String weiLiDaiTotal) {
+        this.weiLiDaiTotal = weiLiDaiTotal;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getBorrowerName() {
+        return borrowerName;
+    }
+
+    public void setBorrowerName(String borrowerName) {
+        this.borrowerName = borrowerName;
     }
 
     public String getMaskBorrowerName() {
@@ -49,12 +100,20 @@ public class LoanOrderViewModel implements Serializable {
         this.maskBorrowerName = maskBorrowerName;
     }
 
-    public String getMaskPhoneNo() {
-        return maskPhoneNo;
+    public String getMaskBorrowerPhoneNo() {
+        return maskBorrowerPhoneNo;
     }
 
-    public void setMaskPhoneNo(String maskPhoneNo) {
-        this.maskPhoneNo = maskPhoneNo;
+    public void setMaskBorrowerPhoneNo(String maskBorrowerPhoneNo) {
+        this.maskBorrowerPhoneNo = maskBorrowerPhoneNo;
+    }
+
+    public String getBorrowerPhoneNo() {
+        return borrowerPhoneNo;
+    }
+
+    public void setBorrowerPhoneNo(String borrowerPhoneNo) {
+        this.borrowerPhoneNo = borrowerPhoneNo;
     }
 
     public String getApplyTime() {
@@ -105,22 +164,6 @@ public class LoanOrderViewModel implements Serializable {
         this.incomeType = incomeType;
     }
 
-    public boolean isHaveProvidentFund() {
-        return haveProvidentFund;
-    }
-
-    public void setHaveProvidentFund(boolean haveProvidentFund) {
-        this.haveProvidentFund = haveProvidentFund;
-    }
-
-    public boolean isHaveSocialSecurity() {
-        return haveSocialSecurity;
-    }
-
-    public void setHaveSocialSecurity(boolean haveSocialSecurity) {
-        this.haveSocialSecurity = haveSocialSecurity;
-    }
-
     public String getHouseInfo() {
         return houseInfo;
     }
@@ -151,6 +194,30 @@ public class LoanOrderViewModel implements Serializable {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public String getLoanType() {
+        return loanType;
+    }
+
+    public void setLoanType(String loanType) {
+        this.loanType = loanType;
+    }
+
+    public String getProvidentFundTaskId() {
+        return providentFundTaskId;
+    }
+
+    public void setProvidentFundTaskId(String providentFundTaskId) {
+        this.providentFundTaskId = providentFundTaskId;
+    }
+
+    public String getSocialSecurityTaskId() {
+        return socialSecurityTaskId;
+    }
+
+    public void setSocialSecurityTaskId(String socialSecurityTaskId) {
+        this.socialSecurityTaskId = socialSecurityTaskId;
     }
 
     @Override

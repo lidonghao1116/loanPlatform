@@ -19,6 +19,16 @@ public class LoanOrderResult extends BaseResult {
 
     private int                      pageNum;
 
+    private int                      totalPageNum;
+
+    public int getTotalPageNum() {
+        return totalPageNum;
+    }
+
+    public void setTotalPageNum(int totalPageNum) {
+        this.totalPageNum = totalPageNum;
+    }
+
     public List<LoanOrderViewModel> getViewList() {
         return viewList;
     }

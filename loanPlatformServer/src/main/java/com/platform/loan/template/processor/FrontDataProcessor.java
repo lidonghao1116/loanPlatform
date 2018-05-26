@@ -3,11 +3,17 @@
  */
 package com.platform.loan.template.processor;
 
+import com.platform.loan.constant.BorrowerOrderStatusEnum;
+import com.platform.loan.constant.LoanOrderQueryConditionEnum;
+import com.platform.loan.constant.ProcessResultEnum;
+import com.platform.loan.constant.ResultCodeEnum;
 import com.platform.loan.pojo.request.BaseRequest;
 import com.platform.loan.pojo.result.FrontDataResult;
 import com.platform.loan.template.Processor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -32,6 +38,32 @@ public class FrontDataProcessor implements Processor<BaseRequest, FrontDataResul
         frontDataResult.setInsuranceCompanyList(Arrays.asList("安邦保险", "中国平安", "前海人寿", "中国人寿",
             "太平洋保险", "泰康人寿", "新华保险", "阳光保险", "招商信诺", "中国天平", "其他"));
         frontDataResult.setInsuranceCoverageList(Arrays.asList("5万及以下", "5万至20万", "20万以上"));
+        //==============//
+        List<String> resultCodeEnumList = new ArrayList<>();
+        for (ResultCodeEnum resultCodeEnum : ResultCodeEnum.values()) {
+            resultCodeEnumList.add(resultCodeEnum.getCode() + ":" + resultCodeEnum.getDetail());
+        }
+        frontDataResult.setResultCodeList(resultCodeEnumList);
+        //==========//
+        List<String> borrowerOrderStatusEnumList = new ArrayList<>();
+        for (BorrowerOrderStatusEnum r : BorrowerOrderStatusEnum.values()) {
+            borrowerOrderStatusEnumList.add(r.getStatus() + ":" + r.getDesc());
+        }
+        frontDataResult.setBorrowerOrderStatusList(borrowerOrderStatusEnumList);
+        //=========//
+
+        List<String> loanOrderQueryConditionEnum = new ArrayList<>();
+        for (LoanOrderQueryConditionEnum r : LoanOrderQueryConditionEnum.values()) {
+            loanOrderQueryConditionEnum.add(r.getCode() + ":" + r.getDesc());
+        }
+        frontDataResult.setLoanOrderQueryConditionList(loanOrderQueryConditionEnum);
+
+        //=========//
+        List<String> processResultList = new ArrayList<>();
+        for (ProcessResultEnum r : ProcessResultEnum.values()) {
+            processResultList.add(r.getDesc());
+        }
+        frontDataResult.setProcessResultList(processResultList);
 
     }
 }

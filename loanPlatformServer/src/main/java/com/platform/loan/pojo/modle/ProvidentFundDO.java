@@ -20,12 +20,36 @@ public class ProvidentFundDO {
     private Timestamp createTime;
     private Timestamp modifyTime;
     //==========//
-    //关联用户的手机号
+    /** 关联用户的手机号 */
     private String    phoneNo;
 
-    /** 公积金中心查询来的数据，json格式 */
+    /** 公积金详情 json格式 */
+    @Column(columnDefinition = "TEXT")
+    private String    fundDetail;
+
+    /** 公积金报告 */
+    @Column(columnDefinition = "TEXT")
+    private String    fundReport;
+
+    /** json格式,扩展字段 */
     @Column(columnDefinition = "TEXT")
     private String    extData;
+
+    public String getFundReport() {
+        return fundReport;
+    }
+
+    public void setFundReport(String fundReport) {
+        this.fundReport = fundReport;
+    }
+
+    public String getFundDetail() {
+        return fundDetail;
+    }
+
+    public void setFundDetail(String fundDetail) {
+        this.fundDetail = fundDetail;
+    }
 
     public String getExtData() {
         return extData;

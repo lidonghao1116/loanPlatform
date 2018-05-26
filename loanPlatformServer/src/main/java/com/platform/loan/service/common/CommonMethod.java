@@ -20,9 +20,11 @@ public class CommonMethod {
     public static void verifyOTP(String phoneNo, String bizType, String smsCode)
                                                                                 throws LoanPlatformException {
 
-        String SMSCode = SimpleCacheUtil.getSMSCode(phoneNo, bizType);
+        String cacheCode = SimpleCacheUtil.getSMSCode(phoneNo, bizType);
 
-        if (!StringUtils.endsWith(SMSCode, smsCode)) {
+        System.out.println("==手机发过来的:" + smsCode + ",缓存的:" + cacheCode);
+
+        if (!StringUtils.equalsIgnoreCase(cacheCode, smsCode)) {
             throw new LoanPlatformException("短信验证码验证失败！");
         }
         //验证通过，清空缓存

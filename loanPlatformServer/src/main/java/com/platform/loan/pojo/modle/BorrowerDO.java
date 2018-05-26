@@ -34,7 +34,6 @@ public class BorrowerDO {
     private String    eduLevel;
     /** 职业 */
     private String    profession;
-
     /** 月收入  */
     private String    monthlyIncome;
     /** 收入形式，现金发放，转帐工资，银行代发 */
@@ -58,6 +57,18 @@ public class BorrowerDO {
 
     private String    weiLiDaiKeJie;
 
+    /** json格式 */
+    @Column(columnDefinition = "TEXT")
+    private String    extData;
+
+    public String getExtData() {
+        return extData;
+    }
+
+    public void setExtData(String extData) {
+        this.extData = extData;
+    }
+
     public String getWeiLiDaiTotal() {
         return weiLiDaiTotal;
     }
@@ -73,8 +84,6 @@ public class BorrowerDO {
     public void setWeiLiDaiKeJie(String weiLiDaiKeJie) {
         this.weiLiDaiKeJie = weiLiDaiKeJie;
     }
-
-    private String extData;
 
     public String getIdNo() {
         return idNo;
@@ -186,14 +195,6 @@ public class BorrowerDO {
 
     public void setInsuranceCoverage(String insuranceCoverage) {
         this.insuranceCoverage = insuranceCoverage;
-    }
-
-    public String getExtData() {
-        return extData;
-    }
-
-    public void setExtData(String extData) {
-        this.extData = extData;
     }
 
     public Integer getId() {

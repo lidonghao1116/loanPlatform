@@ -12,7 +12,7 @@ import com.platform.loan.pojo.modle.OrderDO;
 import com.platform.loan.pojo.request.LoanApplyRequest;
 import com.platform.loan.pojo.result.LoanApplyResult;
 import com.platform.loan.template.Processor;
-import com.platform.loan.util.LoanPriceUtil;
+import com.platform.loan.util.LoanUtil;
 import com.platform.loan.util.TimeUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +35,7 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         String phoneNo = JwtUtil.getLoginSession(httpServletRequest).getPhoneNo();
 
         //如果申请过类似订单，无法继续重复申请
-        if (isRpeat(borrowerOrderRepository, phoneNo, request.getLoanType())) {
+        if (isRepeat(borrowerOrderRepository, phoneNo, request.getLoanType())) {
             throw new LoanPlatformException(ResultCodeEnum.LOAN_REPEAT, "重复申请");
         }
 
@@ -53,15 +53,9 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
 
     }
 
-    private boolean isRpeat(OrderRepository orderRepository, String phoneNo, String loanTypeCode) {
+    private boolean isRepeat(OrderRepository orderRepository, String phoneNo, String loanTypeCode) {
 
-        OrderDO borrowerOrderDO = orderRepository.findOrderDO(phoneNo, loanTypeCode);
-
-        if (null == borrowerOrderDO) {
-
-            return false;
-        }
-        return true;
+        return null == orderRepository.findOrderDO(phoneNo, loanTypeCode) ? false : true;
     }
 
     private void saveWEI_LI_DAIBorrowerInfo(LoanApplyRequest request,
@@ -107,8 +101,8 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         borrowerOrderDO.setLoanLimit(request.getLoanLimit());
         borrowerOrderDO.setLoanPurpose(request.getLoanPurpose());
         borrowerOrderDO.setLoanType(request.getLoanType());
-        borrowerOrderDO.setPrice(LoanPriceUtil.getPrice(request));
-        borrowerOrderDO.setOrderStatus(BorrowerOrderStatusEnum.AUDIT.getStatus());
+        borrowerOrderDO.setPrice(LoanUtil.getPrice(request));
+        borrowerOrderDO.setOrderStatus(BorrowerOrderStatusEnum.ENABLE_GRAB.getStatus());
         borrowerOrderRepository.save(borrowerOrderDO);
     }
 

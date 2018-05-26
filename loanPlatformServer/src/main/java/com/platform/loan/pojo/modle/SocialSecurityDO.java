@@ -24,7 +24,29 @@ public class SocialSecurityDO {
     private String    phoneNo;
 
     @Column(columnDefinition = "TEXT")
+    private String    socialDetail;
+
+    @Column(columnDefinition = "TEXT")
+    private String    socialReport;
+
+    @Column(columnDefinition = "TEXT")
     private String    extData;
+
+    public String getSocialDetail() {
+        return socialDetail;
+    }
+
+    public void setSocialDetail(String socialDetail) {
+        this.socialDetail = socialDetail;
+    }
+
+    public String getSocialReport() {
+        return socialReport;
+    }
+
+    public void setSocialReport(String socialReport) {
+        this.socialReport = socialReport;
+    }
 
     public String getExtData() {
         return extData;
