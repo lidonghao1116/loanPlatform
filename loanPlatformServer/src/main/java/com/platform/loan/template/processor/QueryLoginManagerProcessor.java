@@ -12,6 +12,7 @@ import com.platform.loan.pojo.modle.CreditManagerDO;
 import com.platform.loan.pojo.request.BaseRequest;
 import com.platform.loan.pojo.result.QueryLoginManagerResult;
 import com.platform.loan.template.Processor;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,6 +37,11 @@ public class QueryLoginManagerProcessor implements Processor<BaseRequest, QueryL
             throw new LoanPlatformException(ResultCodeEnum.TOKEN_VERIFY_FAILED, "数据库无账号信息，请重新登陆");
         }
 
+        if (StringUtils.isBlank(creditManagerDO.getIdNo())) {
+            queryLoginManagerResult.setHaveCertfication(false);
+        } else {
+            queryLoginManagerResult.setHaveCertfication(true);
+        }
         queryLoginManagerResult.setBalance(creditManagerDO.getBalance());
         queryLoginManagerResult.setCity(creditManagerDO.getCity());
         queryLoginManagerResult.setCompany(creditManagerDO.getCompany());

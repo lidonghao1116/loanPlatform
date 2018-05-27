@@ -16,7 +16,9 @@ public enum ResultCodeEnum {
     //
     LOAN_REPEAT("002", "重复借款", "一个用户已申请过该类型或者其他类型借款"),
     //
-    NOT_SUFFICIENT_BALANCE("003", "抢订单时余额不足", "抢订单时余额不足");
+    NOT_SUFFICIENT_BALANCE("003", "抢订单时余额不足", "抢订单时余额不足"),
+
+    NOT_CERTFICATION("004", "未实名认证", "未实名认证");
 
     private String code;
     private String errorMessage;

@@ -68,7 +68,8 @@ public class LoanUtil {
         if (null == borrowerDO) {
             return;
         }
-
+        model.setCreditLimit(borrowerDO.getCreditLimit());
+        model.setPersonalnsurance(borrowerDO.getPersonalnsurance());
         model.setMaskBorrowerName(maskBorrowerName(borrowerDO));
         model.setProfession(borrowerDO.getProfession());
         model.setMonthlyIncome(borrowerDO.getMonthlyIncome());

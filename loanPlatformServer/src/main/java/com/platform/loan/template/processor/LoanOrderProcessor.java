@@ -4,6 +4,7 @@
 package com.platform.loan.template.processor;
 
 import com.platform.loan.constant.BorrowerOrderStatusEnum;
+import com.platform.loan.constant.LoanOrderQueryConditionEnum;
 import com.platform.loan.dao.BorrowerRepository;
 import com.platform.loan.dao.OrderRepository;
 import com.platform.loan.dao.ProvidentFundRepository;
@@ -19,13 +20,9 @@ import com.platform.loan.template.Processor;
 import com.platform.loan.util.LoanUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
- *
  * @author caogu.wyp
  * @version $Id: LoanOrderProcessor.java, v 0.1 2018-05-21 下午11:56 caogu.wyp Exp $$
  */
@@ -40,10 +37,12 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
         SocialSecurityRepository socialSecurityRepository = (SocialSecurityRepository) others[3];
 
         //如果穿了orderId，优先使用orderId查
-        Iterable<OrderDO> orders = queryOrders(loanOrderRequest, orderRepository);
+        List<OrderDO> orders = queryOrders(loanOrderRequest, orderRepository);
 
         List<LoanOrderViewModel> list = getLoanOrderViewModels(borrowerRepository,
             providentFundRepository, socialSecurityRepository, orders);
+
+        filterLoanOrderViewModel(list, loanOrderRequest);
 
         loanOrderResult.setPageNum(1);
         loanOrderResult.setTotalPageNum(1);
@@ -51,8 +50,113 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
 
     }
 
-    private Iterable<OrderDO> queryOrders(LoanOrderRequest loanOrderRequest,
-                                          OrderRepository orderRepository) {
+    private void filterLoanOrderViewModel(List<LoanOrderViewModel> loanOrderViewModels,
+                                          LoanOrderRequest loanOrderRequest) {
+        if (StringUtils.isNotBlank(loanOrderRequest.getOrderId())) {
+            return;
+        }
+
+        filterCity(loanOrderRequest.getCity(), loanOrderViewModels);
+
+        filterQueryConditions(loanOrderViewModels, loanOrderRequest.getQueryCondition());
+    }
+
+    private void filterCity(String city, List<LoanOrderViewModel> loanOrderViewModels) {
+
+        Iterator<LoanOrderViewModel> iterator = loanOrderViewModels.iterator();
+        if (StringUtils.isNotBlank(city) && !"不限城市".equals(city)) {
+            while (iterator.hasNext()) {
+                LoanOrderViewModel loanOrderViewModel = iterator.next();
+                if (!city.equals(loanOrderViewModel.getLoanCity())) {
+                    iterator.remove();
+                }
+
+            }
+        }
+
+    }
+
+    /**
+     *
+     * 先给订单打标 Set A
+     * queryCondition Set B
+     *
+     * A ＋B size和 ＝ m
+     *  A B 取交集后，size ＝ n
+     *
+     *  如果m=n ，则说明不符合条件，删除
+     *  如果 n<m ,则说明符合条件，加入
+     *
+     */
+    private void filterQueryConditions(List<LoanOrderViewModel> loanOrderViewModels,
+                                       Set<String> queryConditions) {
+
+        if (null == queryConditions || 0 == queryConditions.size()) {
+            return;
+        }
+
+        Iterator<LoanOrderViewModel> iterator = loanOrderViewModels.iterator();
+
+        while (iterator.hasNext()) {
+            LoanOrderViewModel loanOrderViewModel = iterator.next();
+
+            Set<String> ordersMark = getMarks(loanOrderViewModel);
+
+            int totalSize = ordersMark.size() + queryConditions.size();
+            if (ordersMark.addAll(queryConditions)) {
+                if (totalSize == ordersMark.size()) {
+                    iterator.remove();
+                }
+            }
+
+        }
+    }
+
+    private Set<String> getMarks(LoanOrderViewModel loanOrderViewModel) {
+        Set<String> marks = new HashSet<String>();
+        if (StringUtils.isNotBlank(loanOrderViewModel.getCarInfo())
+            && !"无车".equals(loanOrderViewModel.getCarInfo())) {
+            marks.add(LoanOrderQueryConditionEnum.HAVE_CAR.getCode());
+        }
+        if (StringUtils.isNotBlank(loanOrderViewModel.getHouseInfo())
+            && !"无房产".equals(loanOrderViewModel.getHouseInfo())) {
+            marks.add(LoanOrderQueryConditionEnum.HAVE_HOUSE.getCode());
+        }
+        if (StringUtils.isNotBlank(loanOrderViewModel.getProvidentFundTaskId())) {
+            marks.add(LoanOrderQueryConditionEnum.HAVE_FUND.getCode());
+
+        }
+        if (StringUtils.isNotBlank(loanOrderViewModel.getSocialSecurityTaskId())) {
+            marks.add(LoanOrderQueryConditionEnum.HAVE_SOCIAL.getCode());
+
+        }
+
+        if (StringUtils.isNotBlank(loanOrderViewModel.getProfession())
+            && "事业单位".equals(loanOrderViewModel.getProfession())) {
+            marks.add(LoanOrderQueryConditionEnum.SERVANT.getCode());
+
+        }
+        if (StringUtils.isNotBlank(loanOrderViewModel.getPersonalnsurance())
+            && !"无".equals(loanOrderViewModel.getProfession())) {
+            marks.add(LoanOrderQueryConditionEnum.HAVE_POLICY.getCode());
+
+        }
+
+        if (StringUtils.isNotBlank(loanOrderViewModel.getCreditLimit())
+            && !"无".equals(loanOrderViewModel.getProfession())) {
+            marks.add(LoanOrderQueryConditionEnum.HAVE_CREDIT_CARD.getCode());
+
+        }
+        if (StringUtils.isNotBlank(loanOrderViewModel.getWeiLiDaiKeJie())) {
+            marks.add(LoanOrderQueryConditionEnum.HAVE_WEI_LI_DAI.getCode());
+        }
+
+        return marks;
+
+    }
+
+    private List<OrderDO> queryOrders(LoanOrderRequest loanOrderRequest,
+                                      OrderRepository orderRepository) {
 
         if (StringUtils.isNotBlank(loanOrderRequest.getOrderId())) {
 
@@ -63,7 +167,7 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
             return Arrays.asList(OrderDO);
 
         } else {
-            Iterable<OrderDO> borrowerOrderList = orderRepository
+            List<OrderDO> borrowerOrderList = orderRepository
                 .findOrderDOSByOrderStatusOrderByCreateTimeDesc(BorrowerOrderStatusEnum.ENABLE_GRAB
                     .getStatus());
 

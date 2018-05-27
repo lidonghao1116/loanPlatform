@@ -99,11 +99,11 @@ public class CallBackController {
         if (null != providentFundDO) {
             providentFundDO.setModifyTime(TimeUtil.getCurrentTimestamp());
             providentFundDO.setPhoneNo(callBackRequest.getUser_id());
-            providentFundDO.setExtData(jsonResponse);
+            providentFundDO.setFundDetail(jsonResponse);
             providentFundRepository.save(providentFundDO);
         } else {
             ProvidentFundDO newProvidentFundDO = new ProvidentFundDO();
-            newProvidentFundDO.setExtData(jsonResponse);
+            newProvidentFundDO.setFundDetail(jsonResponse);
             newProvidentFundDO.setPhoneNo(callBackRequest.getUser_id());
             newProvidentFundDO.setCreateTime(TimeUtil.getCurrentTimestamp());
             newProvidentFundDO.setModifyTime(TimeUtil.getCurrentTimestamp());

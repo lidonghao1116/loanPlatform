@@ -63,7 +63,7 @@ public class QueryBorrowerInfoByAccessTokenProcessor implements
             .findProvidentFundDoByPhoneNo(borrowerDo.getPhoneNo());
         if (null != providentFundDO) {
 
-            String jsonStr = providentFundDO.getExtData();
+            String jsonStr = providentFundDO.getFundDetail();
             JSONObject object = JSONArray.parseObject(jsonStr);
             if (null != object) {
                 result.setProvidentFundCity(object.getString("city"));

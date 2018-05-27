@@ -8,7 +8,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.platform.loan.constant.CommonConstants;
+import com.platform.loan.constant.ResultCodeEnum;
+import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.pojo.LoginSession;
+import com.platform.loan.util.LoanLogUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -45,18 +48,24 @@ public class JwtUtil {
         return JWT.require(algorithm).build().verify(token);
     }
 
-    public static LoginSession getLoginSession(HttpServletRequest request)
-                                                                          throws UnsupportedEncodingException {
+    public static LoginSession getLoginSession(HttpServletRequest request) {
 
         String jwtToken = request.getHeader(CommonConstants.AUTHORIZATION_HEARDER_KEY);
+        LoginSession loginSession = null;
+        try {
+            DecodedJWT jwt = verifyJwt(jwtToken);
 
-        DecodedJWT jwt = verifyJwt(jwtToken);
+            loginSession = JSONObject.parseObject(jwt.getClaim(CommonConstants.CLAIM_LOGININFO_KEY)
+                .asString(), LoginSession.class);
 
-        return JSONObject.parseObject(jwt.getClaim(CommonConstants.CLAIM_LOGININFO_KEY).asString(),
-            LoginSession.class);
+        } catch (Exception e) {
+            LoanLogUtil.getLogger(JwtUtil.class).warn("获取登陆信息失败", e);
+            throw new LoanPlatformException(ResultCodeEnum.TOKEN_VERIFY_FAILED, "获取登陆信息失败");
+        }
+
+        return loginSession;
 
     }
-
     //public static void main(String[] args) throws UnsupportedEncodingException,
     //                                      InterruptedException {
     //    LoginSession session = new LoginSession();

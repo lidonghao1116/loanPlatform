@@ -22,6 +22,16 @@ public class QueryLoginManagerResult extends BaseResult {
     //微信号
     private String     webChatNo;
 
+    private boolean    haveCertfication;
+
+    public boolean isHaveCertfication() {
+        return haveCertfication;
+    }
+
+    public void setHaveCertfication(boolean haveCertfication) {
+        this.haveCertfication = haveCertfication;
+    }
+
     public String getPhoneNo() {
         return phoneNo;
     }

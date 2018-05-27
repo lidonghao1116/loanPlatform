@@ -54,6 +54,26 @@ public class LoanOrderViewModel implements Serializable {
 
     private String notLoginIndexDesc;
 
+    private String personalnsurance;
+
+    private String creditLimit;
+
+    public String getCreditLimit() {
+        return creditLimit;
+    }
+
+    public void setCreditLimit(String creditLimit) {
+        this.creditLimit = creditLimit;
+    }
+
+    public String getPersonalnsurance() {
+        return personalnsurance;
+    }
+
+    public void setPersonalnsurance(String personalnsurance) {
+        this.personalnsurance = personalnsurance;
+    }
+
     public String getMaskBorrowerIdNo() {
         return maskBorrowerIdNo;
     }

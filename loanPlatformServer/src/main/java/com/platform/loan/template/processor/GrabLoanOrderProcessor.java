@@ -12,6 +12,7 @@ import com.platform.loan.pojo.request.GrabLoanOrderRequest;
 import com.platform.loan.pojo.result.GrabLoanOrderResult;
 import com.platform.loan.template.Processor;
 import com.platform.loan.util.TimeUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -45,6 +46,10 @@ public class GrabLoanOrderProcessor implements Processor<GrabLoanOrderRequest, G
 
         CreditManagerDO creditManagerDO = managerRepository
             .findCreditManagerDOByPhoneNo(managerPhoneNo);
+
+        if (StringUtils.isBlank(creditManagerDO.getIdNo())) {
+            throw new LoanPlatformException(ResultCodeEnum.NOT_CERTFICATION, "未实名认证！");
+        }
 
         BigDecimal newBalance = creditManagerDO.getBalance().subtract(orderDO.getPrice());
 
