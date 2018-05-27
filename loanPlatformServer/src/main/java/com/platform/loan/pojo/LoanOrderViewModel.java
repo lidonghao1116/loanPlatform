@@ -30,7 +30,7 @@ public class LoanOrderViewModel implements Serializable {
     private String price;
     /** BorrowerOrderStatusEnum */
     private String orderStatus;
-    private String loanType;
+    private String loanTypeDesc;
     /** 公积金taskId,用于显示用户公积金信息 */
     private String providentFundTaskId;
     /** 社保taskId,用于显示用户社保信息 */
@@ -40,6 +40,47 @@ public class LoanOrderViewModel implements Serializable {
     private String weiLiDaiKeJie;
     private String weiLiDaiTotal;
     private String grabTime;
+
+    /** 借款周期 */
+    private String loanDeadline;
+    /** 目的 */
+    private String loanPurpose;
+
+    private String borrowerIdNo;
+
+    private String processResult;
+
+    public String getProcessResult() {
+        return processResult;
+    }
+
+    public void setProcessResult(String processResult) {
+        this.processResult = processResult;
+    }
+
+    public String getBorrowerIdNo() {
+        return borrowerIdNo;
+    }
+
+    public void setBorrowerIdNo(String borrowerIdNo) {
+        this.borrowerIdNo = borrowerIdNo;
+    }
+
+    public String getLoanDeadline() {
+        return loanDeadline;
+    }
+
+    public void setLoanDeadline(String loanDeadline) {
+        this.loanDeadline = loanDeadline;
+    }
+
+    public String getLoanPurpose() {
+        return loanPurpose;
+    }
+
+    public void setLoanPurpose(String loanPurpose) {
+        this.loanPurpose = loanPurpose;
+    }
 
     /** 借贷方简介 */
     private String borrowerInfoDesc;
@@ -196,12 +237,12 @@ public class LoanOrderViewModel implements Serializable {
         this.orderStatus = orderStatus;
     }
 
-    public String getLoanType() {
-        return loanType;
+    public String getLoanTypeDesc() {
+        return loanTypeDesc;
     }
 
-    public void setLoanType(String loanType) {
-        this.loanType = loanType;
+    public void setLoanTypeDesc(String loanTypeDesc) {
+        this.loanTypeDesc = loanTypeDesc;
     }
 
     public String getProvidentFundTaskId() {

@@ -22,8 +22,6 @@ public class CommonMethod {
 
         String cacheCode = SimpleCacheUtil.getSMSCode(phoneNo, bizType);
 
-        System.out.println("==手机发过来的:" + smsCode + ",缓存的:" + cacheCode);
-
         if (!StringUtils.equalsIgnoreCase(cacheCode, smsCode)) {
             throw new LoanPlatformException("短信验证码验证失败！");
         }

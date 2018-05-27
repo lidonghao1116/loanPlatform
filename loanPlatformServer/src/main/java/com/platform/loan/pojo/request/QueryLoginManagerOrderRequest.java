@@ -17,6 +17,16 @@ public class QueryLoginManagerOrderRequest extends BaseRequest {
     @ApiModelProperty(value = "已登录经理查询他的订单,条件为订单的状态,不传则查询所有,GRAB_FINISH:未处理,FINISH:已处理,INVALID:垃圾单", name = "queryCondition", required = true)
     private Set<String> queryCondition;
 
+    private String      orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
     public Set<String> getQueryCondition() {
         return queryCondition;
     }

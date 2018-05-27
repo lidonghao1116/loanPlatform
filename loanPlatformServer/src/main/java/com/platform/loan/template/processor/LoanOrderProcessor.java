@@ -3,6 +3,7 @@
  */
 package com.platform.loan.template.processor;
 
+import com.platform.loan.constant.BorrowerOrderStatusEnum;
 import com.platform.loan.dao.BorrowerRepository;
 import com.platform.loan.dao.OrderRepository;
 import com.platform.loan.dao.ProvidentFundRepository;
@@ -16,8 +17,11 @@ import com.platform.loan.pojo.request.LoanOrderRequest;
 import com.platform.loan.pojo.request.LoanOrderResult;
 import com.platform.loan.template.Processor;
 import com.platform.loan.util.LoanUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,11 +39,11 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
         ProvidentFundRepository providentFundRepository = (ProvidentFundRepository) others[2];
         SocialSecurityRepository socialSecurityRepository = (SocialSecurityRepository) others[3];
 
-        //TODO 根据条件分页查
-        Iterable<OrderDO> borrowerOrderList = orderRepository.findAll();
+        //如果穿了orderId，优先使用orderId查
+        Iterable<OrderDO> orders = queryOrders(loanOrderRequest, orderRepository);
 
         List<LoanOrderViewModel> list = getLoanOrderViewModels(borrowerRepository,
-            providentFundRepository, socialSecurityRepository, borrowerOrderList);
+            providentFundRepository, socialSecurityRepository, orders);
 
         loanOrderResult.setPageNum(1);
         loanOrderResult.setTotalPageNum(1);
@@ -47,10 +51,31 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
 
     }
 
-    private List<LoanOrderViewModel> getLoanOrderViewModels(BorrowerRepository borrowerRepository,
-                                                            ProvidentFundRepository providentFundRepository,
-                                                            SocialSecurityRepository socialSecurityRepository,
-                                                            Iterable<OrderDO> borrowerOrderList) {
+    private Iterable<OrderDO> queryOrders(LoanOrderRequest loanOrderRequest,
+                                          OrderRepository orderRepository) {
+
+        if (StringUtils.isNotBlank(loanOrderRequest.getOrderId())) {
+
+            OrderDO OrderDO = orderRepository.findOrderDO(loanOrderRequest.getOrderId());
+            if (null == OrderDO) {
+                return Collections.EMPTY_LIST;
+            }
+            return Arrays.asList(OrderDO);
+
+        } else {
+            Iterable<OrderDO> borrowerOrderList = orderRepository.findOrders(
+                BorrowerOrderStatusEnum.ENABLE_GRAB.getStatus(),
+                BorrowerOrderStatusEnum.FINISH.getStatus());
+
+            return borrowerOrderList;
+        }
+
+    }
+
+    public static List<LoanOrderViewModel> getLoanOrderViewModels(BorrowerRepository borrowerRepository,
+                                                                  ProvidentFundRepository providentFundRepository,
+                                                                  SocialSecurityRepository socialSecurityRepository,
+                                                                  Iterable<OrderDO> borrowerOrderList) {
         List<LoanOrderViewModel> list = new ArrayList<>();
 
         borrowerOrderList.forEach(borrowerOrderDO -> {
@@ -72,7 +97,7 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
             LoanUtil.initSocialInfo(model, socialSecurityDO);
 
             //拼描述信息
-            LoanUtil.intBorrowerInfo(model, borrowerDO);
+            LoanUtil.intBorrowerInfoDesc(model, borrowerDO);
 
             list.add(model);
         });

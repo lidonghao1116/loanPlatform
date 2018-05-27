@@ -10,7 +10,7 @@ import com.platform.loan.constant.ResultCodeEnum;
  * @author caogu.wyp
  * @version $Id: LoanPlatformException.java, v 0.1 2018-05-05 上午10:47 caogu.wyp Exp $$
  */
-public class LoanPlatformException extends Exception {
+public class LoanPlatformException extends RuntimeException {
     /**
      * Constructs a new exception with the specified detail message and cause.  <p>Note that the detail message associated with {@code
      * cause} is <i>not</i> automatically incorporated in this exception's detail message.

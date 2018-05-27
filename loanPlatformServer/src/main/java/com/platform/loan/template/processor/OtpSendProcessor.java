@@ -22,7 +22,7 @@ public class OtpSendProcessor implements Processor<OTPRequest, BaseResult> {
 
         OtpService otpService = (OtpService) others[0];
 
-        RequestCheckUtil.checkOtpRequst(request);
+        RequestCheckUtil.checkOtpRequest(request);
 
         //校验图片验证码
         verifyImageCode(request);

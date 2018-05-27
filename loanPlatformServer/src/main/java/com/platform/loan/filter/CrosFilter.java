@@ -1,6 +1,7 @@
 package com.platform.loan.filter;
 
 import com.platform.loan.constant.CommonConstants;
+import com.platform.loan.util.LoanLogUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +33,10 @@ public class CrosFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        System.out.println("===========A_CrosFilter" + ((HttpServletRequest) req).getRequestURI()
-                           + ",request.getMethod()=" + request.getMethod());
+
+        LoanLogUtil.getLogger(CrosFilter.class).info(
+            "===========A_CrosFilter" + ((HttpServletRequest) req).getRequestURI()
+                    + ",request.getMethod()=" + request.getMethod());
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE");

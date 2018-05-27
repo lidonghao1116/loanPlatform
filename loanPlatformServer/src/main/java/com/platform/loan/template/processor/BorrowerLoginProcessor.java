@@ -28,9 +28,10 @@ public class BorrowerLoginProcessor implements Processor<BorrowerLoginRequest, L
 
         //请求参数判空
         RequestCheckUtil.checkBorrowerLoginRequest(request);
+
         //校验短信
-        CommonMethod.verifyOTP(request.getPhoneNo(), LoginUserTypeEnum.BORROWER.getCode(),
-            request.getSmsCode());
+        //  CommonMethod.verifyOTP(request.getPhoneNo(), LoginUserTypeEnum.BORROWER.getCode(),request.getSmsCode());
+
         //更新用户信息
         updateBorrowerInfo(request, borrowerRepository);
         //下发登陆token

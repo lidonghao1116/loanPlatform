@@ -25,9 +25,9 @@ public class OtpController {
 
     @ApiOperation(value = "发送手机验证码", notes = "给手机发送验证码，用于登录")
     @RequestMapping(value = "/api/sms/send", method = RequestMethod.POST)
-    public BaseResult sendOtp(@RequestBody OTPRequest otpRequst) {
+    public BaseResult sendOtp(@RequestBody OTPRequest otpRequest) {
 
-        return LoanPlatformTemplate.run(new OtpSendProcessor(), otpRequst, new BaseResult(),
+        return LoanPlatformTemplate.run(new OtpSendProcessor(), otpRequest, new BaseResult(),
             otpService);
 
     }

@@ -42,4 +42,13 @@ public enum LoanTypeEnum {
     public void setDesc(String desc) {
         this.desc = desc;
     }
+
+    public static String getDescByName(String loanType) {
+        for (LoanTypeEnum loanTypeEnum : LoanTypeEnum.values()) {
+            if (loanTypeEnum.getLoanName().equals(loanType)) {
+                return loanTypeEnum.getDesc();
+            }
+        }
+        return null;
+    }
 }

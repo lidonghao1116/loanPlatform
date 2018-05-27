@@ -53,13 +53,14 @@ public class LoanOrderController {
 
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
     @ApiOperation(value = "查询当前登录信贷经理的订单", notes = "查询当前信贷经理的订单,入参是订单的状态,未填写则查询所有的状态,参考BorrowerOrderStatusEnum")
-    @RequestMapping(value = "/api/manager/login/orders", method = RequestMethod.GET)
-    public QueryLoginManagerOrderResult queryLoginManagerOrder(QueryLoginManagerOrderRequest queryLoginManagerOrderRequest,
+    @RequestMapping(value = "/api/manager/login/orders", method = RequestMethod.POST)
+    public QueryLoginManagerOrderResult queryLoginManagerOrder(@RequestBody QueryLoginManagerOrderRequest queryLoginManagerOrderRequest,
                                                                HttpServletRequest httpServletRequest) {
 
         return LoanPlatformTemplate.run(new QueryLoginManagerOrderProcessor(),
             queryLoginManagerOrderRequest, new QueryLoginManagerOrderResult(), httpServletRequest,
             orderRepository, borrowerRepository, providentFundRepository, socialSecurityRepository);
+
     }
 
 }

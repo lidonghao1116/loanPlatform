@@ -65,9 +65,12 @@ public class QueryBorrowerInfoByAccessTokenProcessor implements
 
             String jsonStr = providentFundDO.getExtData();
             JSONObject object = JSONArray.parseObject(jsonStr);
-            String city = object.getString("city");
-            result.setProvidentFundCity(city);
-            result.setProvidentFundVerifyTime(providentFundDO.getCreateTime().toString());
+            if (null != object) {
+                result.setProvidentFundCity(object.getString("city"));
+            }
+            if (null != providentFundDO.getCreateTime()) {
+                result.setProvidentFundVerifyTime(providentFundDO.getCreateTime().toString());
+            }
         }
         //====查询社保认证情况
         SocialSecurityDO socialSecurityDO = socialSecurityRepository
@@ -75,9 +78,13 @@ public class QueryBorrowerInfoByAccessTokenProcessor implements
         if (null != socialSecurityDO) {
             String jsonStr = socialSecurityDO.getExtData();
             JSONObject object = JSONArray.parseObject(jsonStr);
-            String city = object.getString("city");
-            result.setSocialSecurityCity(city);
-            result.setSocialSecurityVerifyTime(socialSecurityDO.getCreateTime().toString());
+
+            if (null != object) {
+                result.setSocialSecurityCity(object.getString("city"));
+            }
+            if (null != socialSecurityDO.getCreateTime()) {
+                result.setSocialSecurityVerifyTime(socialSecurityDO.getCreateTime().toString());
+            }
         }
 
     }

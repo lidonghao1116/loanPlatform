@@ -24,6 +24,16 @@ public class LoanOrderRequest extends BaseRequest {
     @ApiModelProperty(value = "查询哪个城市的订单,不传则查询所有城市", name = "city", required = false)
     private String      city;
 
+    private String      orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
     public String getCity() {
         return city;
     }

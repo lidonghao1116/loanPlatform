@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.platform.loan.constant.ResultCodeEnum;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.result.BaseResult;
+import com.platform.loan.util.LoanLogUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,8 @@ public class LoginCheckFilter implements Filter {
         noNeedCheckUrl.add("/api/manager/login");
         noNeedCheckUrl.add("/api/front/data");
 
+        noNeedCheckUrl.add("/api/pay/create");
+
     }
 
     @Override
@@ -49,8 +52,9 @@ public class LoginCheckFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse res = (HttpServletResponse) servletResponse;
 
-        System.out.println("===========B_LoginCheckFilter" + req.getRequestURI()
-                           + ",request.getMethod()=" + req.getMethod());
+        LoanLogUtil.getLogger(LoginCheckFilter.class).debug(
+            "===========B_LoginCheckFilter" + req.getRequestURI() + ",request.getMethod()="
+                    + req.getMethod());
 
         if (needCheck(req)) {
             //非登录页面进行验证

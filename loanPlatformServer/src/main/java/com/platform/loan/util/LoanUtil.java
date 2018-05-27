@@ -6,6 +6,7 @@ package com.platform.loan.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.platform.loan.constant.BorrowerOrderStatusEnum;
+import com.platform.loan.constant.LoanTypeEnum;
 import com.platform.loan.pojo.LoanOrderViewModel;
 import com.platform.loan.pojo.modle.BorrowerDO;
 import com.platform.loan.pojo.modle.OrderDO;
@@ -39,24 +40,26 @@ public class LoanUtil {
         return city;
     }
 
-    public static LoanOrderViewModel getLoanOrderViewModel(OrderDO borrowerOrderDO, boolean isLogin) {
+    public static LoanOrderViewModel getLoanOrderViewModel(OrderDO orderDO, boolean isLogin) {
 
         LoanOrderViewModel model = new LoanOrderViewModel();
-        model.setBorrowerPhoneNo(maskBorrowerPhone(borrowerOrderDO));
-        model.setApplyTime(borrowerOrderDO.getCreateTime().toString());
-        model.setPrice(borrowerOrderDO.getPrice().toString());
-        model.setLoanType(borrowerOrderDO.getLoanType());
-        model.setLoanLimit(borrowerOrderDO.getLoanLimit());
-        model.setOrderStatus(borrowerOrderDO.getOrderStatus());
-        model.setLoanCity(processCity(borrowerOrderDO.getLoanCity()));
-        model.setOrderId(borrowerOrderDO.getOrderId());
+        model.setBorrowerPhoneNo(maskBorrowerPhone(orderDO));
+        model.setApplyTime(orderDO.getCreateTime().toString());
+        model.setPrice(orderDO.getPrice().toString());
+        model.setLoanTypeDesc(LoanTypeEnum.getDescByName(orderDO.getLoanType()));
+        model.setLoanLimit(orderDO.getLoanLimit());
+        model.setOrderStatus(orderDO.getOrderStatus());
+        model.setLoanCity(processCity(orderDO.getLoanCity()));
+        model.setOrderId(orderDO.getOrderId());
+        model.setLoanDeadline(orderDO.getLoanDeadline());
+        model.setLoanPurpose(orderDO.getLoanPurpose());
 
         if (isLogin) {
-            model.setBorrowerPhoneNo(borrowerOrderDO.getBorrowerPhoneNo());
 
-            if (BorrowerOrderStatusEnum.GRAB_FINISH.getStatus().equals(
-                borrowerOrderDO.getOrderStatus())) {
-                model.setGrabTime(borrowerOrderDO.getGrabTime().toString());
+            model.setBorrowerPhoneNo(orderDO.getBorrowerPhoneNo());
+            model.setProcessResult(orderDO.getProcessResult());
+            if (BorrowerOrderStatusEnum.GRAB_FINISH.getStatus().equals(orderDO.getOrderStatus())) {
+                model.setGrabTime(orderDO.getGrabTime().toString());
 
             }
 
@@ -82,11 +85,12 @@ public class LoanUtil {
 
         if (isLogin) {
             model.setBorrowerName(borrowerDO.getName());
+            model.setBorrowerIdNo(borrowerDO.getIdNo());
         }
 
     }
 
-    public static void intBorrowerInfo(LoanOrderViewModel model, BorrowerDO borrowerDO) {
+    public static void intBorrowerInfoDesc(LoanOrderViewModel model, BorrowerDO borrowerDO) {
 
         /**
          * 职业＋收入＋房产＋社保

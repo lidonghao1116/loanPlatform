@@ -22,6 +22,9 @@ public interface OrderRepository extends CrudRepository<OrderDO, Integer> {
     @Query(value = "select o from OrderDO o where o.orderId =?1")
     OrderDO findOrderDO(String orderId);
 
-    List<OrderDO> findOrderDOSByManagerPhoneNo(String managerPhone);
+    List<OrderDO> findOrderDOSByManagerPhoneNo(String managerPhoneNo);
+
+    @Query(value = "select o from OrderDO o where o.orderStatus=?1 or o.orderStatus=?2")
+    List<OrderDO> findOrders(String status1, String status2);
 
 }
