@@ -61,11 +61,11 @@ public class JwtUtil {
     //                                      InterruptedException {
     //    LoginSession session = new LoginSession();
     //    session.setPhoneNo("15170004409");
+    //    session.setLoginUserType(LoginUserTypeEnum.CREDIT_MANAGER.getCode());
     //    String token = JwtUtil.createJwt(session);
     //    System.out.println(token);
     //
     //    System.out.println(JwtUtil.verifyJwt(token));
     //}
 
-    //eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJDTEFJTV9MT0dJTklORk9fS0VZIjoie1wicGhvbmVOb1wiOlwiMTUxNzAwMDQ0MDlcIn0iLCJleHAiOjE1NjI1Nzc2MzJ9.93_A2VNnhpY1XSOg6ad7BiyPsrK-mkewXZFGGTxVR0Y
 }

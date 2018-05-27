@@ -4,14 +4,19 @@
 package com.platform.loan.template.processor;
 
 import com.alibaba.fastjson.JSONObject;
+import com.platform.loan.constant.LoginUserTypeEnum;
 import com.platform.loan.dao.BorrowerRepository;
+import com.platform.loan.dao.ManagerRepository;
+import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.LoginSession;
 import com.platform.loan.pojo.VerifyIdNoModel;
 import com.platform.loan.pojo.modle.BorrowerDO;
+import com.platform.loan.pojo.modle.CreditManagerDO;
 import com.platform.loan.pojo.request.VerifyIdNoRequest;
 import com.platform.loan.pojo.result.BaseResult;
 import com.platform.loan.template.Processor;
+import com.platform.loan.util.LoanLogUtil;
 import com.platform.loan.util.http.LoanHttpUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,24 +41,43 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
 
         BorrowerRepository borrowerRepository = (BorrowerRepository) others[1];
 
+        ManagerRepository managerRepository = (ManagerRepository) others[2];
+
         LoginSession loginSession = JwtUtil.getLoginSession(httpServletRequest);
 
-        if (verifyPass(request)) {
+        if (LoginUserTypeEnum.CREDIT_MANAGER.getCode().equals(loginSession.getLoginUserType())) {
 
+            CreditManagerDO creditManagerDO = managerRepository
+                .findCreditManagerDOByPhoneNo(loginSession.getPhoneNo());
+
+            if (null == creditManagerDO) {
+                throw new Exception("未在数据库中找到该用户，请重新正常流程登录！");
+            }
+
+            if (verifyPass(request)) {
+
+                creditManagerDO.setIdNo(request.getIdNo());
+                creditManagerDO.setName(request.getName());
+                managerRepository.save(creditManagerDO);
+            }
+        } else if (LoginUserTypeEnum.BORROWER.getCode().equals(loginSession.getLoginUserType())) {
             BorrowerDO borrowerDo = borrowerRepository.findBorrowerDoByPhoneNo(loginSession
                 .getPhoneNo());
 
             if (null == borrowerDo) {
+
                 throw new Exception("未在数据库中找到该用户，请重新正常流程登录！");
-
             }
-            borrowerDo.setIdNo(request.getIdNo());
-            borrowerDo.setName(request.getName());
+            if (verifyPass(request)) {
 
-            borrowerRepository.save(borrowerDo);
+                borrowerDo.setIdNo(request.getIdNo());
+                borrowerDo.setName(request.getName());
+                borrowerRepository.save(borrowerDo);
+            }
 
         } else {
-            throw new Exception("实名认证失败");
+
+            throw new Exception("未知登陆类型：" + loginSession);
         }
 
     }
@@ -69,16 +93,18 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
         String signature = md5(bodyStr + "|" + "2b2fcaf0-9c75-48a0-b53b-af56f5415c0f");
         url += String.format(fformatStr, "d0f5910c-3cf2-4cf5-8643-1dc6adc8cd19", "O1001S0201",
             System.currentTimeMillis(), signature);
-        System.out.println("requestUrl=>" + url);
-        System.out.println("request parameter body=>" + bodyStr);
+        LoanLogUtil.getLogger(VerifyIdNoProcessor.class).info("requestUrl=>" + url);
+        LoanLogUtil.getLogger(VerifyIdNoProcessor.class).info("request parameter body=>" + bodyStr);
         String jsonRespon = LoanHttpUtil.sendPost(url, bodyStr);
-        System.out.println("身份认证请求结果：" + jsonRespon);
+        LoanLogUtil.getLogger(VerifyIdNoProcessor.class).info("身份认证请求结果：" + jsonRespon);
         JSONObject jsonObject = JSONObject.parseObject(jsonRespon);
         String resultCode = jsonObject.getJSONObject("header").getString("ret_code");
 
         if ("000000".equals(resultCode)) {
-            //请求成功
+
             String status = jsonObject.getJSONObject("body").getString("status");
+
+            //请求成功
             /**
              * 认证结果状态码：
              1-认证一致，
@@ -87,11 +113,15 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
              */
             if ("1".equals(status)) {
                 return true;
+
+            } else {
+                throw new LoanPlatformException("身份认证失败");
             }
 
+        } else {
+            throw new LoanPlatformException(jsonObject.getJSONObject("header").getString("ret_msg"));
         }
 
-        return false;
     }
 
     /**
@@ -105,8 +135,9 @@ public class VerifyIdNoProcessor implements Processor<VerifyIdNoRequest, BaseRes
 
     private static String bytesToHex(byte[] ch) {
         StringBuffer ret = new StringBuffer("");
-        for (int i = 0; i < ch.length; i++)
+        for (int i = 0; i < ch.length; i++) {
             ret.append(byteToHex(ch[i]));
+        }
         return ret.toString();
     }
 

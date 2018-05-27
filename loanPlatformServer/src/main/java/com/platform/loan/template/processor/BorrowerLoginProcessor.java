@@ -12,6 +12,7 @@ import com.platform.loan.service.common.CommonMethod;
 import com.platform.loan.template.Processor;
 import com.platform.loan.util.RequestCheckUtil;
 import com.platform.loan.util.TimeUtil;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -32,8 +33,8 @@ public class BorrowerLoginProcessor implements Processor<BorrowerLoginRequest, L
         //校验短信
         //  CommonMethod.verifyOTP(request.getPhoneNo(), LoginUserTypeEnum.BORROWER.getCode(),request.getSmsCode());
 
-        //更新用户信息
-        updateBorrowerInfo(request, borrowerRepository);
+        //更新用户信息&&查询是否身份认证
+        updateBorrowerInfo(request, borrowerRepository, result);
         //下发登陆token
         result.setAccessToken(CommonMethod.buildLoginAccessToken(request.getPhoneNo(),
             LoginUserTypeEnum.BORROWER.getCode()));
@@ -41,14 +42,25 @@ public class BorrowerLoginProcessor implements Processor<BorrowerLoginRequest, L
     }
 
     private void updateBorrowerInfo(BorrowerLoginRequest borrowerLoginRequest,
-                                    BorrowerRepository borrowerRepository) {
+                                    BorrowerRepository borrowerRepository, LoginResult result) {
+        BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(borrowerLoginRequest
+            .getPhoneNo());
 
-        if (null == borrowerRepository.findBorrowerDoByPhoneNo(borrowerLoginRequest.getPhoneNo())) {
+        if (null == borrowerDO) {
             BorrowerDO newBorrower = new BorrowerDO();
             newBorrower.setPhoneNo(borrowerLoginRequest.getPhoneNo());
             newBorrower.setCreateTime(TimeUtil.getCurrentTimestamp());
             borrowerRepository.save(newBorrower);
+            result.setHaveVerifyIdNo(false);
+            return;
+        }
+
+        if (StringUtils.isNotBlank(borrowerDO.getIdNo())) {
+
+            result.setHaveVerifyIdNo(true);
+        } else {
+
+            result.setHaveVerifyIdNo(false);
         }
     }
-
 }

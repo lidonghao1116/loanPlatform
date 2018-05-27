@@ -44,7 +44,7 @@ public class CrosFilter implements Filter {
         response.setHeader("Access-Control-Expose-Headers", sb.toString());
         response.setHeader("Access-Control-Max-Age", "3600");
 
-        if (request.getMethod().equals("OPTIONS")) {
+        if ("OPTIONS".equals(request.getMethod())) {
 
             response.setStatus(HttpServletResponse.SC_OK);
         } else {

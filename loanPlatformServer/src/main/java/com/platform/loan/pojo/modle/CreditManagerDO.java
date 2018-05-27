@@ -25,6 +25,10 @@ public class CreditManagerDO implements Serializable {
     private Timestamp  createTime;
     private Timestamp  modifyTime;
     //=====//
+    private String     idNo;
+
+    private String     name;
+
     private String     phoneNo;
     //信贷经理所在公司
     private String     company;
@@ -38,6 +42,22 @@ public class CreditManagerDO implements Serializable {
     /** json格式 */
     @Column(columnDefinition = "TEXT")
     private String     extData;
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getExtData() {
         return extData;

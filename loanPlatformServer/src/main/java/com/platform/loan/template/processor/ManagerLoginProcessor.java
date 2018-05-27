@@ -12,6 +12,7 @@ import com.platform.loan.service.common.CommonMethod;
 import com.platform.loan.template.Processor;
 import com.platform.loan.util.RequestCheckUtil;
 import com.platform.loan.util.TimeUtil;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author caogu.wyp
@@ -29,23 +30,35 @@ public class ManagerLoginProcessor implements Processor<ManagerLoginRequest, Log
         //校验短信
         //CommonMethod.verifyOTP(managerLoginRequest.getPhoneNo(), LoginUserTypeEnum.CREDIT_MANAGER.getCode(), managerLoginRequest.getSmsCode());
         //更新用户信息
-        updateManagerInfo(managerLoginRequest, managerRepository);
+        updateManagerInfo(managerLoginRequest, managerRepository, loginResult);
         //下发token
         loginResult.setAccessToken(CommonMethod.buildLoginAccessToken(
             managerLoginRequest.getPhoneNo(), LoginUserTypeEnum.CREDIT_MANAGER.getCode()));
     }
 
     private void updateManagerInfo(ManagerLoginRequest managerLoginRequest,
-                                   ManagerRepository managerRepository) {
+                                   ManagerRepository managerRepository, LoginResult loginResult) {
 
-        if (null == managerRepository
-            .findCreditManagerDOByPhoneNo(managerLoginRequest.getPhoneNo())) {
+        CreditManagerDO creditManagerDO = managerRepository
+            .findCreditManagerDOByPhoneNo(managerLoginRequest.getPhoneNo());
 
-            CreditManagerDO creditManagerDO = new CreditManagerDO();
-            creditManagerDO.setPhoneNo(managerLoginRequest.getPhoneNo());
-            creditManagerDO.setCreateTime(TimeUtil.getCurrentTimestamp());
-            creditManagerDO.setModifyTime(TimeUtil.getCurrentTimestamp());
-            managerRepository.save(creditManagerDO);
+        if (null == creditManagerDO) {
+            CreditManagerDO newCreditManagerDO = new CreditManagerDO();
+            newCreditManagerDO.setPhoneNo(managerLoginRequest.getPhoneNo());
+            newCreditManagerDO.setCreateTime(TimeUtil.getCurrentTimestamp());
+            newCreditManagerDO.setModifyTime(TimeUtil.getCurrentTimestamp());
+            managerRepository.save(newCreditManagerDO);
+            loginResult.setHaveVerifyIdNo(false);
+            return;
         }
+
+        if (StringUtils.isNotBlank(creditManagerDO.getIdNo())) {
+
+            loginResult.setHaveVerifyIdNo(true);
+        } else {
+
+            loginResult.setHaveVerifyIdNo(false);
+        }
+
     }
 }

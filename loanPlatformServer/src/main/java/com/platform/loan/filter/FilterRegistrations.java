@@ -19,7 +19,7 @@ public class FilterRegistrations {
     public FilterRegistrationBean someFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new CrosFilter());
-        registration.addUrlPatterns("/api/*");
+        registration.addUrlPatterns("/*");
         registration.setName("crosFilter");
         registration.setOrder(1);
         return registration;

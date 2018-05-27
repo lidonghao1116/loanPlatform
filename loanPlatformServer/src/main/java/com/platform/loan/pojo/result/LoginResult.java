@@ -11,7 +11,17 @@ package com.platform.loan.pojo.result;
 public class LoginResult extends BaseResult {
 
     /** 登录后下发给前端的jwt token */
-    private String accessToken;
+    private String  accessToken;
+
+    private boolean haveVerifyIdNo;
+
+    public boolean isHaveVerifyIdNo() {
+        return haveVerifyIdNo;
+    }
+
+    public void setHaveVerifyIdNo(boolean haveVerifyIdNo) {
+        this.haveVerifyIdNo = haveVerifyIdNo;
+    }
 
     public String getAccessToken() {
         return accessToken;

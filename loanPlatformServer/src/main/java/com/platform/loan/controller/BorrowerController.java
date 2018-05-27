@@ -7,14 +7,11 @@ import com.platform.loan.dao.BorrowerRepository;
 import com.platform.loan.dao.ProvidentFundRepository;
 import com.platform.loan.dao.SocialSecurityRepository;
 import com.platform.loan.pojo.request.BaseRequest;
-import com.platform.loan.pojo.request.VerifyIdNoRequest;
-import com.platform.loan.pojo.result.BaseResult;
 import com.platform.loan.pojo.result.BorrowerInfoResult;
 import com.platform.loan.pojo.result.LoanTypeResult;
 import com.platform.loan.template.LoanPlatformTemplate;
 import com.platform.loan.template.processor.QueryBorrowerInfoByAccessTokenProcessor;
 import com.platform.loan.template.processor.QueryLoanTypesProcessor;
-import com.platform.loan.template.processor.VerifyIdNoProcessor;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,15 +56,6 @@ public class BorrowerController {
         return LoanPlatformTemplate.run(new QueryBorrowerInfoByAccessTokenProcessor(), baseRequest,
             new BorrowerInfoResult(), request, borrowerRepository, providentFundRepository,
             socialSecurityRepository);
-
-    }
-
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
-    @ApiOperation(value = "身份认证", notes = "身份认证信息")
-    @RequestMapping(value = "/api/borrower/idNo/verify", method = RequestMethod.GET)
-    public BaseResult verifyIdNo(VerifyIdNoRequest request, HttpServletRequest httpServletRequest) {
-        return LoanPlatformTemplate.run(new VerifyIdNoProcessor(), request, new BaseResult(),
-            httpServletRequest, borrowerRepository);
     }
 
 }
