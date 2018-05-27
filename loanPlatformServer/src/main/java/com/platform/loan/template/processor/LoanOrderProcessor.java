@@ -63,9 +63,9 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
             return Arrays.asList(OrderDO);
 
         } else {
-            Iterable<OrderDO> borrowerOrderList = orderRepository.findOrders(
-                BorrowerOrderStatusEnum.ENABLE_GRAB.getStatus(),
-                BorrowerOrderStatusEnum.FINISH.getStatus());
+            Iterable<OrderDO> borrowerOrderList = orderRepository
+                .findOrderDOSByOrderStatusOrderByCreateTimeDesc(BorrowerOrderStatusEnum.ENABLE_GRAB
+                    .getStatus());
 
             return borrowerOrderList;
         }
@@ -78,26 +78,29 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
                                                                   Iterable<OrderDO> borrowerOrderList) {
         List<LoanOrderViewModel> list = new ArrayList<>();
 
-        borrowerOrderList.forEach(borrowerOrderDO -> {
+        borrowerOrderList.forEach(orderDO -> {
 
             //查询订单信息
-            LoanOrderViewModel model = LoanUtil.getLoanOrderViewModel(borrowerOrderDO, false);
+            LoanOrderViewModel model = LoanUtil.getLoanOrderViewModel(orderDO, false);
             //查询借款人信息
-            BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(borrowerOrderDO
+            BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(orderDO
                 .getBorrowerPhoneNo());
             LoanUtil.initBorrowerInfo(model, borrowerDO, false);
 
             //查询公积金信息
             ProvidentFundDO providentFundDO = providentFundRepository
-                .findProvidentFundDoByPhoneNo(borrowerOrderDO.getBorrowerPhoneNo());
+                .findProvidentFundDoByPhoneNo(orderDO.getBorrowerPhoneNo());
             LoanUtil.initFundInfo(model, providentFundDO);
             //查询社保信息
             SocialSecurityDO socialSecurityDO = socialSecurityRepository
-                .findSocialSecurityDoByPhoneNo(borrowerOrderDO.getBorrowerPhoneNo());
+                .findSocialSecurityDoByPhoneNo(orderDO.getBorrowerPhoneNo());
             LoanUtil.initSocialInfo(model, socialSecurityDO);
 
             //拼描述信息
             LoanUtil.intBorrowerInfoDesc(model, borrowerDO);
+
+            //根据不同类型订单，拼接首页数据
+            LoanUtil.initNotLoginIndexDesc(model, borrowerDO, orderDO);
 
             list.add(model);
         });

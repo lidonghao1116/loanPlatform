@@ -48,7 +48,27 @@ public class LoanOrderViewModel implements Serializable {
 
     private String borrowerIdNo;
 
+    private String maskBorrowerIdNo;
+
     private String processResult;
+
+    private String notLoginIndexDesc;
+
+    public String getMaskBorrowerIdNo() {
+        return maskBorrowerIdNo;
+    }
+
+    public void setMaskBorrowerIdNo(String maskBorrowerIdNo) {
+        this.maskBorrowerIdNo = maskBorrowerIdNo;
+    }
+
+    public String getNotLoginIndexDesc() {
+        return notLoginIndexDesc;
+    }
+
+    public void setNotLoginIndexDesc(String notLoginIndexDesc) {
+        this.notLoginIndexDesc = notLoginIndexDesc;
+    }
 
     public String getProcessResult() {
         return processResult;

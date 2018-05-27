@@ -35,8 +35,8 @@ public class CrosFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
 
         LoanLogUtil.getLogger(CrosFilter.class).info(
-            "===========A_CrosFilter" + ((HttpServletRequest) req).getRequestURI()
-                    + ",request.getMethod()=" + request.getMethod());
+            "===========A_CrosFilter" + request.getRequestURI() + ",request.getMethod()="
+                    + request.getMethod());
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE");

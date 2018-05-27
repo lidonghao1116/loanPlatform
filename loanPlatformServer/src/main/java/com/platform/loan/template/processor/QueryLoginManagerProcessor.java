@@ -3,7 +3,9 @@
  */
 package com.platform.loan.template.processor;
 
+import com.platform.loan.constant.ResultCodeEnum;
 import com.platform.loan.dao.ManagerRepository;
+import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.LoginSession;
 import com.platform.loan.pojo.modle.CreditManagerDO;
@@ -30,6 +32,9 @@ public class QueryLoginManagerProcessor implements Processor<BaseRequest, QueryL
 
         CreditManagerDO creditManagerDO = managerRepository
             .findCreditManagerDOByPhoneNo(loginSession.getPhoneNo());
+        if (null == creditManagerDO) {
+            throw new LoanPlatformException(ResultCodeEnum.TOKEN_VERIFY_FAILED, "数据库无账号信息，请重新登陆");
+        }
 
         queryLoginManagerResult.setBalance(creditManagerDO.getBalance());
         queryLoginManagerResult.setCity(creditManagerDO.getCity());

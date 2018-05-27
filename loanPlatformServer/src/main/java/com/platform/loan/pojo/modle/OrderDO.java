@@ -26,11 +26,8 @@ public class OrderDO implements Serializable {
     private String     borrowerPhoneNo;
     /**  要贷多少钱，单位万 **/
     private String     loanLimit;
-
     private String     loanDeadline;
-
     private String     loanPurpose;
-
     private String     loanCity;
     /** 该笔单子价格 */
     private BigDecimal price;

@@ -3,7 +3,11 @@
  */
 package com.platform.loan.pojo.modle;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -14,13 +18,15 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "top_up_order")
-public class TopUpOrder {
+public class TopUpOrderDO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer    id;
     private Timestamp  createTime;
     private Timestamp  modifyTime;
+    /** 到账时间 */
+    private Timestamp  AccountingTime;
     /** 充值金额*/
     private BigDecimal amount;
     /** 对应支付宝的out_biz_no */
@@ -31,7 +37,26 @@ public class TopUpOrder {
     private String     phoneNo;
 
     @Column(columnDefinition = "TEXT")
+    private String     alipayCallBackData;
+
+    @Column(columnDefinition = "TEXT")
     private String     extData;
+
+    public Timestamp getAccountingTime() {
+        return AccountingTime;
+    }
+
+    public void setAccountingTime(Timestamp accountingTime) {
+        AccountingTime = accountingTime;
+    }
+
+    public String getAlipayCallBackData() {
+        return alipayCallBackData;
+    }
+
+    public void setAlipayCallBackData(String alipayCallBackData) {
+        this.alipayCallBackData = alipayCallBackData;
+    }
 
     public String getExtData() {
         return extData;
@@ -95,5 +120,10 @@ public class TopUpOrder {
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 }

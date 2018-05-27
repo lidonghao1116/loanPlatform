@@ -5,7 +5,6 @@ package com.platform.loan.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.platform.loan.constant.BorrowerOrderStatusEnum;
 import com.platform.loan.constant.LoanTypeEnum;
 import com.platform.loan.pojo.LoanOrderViewModel;
 import com.platform.loan.pojo.modle.BorrowerDO;
@@ -25,7 +24,7 @@ public class LoanUtil {
 
     public static BigDecimal getPrice(LoanApplyRequest request) {
         //TODO 这里会有定价规则
-        return new BigDecimal(13.14);
+        return new BigDecimal(8);
     }
 
     private static String processCity(String citys) {
@@ -58,11 +57,7 @@ public class LoanUtil {
 
             model.setBorrowerPhoneNo(orderDO.getBorrowerPhoneNo());
             model.setProcessResult(orderDO.getProcessResult());
-            if (BorrowerOrderStatusEnum.GRAB_FINISH.getStatus().equals(orderDO.getOrderStatus())) {
-                model.setGrabTime(orderDO.getGrabTime().toString());
-
-            }
-
+            model.setGrabTime(orderDO.getGrabTime().toString());
         }
 
         return model;
@@ -82,11 +77,22 @@ public class LoanUtil {
         model.setCarInfo(borrowerDO.getCarInfo());
         model.setWeiLiDaiKeJie(borrowerDO.getWeiLiDaiKeJie());
         model.setWeiLiDaiTotal(borrowerDO.getWeiLiDaiTotal());
-
+        model.setMaskBorrowerIdNo(markBorrowerIdNo(borrowerDO));
         if (isLogin) {
             model.setBorrowerName(borrowerDO.getName());
             model.setBorrowerIdNo(borrowerDO.getIdNo());
         }
+
+    }
+
+    private static String markBorrowerIdNo(BorrowerDO borrowerDO) {
+
+        if (StringUtils.isBlank(borrowerDO.getIdNo())) {
+            return borrowerDO.getIdNo();
+        }
+        String idNo = borrowerDO.getIdNo();
+
+        return idNo.substring(0, 4) + "**************";
 
     }
 
@@ -95,17 +101,21 @@ public class LoanUtil {
         /**
          * 职业＋收入＋房产＋社保
          */
+        String profession = borrowerDO.getProfession();
         StringBuilder sb = new StringBuilder();
-        sb.append(borrowerDO.getProfession()).append(" ");
-        sb.append("月收入" + borrowerDO.getMonthlyIncome() + "元").append(" ");
+        if (StringUtils.isNotBlank(profession)) {
+            sb.append(profession).append(" ");
+        }
+        String monthlyIncome = borrowerDO.getMonthlyIncome();
+        if (StringUtils.isNotBlank(monthlyIncome)) {
+            sb.append("月收入" + monthlyIncome + "元").append(" ");
+        }
         if (StringUtils.isNotBlank(model.getProvidentFundTaskId())) {
             sb.append("有公积金").append(" ");
         }
-
         if (StringUtils.isNotBlank(model.getSocialSecurityTaskId())) {
             sb.append("有社保").append(" ");
         }
-
         model.setBorrowerInfoDesc(sb.toString());
 
     }
@@ -159,4 +169,37 @@ public class LoanUtil {
         return first + "**";
     }
 
+    public static void initNotLoginIndexDesc(LoanOrderViewModel model, BorrowerDO borrowerDO,
+                                             OrderDO orderDO) {
+
+        StringBuilder sb = new StringBuilder();
+
+        if (LoanTypeEnum.WEI_LI_DAI.getLoanName().equals(orderDO.getLoanType())) {
+
+            sb.append("微粒贷总额");
+            sb.append(borrowerDO.getWeiLiDaiTotal());
+            sb.append("元 ");
+            sb.append("微粒贷可借额度");
+            sb.append(borrowerDO.getWeiLiDaiKeJie());
+            sb.append("元");
+
+        } else if (LoanTypeEnum.SOCIAL_SECURITY.getLoanName().equals(orderDO.getLoanType())) {
+            sb.append("有社保");
+        } else if (LoanTypeEnum.PROVIDENT_FUND.getLoanName().equals(orderDO.getLoanType())) {
+            sb.append("有公积金");
+
+        } else if (LoanTypeEnum.CREDIT_LOAN.getLoanName().equals(orderDO.getLoanType())) {
+            sb.append(borrowerDO.getEduLevel()).append(" ");
+            sb.append(borrowerDO.getProfession()).append(" ");
+            sb.append("月收入" + borrowerDO.getMonthlyIncome()).append(" ");
+            sb.append(borrowerDO.getIncomeType()).append(" ");
+            sb.append(borrowerDO.getCarInfo()).append(" ");
+            sb.append(borrowerDO.getHouseInfo()).append(" ");
+            if (!"无".equals(borrowerDO.getPersonalnsurance())) {
+                sb.append(borrowerDO.getPersonalnsurance()).append(" ");
+            }
+
+        }
+        model.setNotLoginIndexDesc(sb.toString());
+    }
 }

@@ -16,15 +16,14 @@ import java.util.List;
  */
 public interface OrderRepository extends CrudRepository<OrderDO, Integer> {
 
-    @Query(value = "select o from OrderDO o where o.borrowerPhoneNo =?1 and o.loanType=?2")
-    OrderDO findOrderDO(String borrowerPhoneNo, String loanType);
+    @Query(value = "select o from OrderDO o where o.borrowerPhoneNo =?1 and o.loanType=?2 and o.orderStatus=?3")
+    OrderDO findOrderDO(String borrowerPhoneNo, String loanType, String orderStatus);
 
     @Query(value = "select o from OrderDO o where o.orderId =?1")
     OrderDO findOrderDO(String orderId);
 
     List<OrderDO> findOrderDOSByManagerPhoneNo(String managerPhoneNo);
 
-    @Query(value = "select o from OrderDO o where o.orderStatus=?1 or o.orderStatus=?2")
-    List<OrderDO> findOrders(String status1, String status2);
+    List<OrderDO> findOrderDOSByOrderStatusOrderByCreateTimeDesc(String orderStatus);
 
 }

@@ -55,7 +55,8 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
 
     private boolean isRepeat(OrderRepository orderRepository, String phoneNo, String loanTypeCode) {
 
-        return null == orderRepository.findOrderDO(phoneNo, loanTypeCode) ? false : true;
+        return null == orderRepository.findOrderDO(phoneNo, loanTypeCode,
+            BorrowerOrderStatusEnum.ENABLE_GRAB.getStatus()) ? false : true;
     }
 
     private void saveWEI_LI_DAIBorrowerInfo(LoanApplyRequest request,

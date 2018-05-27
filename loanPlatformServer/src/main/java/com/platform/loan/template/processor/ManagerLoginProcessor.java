@@ -14,6 +14,8 @@ import com.platform.loan.util.RequestCheckUtil;
 import com.platform.loan.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
+
 /**
  * @author caogu.wyp
  * @version $Id: ManagerLoginProcessor.java, v 0.1 2018-05-22 上午12:51 caogu.wyp Exp $$
@@ -28,7 +30,8 @@ public class ManagerLoginProcessor implements Processor<ManagerLoginRequest, Log
         //请求参数判空
         RequestCheckUtil.checkManagerLoginRequest(managerLoginRequest);
         //校验短信
-        //CommonMethod.verifyOTP(managerLoginRequest.getPhoneNo(), LoginUserTypeEnum.CREDIT_MANAGER.getCode(), managerLoginRequest.getSmsCode());
+        CommonMethod.verifyOTP(managerLoginRequest.getPhoneNo(),
+            LoginUserTypeEnum.CREDIT_MANAGER.getCode(), managerLoginRequest.getSmsCode());
         //更新用户信息
         updateManagerInfo(managerLoginRequest, managerRepository, loginResult);
         //下发token
@@ -47,6 +50,7 @@ public class ManagerLoginProcessor implements Processor<ManagerLoginRequest, Log
             newCreditManagerDO.setPhoneNo(managerLoginRequest.getPhoneNo());
             newCreditManagerDO.setCreateTime(TimeUtil.getCurrentTimestamp());
             newCreditManagerDO.setModifyTime(TimeUtil.getCurrentTimestamp());
+            newCreditManagerDO.setBalance(new BigDecimal(0));
             managerRepository.save(newCreditManagerDO);
             loginResult.setHaveVerifyIdNo(false);
             return;
