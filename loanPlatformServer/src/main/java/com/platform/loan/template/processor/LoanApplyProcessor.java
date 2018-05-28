@@ -5,6 +5,7 @@ import com.platform.loan.constant.LoanTypeEnum;
 import com.platform.loan.constant.ResultCodeEnum;
 import com.platform.loan.dao.BorrowerRepository;
 import com.platform.loan.dao.OrderRepository;
+import com.platform.loan.dao.SysConfigRepository;
 import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.modle.BorrowerDO;
@@ -31,6 +32,7 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         HttpServletRequest httpServletRequest = (HttpServletRequest) others[0];
         BorrowerRepository borrowerRepository = (BorrowerRepository) others[1];
         OrderRepository borrowerOrderRepository = (OrderRepository) others[2];
+        SysConfigRepository sysConfigRepository = (SysConfigRepository) others[3];
 
         String phoneNo = JwtUtil.getLoginSession(httpServletRequest).getPhoneNo();
 
@@ -40,7 +42,7 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         }
 
         //保存一张新订单
-        saveOrder(request, borrowerOrderRepository, phoneNo);
+        saveOrder(request, borrowerOrderRepository, phoneNo, sysConfigRepository);
 
         if (LoanTypeEnum.CREDIT_LOAN.getLoanName().equals(request.getLoanType())) {
             saveCREDIT_LOANBorrowerInfo(request, borrowerRepository, phoneNo);
@@ -91,7 +93,7 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
     }
 
     private void saveOrder(LoanApplyRequest request, OrderRepository borrowerOrderRepository,
-                           String phoneNo) {
+                           String phoneNo, SysConfigRepository sysConfigRepository) {
         OrderDO borrowerOrderDO = new OrderDO();
         borrowerOrderDO.setOrderId(UUID.randomUUID().toString());
         borrowerOrderDO.setBorrowerPhoneNo(phoneNo);
@@ -102,7 +104,7 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         borrowerOrderDO.setLoanLimit(request.getLoanLimit());
         borrowerOrderDO.setLoanPurpose(request.getLoanPurpose());
         borrowerOrderDO.setLoanType(request.getLoanType());
-        borrowerOrderDO.setPrice(LoanUtil.getPrice(request));
+        borrowerOrderDO.setPrice(LoanUtil.getPrice(request, sysConfigRepository));
         borrowerOrderDO.setOrderStatus(BorrowerOrderStatusEnum.ENABLE_GRAB.getStatus());
         borrowerOrderRepository.save(borrowerOrderDO);
     }

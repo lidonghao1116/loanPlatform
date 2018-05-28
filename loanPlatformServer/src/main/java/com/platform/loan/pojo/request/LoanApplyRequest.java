@@ -36,7 +36,7 @@ public class LoanApplyRequest extends BaseRequest {
     @ApiModelProperty(value = "职业身份，值服务端下发维护", name = "socialSecurityVerifyTime", required = false)
     private String profession;
 
-    @ApiModelProperty(value = "月收入，单位千", name = "monthlyIncome", required = false)
+    @ApiModelProperty(value = "月收入，单位元", name = "monthlyIncome", required = false)
     private String monthlyIncome;
 
     @ApiModelProperty(value = "收入类型，值服务端下发维护", name = "incomeType", required = false)

@@ -6,11 +6,9 @@ package com.platform.loan.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.platform.loan.constant.LoanTypeEnum;
+import com.platform.loan.dao.SysConfigRepository;
 import com.platform.loan.pojo.LoanOrderViewModel;
-import com.platform.loan.pojo.modle.BorrowerDO;
-import com.platform.loan.pojo.modle.OrderDO;
-import com.platform.loan.pojo.modle.ProvidentFundDO;
-import com.platform.loan.pojo.modle.SocialSecurityDO;
+import com.platform.loan.pojo.modle.*;
 import com.platform.loan.pojo.request.LoanApplyRequest;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,9 +20,22 @@ import java.math.BigDecimal;
  */
 public class LoanUtil {
 
-    public static BigDecimal getPrice(LoanApplyRequest request) {
-        //TODO 这里会有定价规则
-        return new BigDecimal(8);
+    public static BigDecimal getPrice(LoanApplyRequest request,
+                                      SysConfigRepository sysConfigRepository) {
+
+        SysConfigurationDO sysConfigurationDO = sysConfigRepository
+            .findSysConfigurationDOByConfigKey(request.getLoanType());
+
+        try {
+            if (null != sysConfigurationDO
+                && StringUtils.isNotBlank(sysConfigurationDO.getConfigValue())) {
+                return new BigDecimal(sysConfigurationDO.getConfigValue());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BigDecimal(15);
+        }
+        return new BigDecimal(15);
     }
 
     private static String processCity(String citys) {
@@ -79,6 +90,11 @@ public class LoanUtil {
         model.setWeiLiDaiKeJie(borrowerDO.getWeiLiDaiKeJie());
         model.setWeiLiDaiTotal(borrowerDO.getWeiLiDaiTotal());
         model.setMaskBorrowerIdNo(markBorrowerIdNo(borrowerDO));
+        model.setCreditRecord(borrowerDO.getCreditRecord());
+        model.setInsuranceCompany(borrowerDO.getInsuranceCompany());
+        model.setInsuranceCoverage(borrowerDO.getInsuranceCoverage());
+        model.setEduLevel(borrowerDO.getEduLevel());
+
         if (isLogin) {
             model.setBorrowerName(borrowerDO.getName());
             model.setBorrowerIdNo(borrowerDO.getIdNo());
@@ -133,6 +149,7 @@ public class LoanUtil {
             return;
         }
         model.setProvidentFundTaskId(object.getString("task_id"));
+        model.setProvidentFundCity(object.getString("city"));
     }
 
     public static void initSocialInfo(LoanOrderViewModel model, SocialSecurityDO socialSecurityDO) {
@@ -146,6 +163,7 @@ public class LoanUtil {
             return;
         }
         model.setSocialSecurityTaskId(object.getString("task_id"));
+        model.setSocialSecurityCity(object.getString("city"));
     }
 
     private static String maskBorrowerPhone(OrderDO borrowerOrderDO) {
@@ -192,7 +210,7 @@ public class LoanUtil {
         } else if (LoanTypeEnum.CREDIT_LOAN.getLoanName().equals(orderDO.getLoanType())) {
             sb.append(borrowerDO.getEduLevel()).append(" ");
             sb.append(borrowerDO.getProfession()).append(" ");
-            sb.append("月收入" + borrowerDO.getMonthlyIncome()).append(" ");
+            sb.append("月收入" + borrowerDO.getMonthlyIncome() + "元").append(" ");
             sb.append(borrowerDO.getIncomeType()).append(" ");
             sb.append(borrowerDO.getCarInfo()).append(" ");
             sb.append(borrowerDO.getHouseInfo()).append(" ");

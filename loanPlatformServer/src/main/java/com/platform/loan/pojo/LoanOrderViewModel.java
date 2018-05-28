@@ -58,6 +58,66 @@ public class LoanOrderViewModel implements Serializable {
 
     private String creditLimit;
 
+    private String insuranceCompany;
+
+    private String insuranceCoverage;
+
+    private String creditRecord;
+
+    private String eduLevel;
+
+    private String providentFundCity;
+
+    private String socialSecurityCity;
+
+    public String getProvidentFundCity() {
+        return providentFundCity;
+    }
+
+    public void setProvidentFundCity(String providentFundCity) {
+        this.providentFundCity = providentFundCity;
+    }
+
+    public String getSocialSecurityCity() {
+        return socialSecurityCity;
+    }
+
+    public void setSocialSecurityCity(String socialSecurityCity) {
+        this.socialSecurityCity = socialSecurityCity;
+    }
+
+    public String getEduLevel() {
+        return eduLevel;
+    }
+
+    public void setEduLevel(String eduLevel) {
+        this.eduLevel = eduLevel;
+    }
+
+    public String getInsuranceCompany() {
+        return insuranceCompany;
+    }
+
+    public void setInsuranceCompany(String insuranceCompany) {
+        this.insuranceCompany = insuranceCompany;
+    }
+
+    public String getInsuranceCoverage() {
+        return insuranceCoverage;
+    }
+
+    public void setInsuranceCoverage(String insuranceCoverage) {
+        this.insuranceCoverage = insuranceCoverage;
+    }
+
+    public String getCreditRecord() {
+        return creditRecord;
+    }
+
+    public void setCreditRecord(String creditRecord) {
+        this.creditRecord = creditRecord;
+    }
+
     public String getCreditLimit() {
         return creditLimit;
     }
