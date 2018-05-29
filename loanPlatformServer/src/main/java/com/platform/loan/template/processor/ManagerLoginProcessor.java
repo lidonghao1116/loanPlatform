@@ -30,8 +30,7 @@ public class ManagerLoginProcessor implements Processor<ManagerLoginRequest, Log
         //请求参数判空
         RequestCheckUtil.checkManagerLoginRequest(managerLoginRequest);
         //校验短信
-        CommonMethod.verifyOTP(managerLoginRequest.getPhoneNo(),
-            LoginUserTypeEnum.CREDIT_MANAGER.getCode(), managerLoginRequest.getSmsCode());
+        //CommonMethod.verifyOTP(managerLoginRequest.getPhoneNo(),LoginUserTypeEnum.CREDIT_MANAGER.getCode(), managerLoginRequest.getSmsCode());
         //更新用户信息
         updateManagerInfo(managerLoginRequest, managerRepository, loginResult);
         //下发token

@@ -177,14 +177,14 @@ public class CallBackController {
         if (null != socialSecurityDO) {
             socialSecurityDO.setPhoneNo(callBackRequest.getUser_id());
             socialSecurityDO.setModifyTime(TimeUtil.getCurrentTimestamp());
-            socialSecurityDO.setExtData(jsonResponse);
+            socialSecurityDO.setSocialDetail(jsonResponse);
             socialSecurityRepository.save(socialSecurityDO);
         } else {
             SocialSecurityDO newSocialSecurityDO = new SocialSecurityDO();
             newSocialSecurityDO.setPhoneNo(callBackRequest.getUser_id());
             newSocialSecurityDO.setCreateTime(TimeUtil.getCurrentTimestamp());
             newSocialSecurityDO.setModifyTime(TimeUtil.getCurrentTimestamp());
-            newSocialSecurityDO.setExtData(jsonResponse);
+            newSocialSecurityDO.setSocialDetail(jsonResponse);
             socialSecurityRepository.save(newSocialSecurityDO);
         }
         //最后才响应成功

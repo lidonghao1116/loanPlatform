@@ -3,23 +3,21 @@
  */
 package com.platform.loan.template.processor;
 
-import com.platform.loan.constant.BorrowerOrderStatusEnum;
+import com.platform.loan.constant.CommonConstants;
 import com.platform.loan.constant.LoanOrderQueryConditionEnum;
-import com.platform.loan.dao.BorrowerRepository;
-import com.platform.loan.dao.OrderRepository;
-import com.platform.loan.dao.ProvidentFundRepository;
-import com.platform.loan.dao.SocialSecurityRepository;
+import com.platform.loan.dao.*;
+import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.LoanOrderViewModel;
-import com.platform.loan.pojo.modle.BorrowerDO;
-import com.platform.loan.pojo.modle.OrderDO;
-import com.platform.loan.pojo.modle.ProvidentFundDO;
-import com.platform.loan.pojo.modle.SocialSecurityDO;
+import com.platform.loan.pojo.LoginSession;
+import com.platform.loan.pojo.modle.*;
 import com.platform.loan.pojo.request.LoanOrderRequest;
 import com.platform.loan.pojo.request.LoanOrderResult;
 import com.platform.loan.template.Processor;
+import com.platform.loan.util.LoanLogUtil;
 import com.platform.loan.util.LoanUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -35,9 +33,14 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
         BorrowerRepository borrowerRepository = (BorrowerRepository) others[1];
         ProvidentFundRepository providentFundRepository = (ProvidentFundRepository) others[2];
         SocialSecurityRepository socialSecurityRepository = (SocialSecurityRepository) others[3];
+        GrabRecordRepository grabRecordRepository = (GrabRecordRepository) others[4];
+        HttpServletRequest httpServletRequest = (HttpServletRequest) others[5];
 
         //如果穿了orderId，优先使用orderId查
         List<OrderDO> orders = queryOrders(loanOrderRequest, orderRepository);
+
+        //过滤掉自己抢过的订单
+        filterOrders(orders, httpServletRequest, grabRecordRepository);
 
         List<LoanOrderViewModel> list = getLoanOrderViewModels(borrowerRepository,
             providentFundRepository, socialSecurityRepository, orders);
@@ -47,6 +50,47 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
         loanOrderResult.setPageNum(1);
         loanOrderResult.setTotalPageNum(1);
         loanOrderResult.setViewList(list);
+
+    }
+
+    private void filterOrders(List<OrderDO> orders, HttpServletRequest httpServletRequest,
+                              GrabRecordRepository grabRecordRepository) {
+
+        if (StringUtils.isBlank(httpServletRequest
+            .getHeader(CommonConstants.AUTHORIZATION_HEARDER_KEY))) {
+            return;
+        }
+
+        LoginSession loginSession = null;
+        try {
+
+            loginSession = JwtUtil.getLoginSession(httpServletRequest);
+        } catch (Exception e) {
+            //这里失败，不要中断
+            LoanLogUtil.getLogger(LoanOrderProcessor.class).warn("请求查询匿名订单列表时，token验证失败");
+        }
+
+        List<GrabRecordDO> grabRecordDOS = grabRecordRepository.findGrabRecords(loginSession
+            .getPhoneNo());
+
+        if (null == grabRecordDOS || grabRecordDOS.size() == 0) {
+            return;
+        }
+
+        Set<String> grabOrderIds = new HashSet<>();
+        for (GrabRecordDO grabRecordDO : grabRecordDOS) {
+            grabOrderIds.add(grabRecordDO.getOrderId());
+        }
+
+        Iterator<OrderDO> iterator = orders.iterator();
+        while (iterator.hasNext()) {
+            OrderDO orderDO = iterator.next();
+
+            if (grabOrderIds.contains(orderDO.getOrderId())) {
+                iterator.remove();
+            }
+
+        }
 
     }
 
@@ -160,18 +204,15 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
 
         if (StringUtils.isNotBlank(loanOrderRequest.getOrderId())) {
 
-            OrderDO OrderDO = orderRepository.findOrderDO(loanOrderRequest.getOrderId());
-            if (null == OrderDO) {
+            OrderDO orderDO = orderRepository.findOrderDO(loanOrderRequest.getOrderId());
+            if (null == orderDO) {
                 return Collections.EMPTY_LIST;
             }
-            return Arrays.asList(OrderDO);
+            return Arrays.asList(orderDO);
 
         } else {
-            List<OrderDO> borrowerOrderList = orderRepository
-                .findOrderDOSByOrderStatusOrderByCreateTimeDesc(BorrowerOrderStatusEnum.ENABLE_GRAB
-                    .getStatus());
 
-            return borrowerOrderList;
+            return orderRepository.findCanGrabOrders();
         }
 
     }
@@ -179,16 +220,16 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
     public static List<LoanOrderViewModel> getLoanOrderViewModels(BorrowerRepository borrowerRepository,
                                                                   ProvidentFundRepository providentFundRepository,
                                                                   SocialSecurityRepository socialSecurityRepository,
-                                                                  Iterable<OrderDO> borrowerOrderList) {
+                                                                  Iterable<OrderDO> orderDOS) {
         List<LoanOrderViewModel> list = new ArrayList<>();
 
-        borrowerOrderList.forEach(orderDO -> {
-
+        for (OrderDO orderDO : orderDOS) {
             //查询订单信息
             LoanOrderViewModel model = LoanUtil.getLoanOrderViewModel(orderDO, false);
             //查询借款人信息
             BorrowerDO borrowerDO = borrowerRepository.findBorrowerDoByPhoneNo(orderDO
                 .getBorrowerPhoneNo());
+
             LoanUtil.initBorrowerInfo(model, borrowerDO, false);
 
             //查询公积金信息
@@ -207,7 +248,7 @@ public class LoanOrderProcessor implements Processor<LoanOrderRequest, LoanOrder
             LoanUtil.initNotLoginIndexDesc(model, borrowerDO, orderDO);
 
             list.add(model);
-        });
+        }
 
         return list;
     }

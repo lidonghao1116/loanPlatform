@@ -1,9 +1,6 @@
 package com.platform.loan.controller;
 
-import com.platform.loan.dao.BorrowerRepository;
-import com.platform.loan.dao.OrderRepository;
-import com.platform.loan.dao.ProvidentFundRepository;
-import com.platform.loan.dao.SocialSecurityRepository;
+import com.platform.loan.dao.*;
 import com.platform.loan.pojo.request.LoanOrderRequest;
 import com.platform.loan.pojo.request.LoanOrderResult;
 import com.platform.loan.pojo.request.QueryLoginManagerOrderRequest;
@@ -41,13 +38,18 @@ public class LoanOrderController {
     @Autowired
     private SocialSecurityRepository socialSecurityRepository;
 
+    @Autowired
+    private GrabRecordRepository     grabRecordRepository;
+
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = false, dataType = "String")
     @ApiOperation(value = "查询可抢状态的订单", notes = "查询可抢状态的订单,此查询接口不需要做登陆校验,queryCondition为查询条件")
     @RequestMapping(value = "/api/manager/orders", method = RequestMethod.POST)
-    public LoanOrderResult queryInitLoanOrderList(@RequestBody LoanOrderRequest loanOrderRequest) {
+    public LoanOrderResult queryInitLoanOrderList(@RequestBody LoanOrderRequest loanOrderRequest,
+                                                  HttpServletRequest httpServletRequest) {
 
         return LoanPlatformTemplate.run(new LoanOrderProcessor(), loanOrderRequest,
             new LoanOrderResult(), orderRepository, borrowerRepository, providentFundRepository,
-            socialSecurityRepository);
+            socialSecurityRepository, grabRecordRepository, httpServletRequest);
 
     }
 
@@ -59,7 +61,8 @@ public class LoanOrderController {
 
         return LoanPlatformTemplate.run(new QueryLoginManagerOrderProcessor(),
             queryLoginManagerOrderRequest, new QueryLoginManagerOrderResult(), httpServletRequest,
-            orderRepository, borrowerRepository, providentFundRepository, socialSecurityRepository);
+            orderRepository, borrowerRepository, providentFundRepository, socialSecurityRepository,
+            grabRecordRepository);
 
     }
 

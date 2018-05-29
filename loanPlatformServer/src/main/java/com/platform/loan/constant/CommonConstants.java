@@ -9,6 +9,8 @@ package com.platform.loan.constant;
  * @version $Id: CommonConstants.java, v 0.1 2018-05-05 上午11:04 caogu.wyp Exp $$
  */
 public class CommonConstants {
+    /** 能抢2次 */
+    public static final int    ORDER_MAX_GRAB_COUNT      = 2;
 
     public static final String IMAGE_CODE_HEADER_KEY     = "IMAGE_CODE_HEADER_KEY";
 
@@ -26,32 +28,6 @@ public class CommonConstants {
     public static final String ALIPAY_APPID              = "2018052660264066";
 
     public static final String ALIPAY_PUBLIC_KEY         = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsoeLwtaoIEiAPuKOGwzzyhmzwCf5vZ3feHyec9uOKwThCea606L+NACJq7PR5uojDAgjG0IEG3cga52Qr36bVsbCNkyjLjqIGmL9fcmvPWxz2fOyVo8dQT0iIDLlougF1WKJTn1Yw2GJzXbWln1goSrNU+5kfzts/SsqnavcPVKYn1tbTUj8ZhGnHUgBvSdmHjr4wk8E2nqBuiq3Vd8V3ph9A+csOgbkAnhlx5oETxu5RCfCWRQXzkw6rCE1uaRUNP03Ze9V4kgNmG9ZjbzFZyI0VWAjSuWXJn5xWpmFhB/HCieMdFaYj7x8Pf4vSyUWOXYVphGfZu86mfueEu2h1wIDAQAB";
-
-    public static final String PRIVATE_KEY               = "MIIEogIBAAKCAQEAsoeLwtaoIEiAPuKOGwzzyhmzwCf5vZ3feHyec9uOKwThCea6"
-                                                           + "06L+NACJq7PR5uojDAgjG0IEG3cga52Qr36bVsbCNkyjLjqIGmL9fcmvPWxz2fOy"
-                                                           + "Vo8dQT0iIDLlougF1WKJTn1Yw2GJzXbWln1goSrNU+5kfzts/SsqnavcPVKYn1tb"
-                                                           + "TUj8ZhGnHUgBvSdmHjr4wk8E2nqBuiq3Vd8V3ph9A+csOgbkAnhlx5oETxu5RCfC"
-                                                           + "WRQXzkw6rCE1uaRUNP03Ze9V4kgNmG9ZjbzFZyI0VWAjSuWXJn5xWpmFhB/HCieM"
-                                                           + "dFaYj7x8Pf4vSyUWOXYVphGfZu86mfueEu2h1wIDAQABAoIBABeaA8gGSMO70fh+"
-                                                           + "SvsYg0I8k57bqhB/RoPPNcNrSyg0xOtiLWC9M438ZDbm1uEIIwn8KWf5GkHnRcn0"
-                                                           + "UqRgwHiAXjx/dTMvWb7jR0/R0fD03Xv606DN2rg9NL28/M7EjcDf/fb6azmpM2aO"
-                                                           + "R2AtwxCLcAmggnivioENq9ycU8lnYWYpypBQKcjqQI0JOFzc1R8jflKwfK10PWTe"
-                                                           + "ifZdDjbquVC9GfAYGVOfwC6yBe4KtOc88LOMWsESF82s5/+DNJjq3EHtK57EEsKc"
-                                                           + "uxiYfoJTqm6tdlVl3T+hbD4cVqfiDMsK+tB7A5Cos98BniXBDbq+NiK8HFsWohiq"
-                                                           + "HUY/ocECgYEA3ZPVTKUFuC85ofJ7w/NEt78k5e8g+ypAfgcYDlZOdq1wdkcH+5kF"
-                                                           + "bNMYqba3ZXWhWwRJpDjVkU3Dj2KNyE3kSpU1QVD+T0Tq+kbD991/l7WWPin+VFgJ"
-                                                           + "aexKYq9nOFMaJG3AU/Vdc1wRAKFKSi5nbERLdYeMJ3IGIZ7WR5xw5OsCgYEAzkOw"
-                                                           + "HIqidz2UXz/IiUAol1M/wGHAnMcg37yl9a1VZDdGRrHPCXj/S9FDQaq0Jz02NB3G"
-                                                           + "PrtllA1F++ZksV4uis1rJbBwCNy4+3vCnVXV6B1FnbGmNe0QGieRjKxceQiUgdcI"
-                                                           + "QlJciryk93vrh0mtQC72mIbvZNViNSGNK25OK8UCgYA5huMvBf0pJ6Gn6SO26Rbj"
-                                                           + "Oc4joGUIsJyT29WkC0ZNy5PSMXjiGoVtDpVtopGU1uhwj/lqmJLiKbVnKagz4/0s"
-                                                           + "W/a6oYOVIwh6uBqy5J/2zF9YfmCYl07CYGWjn3SGDBVSdegkJCUCCVoktrtp7QhO"
-                                                           + "9KA+wFVj/FeZLPrnFre8xwKBgAr+VpOe2/vo/1B4UNLn5YHzQPGbBC4W+uyR3HKU"
-                                                           + "s3ls7MT10ygZF9pNo/0LASEaRRpP//H2APr8Hh/H7tP5RhfFzREsLzx5ry5QMVY7"
-                                                           + "bfQ6Iyy9fDNhmDscoshRo3gb+fZVpK4MP7xxQ4WhSDNkvOQv3JrSjk3chah5SlHn"
-                                                           + "RilVAoGAf+UWfsMvZprUDwsvjCfKu7QLjORGeN+yreG7kyWg+F8T/lMU3T1bSMUB"
-                                                           + "VJzBFPy4TD38BWX77ZhYtIEgp7tCqIVaMRJvk074/9wCG2t4tF4DqmVSK1Vbpbu1"
-                                                           + "ZP+JvDKqkz5f5YTOjBIctwMB7iOkuocLk3118iMfmwDFP1+OCuA=";
 
     public static final String PRIVATE_KEY_PKCS8         = "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCyh4vC1qggSIA+"
                                                            + "4o4bDPPKGbPAJ/m9nd94fJ5z244rBOEJ5rrTov40AImrs9Hm6iMMCCMbQgQbdyBr"

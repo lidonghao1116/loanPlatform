@@ -4,12 +4,16 @@
 package com.platform.loan.template.processor;
 
 import com.platform.loan.constant.ProcessResultEnum;
-import com.platform.loan.dao.OrderRepository;
+import com.platform.loan.dao.GrabRecordRepository;
 import com.platform.loan.exception.LoanPlatformException;
-import com.platform.loan.pojo.modle.OrderDO;
+import com.platform.loan.jwt.JwtUtil;
+import com.platform.loan.pojo.LoginSession;
+import com.platform.loan.pojo.modle.GrabRecordDO;
 import com.platform.loan.pojo.request.ProcessOrderRequest;
 import com.platform.loan.pojo.result.ProcessOrderResult;
 import com.platform.loan.template.Processor;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -21,26 +25,42 @@ public class ProcessOrderProcessor implements Processor<ProcessOrderRequest, Pro
     public void process(ProcessOrderRequest processOrderRequest,
                         ProcessOrderResult processOrderResult, Object... others) throws Exception {
 
-        OrderRepository orderRepository = (OrderRepository) others[0];
+        HttpServletRequest httpServletRequest = (HttpServletRequest) others[0];
+        GrabRecordRepository grabRecordRepository = (GrabRecordRepository) others[1];
+        LoginSession loginSession = JwtUtil.getLoginSession(httpServletRequest);
 
-        OrderDO orderDO = orderRepository.findOrderDO(processOrderRequest.getOrderId());
+        GrabRecordDO grabRecordDO = getGrabRecordDO(processOrderRequest, grabRecordRepository,
+            loginSession);
 
-        if (null == orderDO) {
-            throw new LoanPlatformException("不存在此订单~" + processOrderRequest.getOrderId());
-        }
+        ProcessResultEnum processResultEnum = getProcessResultEnum(processOrderRequest);
 
-        // 根据desc将订单状态重置
+        grabRecordDO.setProcessResult(processOrderRequest.getProcessorResult());
+        grabRecordDO.setStatus(processResultEnum.getStatus());
+        grabRecordRepository.save(grabRecordDO);
+    }
 
+    private ProcessResultEnum getProcessResultEnum(ProcessOrderRequest processOrderRequest) {
         ProcessResultEnum processResultEnum = ProcessResultEnum.getByDesc(processOrderRequest
             .getProcessorResult());
 
         if (null == processResultEnum) {
-            throw new LoanPlatformException("未定义的处理结果" + processOrderRequest.getProcessorResult());
+            throw new LoanPlatformException("未定义的处理结果：" + processOrderRequest.getProcessorResult());
 
         }
-        orderDO.setProcessResult(processOrderRequest.getProcessorResult());
-        orderDO.setOrderStatus(processResultEnum.getStatus());
+        return processResultEnum;
+    }
 
-        orderRepository.save(orderDO);
+    private GrabRecordDO getGrabRecordDO(ProcessOrderRequest processOrderRequest,
+                                         GrabRecordRepository grabRecordRepository,
+                                         LoginSession loginSession) {
+        GrabRecordDO grabRecordDO = grabRecordRepository.findGrabRecordDO(
+            processOrderRequest.getOrderId(), loginSession.getPhoneNo());
+
+        if (null == grabRecordDO) {
+            throw new LoanPlatformException("处理订单失败，数据库中该用户没有这笔订单，order："
+                                            + processOrderRequest.getOrderId() + "loginUserPhone:"
+                                            + loginSession.getPhoneNo());
+        }
+        return grabRecordDO;
     }
 }

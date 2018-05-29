@@ -13,6 +13,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface BorrowerRepository extends CrudRepository<BorrowerDO, Integer> {
 
-    public BorrowerDO findBorrowerDoByPhoneNo(String phoneNo);
+    BorrowerDO findBorrowerDoByPhoneNo(String phoneNo);
 
 }

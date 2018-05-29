@@ -11,15 +11,15 @@ package com.platform.loan.constant;
 public enum ProcessResultEnum {
 
     //
-    FORM_OTHER("FORM_OTHER", BorrowerOrderStatusEnum.INVALID.getStatus(), "客户已从别处贷款"),
+    FORM_OTHER("FORM_OTHER", OrderProcessStatusEnum.INVALID.getCode(), "客户已从别处贷款"),
     //
-    NOT_TRUE("NOT_TRUE", BorrowerOrderStatusEnum.INVALID.getStatus(), "客户信息不真实"),
+    NOT_TRUE("NOT_TRUE", OrderProcessStatusEnum.INVALID.getCode(), "客户信息不真实"),
     //
-    DO_NOT_WANT("DO_NOT_WANT", BorrowerOrderStatusEnum.INVALID.getStatus(), "客户没有贷款意愿"),
+    DO_NOT_WANT("DO_NOT_WANT", OrderProcessStatusEnum.INVALID.getCode(), "客户没有贷款意愿"),
     //
-    I_CAN_NOT("I_CAN_NOT", BorrowerOrderStatusEnum.INVALID.getStatus(), "客户我做不了"),
+    I_CAN_NOT("I_CAN_NOT", OrderProcessStatusEnum.INVALID.getCode(), "客户我做不了"),
     //
-    LOAN_SUCCESS("LOAN_SUCCESS", BorrowerOrderStatusEnum.FINISH.getStatus(), "已成功放款");
+    LOAN_SUCCESS("LOAN_SUCCESS", OrderProcessStatusEnum.LOAN_FINISH.getCode(), "已成功放款");
 
     private String code;
     private String status;

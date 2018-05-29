@@ -3,6 +3,7 @@
  */
 package com.platform.loan.controller;
 
+import com.platform.loan.dao.GrabRecordRepository;
 import com.platform.loan.dao.ManagerRepository;
 import com.platform.loan.dao.OrderRepository;
 import com.platform.loan.pojo.request.BaseRequest;
@@ -37,10 +38,13 @@ import javax.servlet.http.HttpServletRequest;
 public class ManagerController {
 
     @Autowired
-    private OrderRepository   orderRepository;
+    private OrderRepository      orderRepository;
 
     @Autowired
-    private ManagerRepository managerRepository;
+    private ManagerRepository    managerRepository;
+
+    @Autowired
+    private GrabRecordRepository grabRecordRepository;
 
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
     @ApiOperation(value = "抢订单", notes = "抢订单")
@@ -49,7 +53,8 @@ public class ManagerController {
                                              HttpServletRequest httpServletRequest) {
 
         return LoanPlatformTemplate.run(new GrabLoanOrderProcessor(), grabLoanOrderRequest,
-            new GrabLoanOrderResult(), httpServletRequest, orderRepository, managerRepository);
+            new GrabLoanOrderResult(), httpServletRequest, orderRepository, managerRepository,
+            grabRecordRepository);
     }
 
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
@@ -64,10 +69,11 @@ public class ManagerController {
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")
     @ApiOperation(value = "处理订单", notes = "处理订单")
     @RequestMapping(value = "/api/manager/order/process", method = RequestMethod.POST)
-    public ProcessOrderResult queryLoginManagerInfo(@RequestBody ProcessOrderRequest processOrderRequest) {
+    public ProcessOrderResult queryLoginManagerInfo(@RequestBody ProcessOrderRequest processOrderRequest,
+                                                    HttpServletRequest httpServletRequest) {
 
         return LoanPlatformTemplate.run(new ProcessOrderProcessor(), processOrderRequest,
-            new ProcessOrderResult(), orderRepository);
+            new ProcessOrderResult(), httpServletRequest, grabRecordRepository);
     }
 
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "在登录的时候下发到前端的jwt", required = true, dataType = "String")

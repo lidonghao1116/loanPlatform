@@ -1,12 +1,14 @@
 package com.platform.loan.template.processor;
 
-import com.platform.loan.constant.BorrowerOrderStatusEnum;
+import com.platform.loan.constant.OrderProcessStatusEnum;
 import com.platform.loan.constant.ResultCodeEnum;
+import com.platform.loan.dao.GrabRecordRepository;
 import com.platform.loan.dao.ManagerRepository;
 import com.platform.loan.dao.OrderRepository;
 import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.modle.CreditManagerDO;
+import com.platform.loan.pojo.modle.GrabRecordDO;
 import com.platform.loan.pojo.modle.OrderDO;
 import com.platform.loan.pojo.request.GrabLoanOrderRequest;
 import com.platform.loan.pojo.result.GrabLoanOrderResult;
@@ -18,7 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 
 /**
- *  抢单
+ * 抢单
+ *
  * @author caogu.wyp
  * @version $Id: GrabLoanOrderProcessor.java, v 0.1 2018-05-23 上午12:56 caogu.wyp Exp $$
  */
@@ -31,38 +34,91 @@ public class GrabLoanOrderProcessor implements Processor<GrabLoanOrderRequest, G
         HttpServletRequest httpServletRequest = (HttpServletRequest) others[0];
         OrderRepository orderRepository = (OrderRepository) others[1];
         ManagerRepository managerRepository = (ManagerRepository) others[2];
+        GrabRecordRepository grabRecordRepository = (GrabRecordRepository) others[3];
+
         String managerPhoneNo = JwtUtil.getLoginSession(httpServletRequest).getPhoneNo();
         String orderId = grabLoanOrderRequest.getOrderId();
+        //查询订单
+        OrderDO orderDO = getOrderDO(orderRepository, orderId);
+        //查询信贷经理
+        CreditManagerDO creditManagerDO = getCreditManagerDO(managerRepository, managerPhoneNo);
+        //预扣减余额，判断余额是否足够
+        BigDecimal newBalance = getBigDecimal(orderDO, creditManagerDO);
+        /** 下面三步需要一致性 */
+        insertGrabRecord(grabRecordRepository, managerPhoneNo, orderId);
+        updateOrderGrabCount(orderRepository, orderDO);
+        updateManagerBalance(managerRepository, newBalance, creditManagerDO);
 
-        OrderDO orderDO = orderRepository.findOrderDO(orderId);
+        initResult(newBalance, orderDO.getPrice(), grabLoanOrderResult);
 
-        if (null == orderDO) {
-            throw new LoanPlatformException("订单不存在,订单id:" + orderId);
+    }
+
+    private void updateManagerBalance(ManagerRepository managerRepository, BigDecimal newBalance,
+                                      CreditManagerDO creditManagerDO) {
+        creditManagerDO.setBalance(newBalance);
+        managerRepository.save(creditManagerDO);
+    }
+
+    private void updateOrderGrabCount(OrderRepository orderRepository, OrderDO orderDO) {
+        orderDO.setResidueGrabCount(orderDO.getResidueGrabCount() - 1);
+        orderRepository.save(orderDO);
+    }
+
+    private void insertGrabRecord(GrabRecordRepository grabRecordRepository, String managerPhoneNo,
+                                  String orderId) {
+        //检查自己未抢过这笔订单
+        GrabRecordDO grabRecordDOS = grabRecordRepository.findGrabRecordDO(orderId, managerPhoneNo);
+
+        if (null != grabRecordDOS) {
+            throw new LoanPlatformException("抢订单失败，你已抢过该订单，请勿重复抢单～");
         }
-        if (!BorrowerOrderStatusEnum.ENABLE_GRAB.getStatus().equals(orderDO.getOrderStatus())) {
-            //不是可抢状态
-            throw new LoanPlatformException("订单状态不可抢," + orderDO.getOrderStatus());
-        }
 
-        CreditManagerDO creditManagerDO = managerRepository
-            .findCreditManagerDOByPhoneNo(managerPhoneNo);
+        GrabRecordDO newGrabRecordDO = new GrabRecordDO();
+        newGrabRecordDO.setManagerPhoneNo(managerPhoneNo);
+        newGrabRecordDO.setOrderId(orderId);
+        newGrabRecordDO.setStatus(OrderProcessStatusEnum.GRAB_FINISH.getCode());
+        newGrabRecordDO.setCreateTime(TimeUtil.getCurrentTimestamp());
+        newGrabRecordDO.setModifyTime(TimeUtil.getCurrentTimestamp());
+        grabRecordRepository.save(newGrabRecordDO);
 
-        if (StringUtils.isBlank(creditManagerDO.getIdNo())) {
-            throw new LoanPlatformException(ResultCodeEnum.NOT_CERTFICATION, "未实名认证！");
-        }
+    }
 
+    private BigDecimal getBigDecimal(OrderDO orderDO, CreditManagerDO creditManagerDO) {
         BigDecimal newBalance = creditManagerDO.getBalance().subtract(orderDO.getPrice());
 
         if (-1 == newBalance.compareTo(new BigDecimal(0))) {
 
             throw new LoanPlatformException(ResultCodeEnum.NOT_SUFFICIENT_BALANCE, "余额不足,请充值!");
-
         }
-        saveToDb(orderRepository, managerRepository, managerPhoneNo, orderDO, creditManagerDO,
-            newBalance);
+        return newBalance;
+    }
 
-        initResult(newBalance, orderDO.getPrice(), grabLoanOrderResult);
+    private OrderDO getOrderDO(OrderRepository orderRepository, String orderId) {
+        OrderDO orderDO = orderRepository.findOrderDO(orderId);
 
+        if (null == orderDO) {
+            throw new LoanPlatformException("订单不存在,订单id:" + orderId);
+        }
+        if (orderDO.getResidueGrabCount() <= 0) {
+            throw new LoanPlatformException("订单不可抢，剩余次数为：" + orderDO.getResidueGrabCount());
+        }
+        return orderDO;
+    }
+
+    private CreditManagerDO getCreditManagerDO(ManagerRepository managerRepository,
+                                               String managerPhoneNo) {
+        CreditManagerDO creditManagerDO = managerRepository
+            .findCreditManagerDOByPhoneNo(managerPhoneNo);
+
+        if (null == creditManagerDO) {
+
+            throw new LoanPlatformException("未在数据库中找到该用户，请重新正常流程登录！");
+        }
+
+        if (StringUtils.isBlank(creditManagerDO.getIdNo())) {
+            throw new LoanPlatformException(ResultCodeEnum.NOT_CERTFICATION, "未实名认证！");
+        }
+        return creditManagerDO;
     }
 
     private void initResult(BigDecimal newBalance, BigDecimal price,
@@ -76,12 +132,12 @@ public class GrabLoanOrderProcessor implements Processor<GrabLoanOrderRequest, G
     private void saveToDb(OrderRepository orderRepository, ManagerRepository managerRepository,
                           String managerPhoneNo, OrderDO orderDO, CreditManagerDO creditManagerDO,
                           BigDecimal newBalance) {
-        //TODO 这里后续要数据库加锁及事务
-        orderDO.setManagerPhoneNo(managerPhoneNo);
-        orderDO.setGrabTime(TimeUtil.getCurrentTimestamp());
-        orderDO.setOrderStatus(BorrowerOrderStatusEnum.GRAB_FINISH.getStatus());
-        creditManagerDO.setBalance(newBalance);
-        orderRepository.save(orderDO);
-        managerRepository.save(creditManagerDO);
+
+        /**
+         * 1 新增一条抢单记录    
+         * 2 订单次数减1
+         * 3 修改信贷经理余额
+         */
+
     }
 }

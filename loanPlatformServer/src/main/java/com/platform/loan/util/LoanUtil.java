@@ -53,22 +53,26 @@ public class LoanUtil {
     public static LoanOrderViewModel getLoanOrderViewModel(OrderDO orderDO, boolean isLogin) {
 
         LoanOrderViewModel model = new LoanOrderViewModel();
+
+        if (null == orderDO) {
+            return model;
+        }
         model.setBorrowerPhoneNo(maskBorrowerPhone(orderDO));
         model.setApplyTime(orderDO.getCreateTime().toString());
         model.setPrice(orderDO.getPrice().toString());
         model.setLoanTypeDesc(LoanTypeEnum.getDescByName(orderDO.getLoanType()));
         model.setLoanLimit(orderDO.getLoanLimit());
-        model.setOrderStatus(orderDO.getOrderStatus());
+        // model.setOrderStatus(orderDO.getOrderStatus());
         model.setLoanCity(processCity(orderDO.getLoanCity()));
         model.setOrderId(orderDO.getOrderId());
         model.setLoanDeadline(orderDO.getLoanDeadline());
         model.setLoanPurpose(orderDO.getLoanPurpose());
 
         if (isLogin) {
-
             model.setBorrowerPhoneNo(orderDO.getBorrowerPhoneNo());
-            model.setProcessResult(orderDO.getProcessResult());
-            model.setGrabTime(orderDO.getGrabTime().toString());
+            // model.setProcessResult(orderDO.getProcessResult());
+            //TODO 这里
+            model.setGrabTime(orderDO.getCreateTime().toString());
         }
 
         return model;
@@ -114,7 +118,9 @@ public class LoanUtil {
     }
 
     public static void intBorrowerInfoDesc(LoanOrderViewModel model, BorrowerDO borrowerDO) {
-
+        if (null == borrowerDO) {
+            return;
+        }
         /**
          * 职业＋收入＋房产＋社保
          */
@@ -166,13 +172,13 @@ public class LoanUtil {
         model.setSocialSecurityCity(object.getString("city"));
     }
 
-    private static String maskBorrowerPhone(OrderDO borrowerOrderDO) {
+    private static String maskBorrowerPhone(OrderDO orderDO) {
         //电话号码，取前三位，后面全取*
-        if (StringUtils.isBlank(borrowerOrderDO.getBorrowerPhoneNo())
-            || borrowerOrderDO.getBorrowerPhoneNo().length() < 4) {
-            return borrowerOrderDO.getBorrowerPhoneNo();
+        if (StringUtils.isBlank(orderDO.getBorrowerPhoneNo())
+            || orderDO.getBorrowerPhoneNo().length() < 4) {
+            return orderDO.getBorrowerPhoneNo();
         }
-        return borrowerOrderDO.getBorrowerPhoneNo().substring(0, 3) + "********";
+        return orderDO.getBorrowerPhoneNo().substring(0, 3) + "********";
     }
 
     private static String maskBorrowerName(BorrowerDO borrowerDO) {

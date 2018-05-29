@@ -1,6 +1,5 @@
 package com.platform.loan.template.processor;
 
-import com.platform.loan.constant.BorrowerOrderStatusEnum;
 import com.platform.loan.constant.LoanTypeEnum;
 import com.platform.loan.constant.ResultCodeEnum;
 import com.platform.loan.dao.BorrowerRepository;
@@ -17,6 +16,7 @@ import com.platform.loan.util.LoanUtil;
 import com.platform.loan.util.TimeUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -57,8 +57,12 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
 
     private boolean isRepeat(OrderRepository orderRepository, String phoneNo, String loanTypeCode) {
 
-        return null == orderRepository.findOrderDO(phoneNo, loanTypeCode,
-            BorrowerOrderStatusEnum.ENABLE_GRAB.getStatus()) ? false : true;
+        List<OrderDO> orders = orderRepository.findOrderDO(phoneNo, loanTypeCode);
+
+        if (orders != null && orders.size() > 0) {
+            return true;
+        }
+        return false;
     }
 
     private void saveWEI_LI_DAIBorrowerInfo(LoanApplyRequest request,
@@ -105,7 +109,6 @@ public class LoanApplyProcessor implements Processor<LoanApplyRequest, LoanApply
         borrowerOrderDO.setLoanPurpose(request.getLoanPurpose());
         borrowerOrderDO.setLoanType(request.getLoanType());
         borrowerOrderDO.setPrice(LoanUtil.getPrice(request, sysConfigRepository));
-        borrowerOrderDO.setOrderStatus(BorrowerOrderStatusEnum.ENABLE_GRAB.getStatus());
         borrowerOrderRepository.save(borrowerOrderDO);
     }
 

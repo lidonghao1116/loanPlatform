@@ -3,6 +3,7 @@
  */
 package com.platform.loan.pojo.modle;
 
+import com.platform.loan.constant.CommonConstants;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -20,7 +21,6 @@ public class OrderDO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer    id;
-
     private Timestamp  createTime;
     private Timestamp  modifyTime;
     private String     borrowerPhoneNo;
@@ -31,60 +31,46 @@ public class OrderDO implements Serializable {
     private String     loanCity;
     /** 该笔单子价格 */
     private BigDecimal price;
-    /**  待审核，待抢，已抢，取消，过期，完成，无效*/
-    private String     orderStatus;
     /** 类型，社保借款，公积金借款等 */
     private String     loanType;
-    /** 该单子被哪个信贷经理抢了的 */
-    private String     managerPhoneNo;
     /** 订单号 */
     private String     orderId;
-    /** 订单被抢时间 */
-    private Timestamp  grabTime;
-    /** 处理结果:已重新放款等 */
-    private String     processResult;
+    private Integer    residueGrabCount = CommonConstants.ORDER_MAX_GRAB_COUNT;
+
+    public Integer getResidueGrabCount() {
+        return residueGrabCount;
+    }
+
+    public void setResidueGrabCount(Integer residueGrabCount) {
+        this.residueGrabCount = residueGrabCount;
+    }
+
     /** json格式 */
     @Column(columnDefinition = "TEXT")
-    private String     extData;
+    private String extData;
 
-    public String getProcessResult() {
-        return processResult;
+    public Integer getId() {
+        return id;
     }
 
-    public void setProcessResult(String processResult) {
-        this.processResult = processResult;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getExtData() {
-        return extData;
+    public Timestamp getCreateTime() {
+        return createTime;
     }
 
-    public void setExtData(String extData) {
-        this.extData = extData;
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
     }
 
-    public Timestamp getGrabTime() {
-        return grabTime;
+    public Timestamp getModifyTime() {
+        return modifyTime;
     }
 
-    public void setGrabTime(Timestamp grabTime) {
-        this.grabTime = grabTime;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getManagerPhoneNo() {
-        return managerPhoneNo;
-    }
-
-    public void setManagerPhoneNo(String managerPhoneNo) {
-        this.managerPhoneNo = managerPhoneNo;
+    public void setModifyTime(Timestamp modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     public String getBorrowerPhoneNo() {
@@ -93,14 +79,6 @@ public class OrderDO implements Serializable {
 
     public void setBorrowerPhoneNo(String borrowerPhoneNo) {
         this.borrowerPhoneNo = borrowerPhoneNo;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getLoanLimit() {
@@ -143,14 +121,6 @@ public class OrderDO implements Serializable {
         this.price = price;
     }
 
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
     public String getLoanType() {
         return loanType;
     }
@@ -159,20 +129,20 @@ public class OrderDO implements Serializable {
         this.loanType = loanType;
     }
 
-    public Timestamp getCreateTime() {
-        return createTime;
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setCreateTime(Timestamp createTime) {
-        this.createTime = createTime;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
-    public Timestamp getModifyTime() {
-        return modifyTime;
+    public String getExtData() {
+        return extData;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setExtData(String extData) {
+        this.extData = extData;
     }
 
     @Override

@@ -3,18 +3,12 @@
  */
 package com.platform.loan.template.processor;
 
-import com.platform.loan.dao.BorrowerRepository;
-import com.platform.loan.dao.OrderRepository;
-import com.platform.loan.dao.ProvidentFundRepository;
-import com.platform.loan.dao.SocialSecurityRepository;
+import com.platform.loan.dao.*;
 import com.platform.loan.exception.LoanPlatformException;
 import com.platform.loan.jwt.JwtUtil;
 import com.platform.loan.pojo.LoanOrderViewModel;
 import com.platform.loan.pojo.LoginSession;
-import com.platform.loan.pojo.modle.BorrowerDO;
-import com.platform.loan.pojo.modle.OrderDO;
-import com.platform.loan.pojo.modle.ProvidentFundDO;
-import com.platform.loan.pojo.modle.SocialSecurityDO;
+import com.platform.loan.pojo.modle.*;
 import com.platform.loan.pojo.request.QueryLoginManagerOrderRequest;
 import com.platform.loan.pojo.result.QueryLoginManagerOrderResult;
 import com.platform.loan.template.Processor;
@@ -22,10 +16,7 @@ import com.platform.loan.util.LoanUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author caogu.wyp
@@ -44,86 +35,115 @@ public class QueryLoginManagerOrderProcessor
         BorrowerRepository borrowerRepository = (BorrowerRepository) others[2];
         ProvidentFundRepository providentFundRepository = (ProvidentFundRepository) others[3];
         SocialSecurityRepository socialSecurityRepository = (SocialSecurityRepository) others[4];
+        GrabRecordRepository grabRecordRepository = (GrabRecordRepository) others[5];
         LoginSession loginSession = JwtUtil.getLoginSession(httpServletRequest);
 
         List<OrderDO> orders = queryOrders(queryLoginManagerOrderRequest, orderRepository,
-            loginSession.getPhoneNo());
+            loginSession.getPhoneNo(), grabRecordRepository);
 
         List<LoanOrderViewModel> loanOrderViewModelList = getLoanOrderViewModels(
-            queryLoginManagerOrderRequest, borrowerRepository, providentFundRepository,
-            socialSecurityRepository, orders);
+            borrowerRepository, providentFundRepository, socialSecurityRepository, orders);
 
         queryLoginManagerOrderResult.setViewList(loanOrderViewModelList);
     }
 
     private List<OrderDO> queryOrders(QueryLoginManagerOrderRequest queryLoginManagerOrderRequest,
-                                      OrderRepository orderRepository, String phoneNo) {
+                                      OrderRepository orderRepository, String phoneNo,
+                                      GrabRecordRepository grabRecordRepository) {
 
         if (StringUtils.isNotBlank(queryLoginManagerOrderRequest.getOrderId())) {
 
-            OrderDO orderDO = orderRepository.findOrderDO(queryLoginManagerOrderRequest
-                .getOrderId());
+            //检查这笔订单，是否该用户抢过
+            checkSelfGrabOrder(queryLoginManagerOrderRequest, phoneNo, grabRecordRepository);
+
+            OrderDO orderDO = getOrderDO(queryLoginManagerOrderRequest, orderRepository);
+
             if (null == orderDO) {
                 return Collections.EMPTY_LIST;
-            }
-            if (!phoneNo.equals(orderDO.getManagerPhoneNo())) {
-                throw new LoanPlatformException("不允许查非自己的订单详情");
             }
 
             return Arrays.asList(orderDO);
 
-        } else {
-            return orderRepository.findOrderDOSByManagerPhoneNo(phoneNo);
         }
+
+        /**
+         * 1 先把自己所有的单子查出来
+         * 2 根据过滤条件，把不符合的状态过滤掉
+         * 3 剩下的去order库中查
+         */
+
+        List<GrabRecordDO> grabRecordDOs = grabRecordRepository.findGrabRecords(phoneNo);
+
+        if (null == grabRecordDOs) {
+            return Collections.emptyList();
+        }
+        //过滤掉不在查询条件中的记录
+        filterByCondition(queryLoginManagerOrderRequest, grabRecordDOs);
+
+        //从order库中查出
+        Set<String> conditions = new HashSet<>();
+        for (GrabRecordDO grabRecordDO : grabRecordDOs) {
+            conditions.add(grabRecordDO.getOrderId());
+        }
+
+        return orderRepository.findOrders(conditions);
 
     }
 
-    public static List<LoanOrderViewModel> getLoanOrderViewModels(QueryLoginManagerOrderRequest queryLoginManagerOrderRequest,
-                                                                  BorrowerRepository borrowerRepository,
+    private void filterByCondition(QueryLoginManagerOrderRequest queryLoginManagerOrderRequest,
+                                   List<GrabRecordDO> grabRecordDOs) {
+        Set<String> queryCondition = queryLoginManagerOrderRequest.getQueryCondition();
+        if (null != queryCondition && queryCondition.size() > 0) {
+            //需要过滤的状态
+            Iterator<GrabRecordDO> iterator = grabRecordDOs.iterator();
+            while (iterator.hasNext()) {
+                GrabRecordDO grabRecordDO = iterator.next();
+                if (!queryCondition.contains(grabRecordDO.getStatus())) {
+                    iterator.remove();
+                }
+            }
+
+        }
+    }
+
+    private OrderDO getOrderDO(QueryLoginManagerOrderRequest queryLoginManagerOrderRequest,
+                               OrderRepository orderRepository) {
+        OrderDO orderDO = orderRepository.findOrderDO(queryLoginManagerOrderRequest.getOrderId());
+
+        return orderDO;
+    }
+
+    private void checkSelfGrabOrder(QueryLoginManagerOrderRequest queryLoginManagerOrderRequest,
+                                    String phoneNo, GrabRecordRepository grabRecordRepository) {
+        GrabRecordDO grabRecordDO = grabRecordRepository.findGrabRecordDO(
+            queryLoginManagerOrderRequest.getOrderId(), phoneNo);
+
+        if (null == grabRecordDO) {
+            throw new LoanPlatformException("不允许查询自己未抢过的订单，orderId："
+                                            + queryLoginManagerOrderRequest.getOrderId());
+        }
+    }
+
+    public static List<LoanOrderViewModel> getLoanOrderViewModels(BorrowerRepository borrowerRepository,
                                                                   ProvidentFundRepository providentFundRepository,
                                                                   SocialSecurityRepository socialSecurityRepository,
                                                                   List<OrderDO> orderDOList) {
 
-        //根据条件过滤
         List<LoanOrderViewModel> loanOrderViewModelList = new ArrayList<>();
 
         if (null == orderDOList) {
             return loanOrderViewModelList;
         }
 
-        if (haveQueryCondition(queryLoginManagerOrderRequest)) {
+        for (OrderDO orderDO : orderDOList) {
 
-            for (OrderDO orderDO : orderDOList) {
+            LoanOrderViewModel loanOrderViewModel = getLoanOrderViewModel(borrowerRepository,
+                providentFundRepository, socialSecurityRepository, orderDO);
 
-                if (queryLoginManagerOrderRequest.getQueryCondition().contains(
-                    orderDO.getOrderStatus())) {
-
-                    LoanOrderViewModel loanOrderViewModel = getLoanOrderViewModel(
-                        borrowerRepository, providentFundRepository, socialSecurityRepository,
-                        orderDO);
-                    loanOrderViewModelList.add(loanOrderViewModel);
-                }
-            }
-
-        } else {
-
-            for (OrderDO orderDO : orderDOList) {
-
-                LoanOrderViewModel loanOrderViewModel = getLoanOrderViewModel(borrowerRepository,
-                    providentFundRepository, socialSecurityRepository, orderDO);
-
-                loanOrderViewModelList.add(loanOrderViewModel);
-            }
-
+            loanOrderViewModelList.add(loanOrderViewModel);
         }
 
         return loanOrderViewModelList;
-    }
-
-    private static boolean haveQueryCondition(QueryLoginManagerOrderRequest queryLoginManagerOrderRequest) {
-        // 判断是否有查询条件
-        return null != queryLoginManagerOrderRequest.getQueryCondition()
-               && queryLoginManagerOrderRequest.getQueryCondition().size() > 0;
     }
 
     private static LoanOrderViewModel getLoanOrderViewModel(BorrowerRepository borrowerRepository,

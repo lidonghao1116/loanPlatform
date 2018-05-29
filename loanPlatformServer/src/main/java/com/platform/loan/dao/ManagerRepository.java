@@ -13,6 +13,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ManagerRepository extends CrudRepository<CreditManagerDO, Integer> {
 
-    public CreditManagerDO findCreditManagerDOByPhoneNo(String phoneNo);
+    CreditManagerDO findCreditManagerDOByPhoneNo(String phoneNo);
 
 }

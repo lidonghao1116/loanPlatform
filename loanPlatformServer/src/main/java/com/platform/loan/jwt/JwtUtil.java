@@ -66,6 +66,24 @@ public class JwtUtil {
         return loginSession;
 
     }
+
+    public static LoginSession getLoginSession(String jwtToken) {
+
+        LoginSession loginSession = null;
+        try {
+            DecodedJWT jwt = verifyJwt(jwtToken);
+
+            loginSession = JSONObject.parseObject(jwt.getClaim(CommonConstants.CLAIM_LOGININFO_KEY)
+                .asString(), LoginSession.class);
+
+        } catch (Exception e) {
+            LoanLogUtil.getLogger(JwtUtil.class).warn("查询匿名订单时，尝试解析token失败", e);
+        }
+
+        return loginSession;
+
+    }
+
     //public static void main(String[] args) throws UnsupportedEncodingException,
     //                                      InterruptedException {
     //    LoginSession session = new LoginSession();
