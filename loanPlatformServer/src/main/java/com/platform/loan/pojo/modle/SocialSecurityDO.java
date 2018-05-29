@@ -23,6 +23,8 @@ public class SocialSecurityDO {
     /** 关联用户的手机号 */
     private String    phoneNo;
 
+    private String    socialMessageId;
+
     @Column(columnDefinition = "TEXT")
     private String    socialDetail;
 
@@ -31,6 +33,14 @@ public class SocialSecurityDO {
 
     @Column(columnDefinition = "TEXT")
     private String    extData;
+
+    public String getSocialMessageId() {
+        return socialMessageId;
+    }
+
+    public void setSocialMessageId(String socialMessageId) {
+        this.socialMessageId = socialMessageId;
+    }
 
     public String getSocialDetail() {
         return socialDetail;

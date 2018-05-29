@@ -58,11 +58,10 @@ public class LoanUtil {
             return model;
         }
         model.setBorrowerPhoneNo(maskBorrowerPhone(orderDO));
-        model.setApplyTime(orderDO.getCreateTime().toString());
+        model.setApplyTime(processApplyTime(orderDO));
         model.setPrice(orderDO.getPrice().toString());
         model.setLoanTypeDesc(LoanTypeEnum.getDescByName(orderDO.getLoanType()));
         model.setLoanLimit(orderDO.getLoanLimit());
-        // model.setOrderStatus(orderDO.getOrderStatus());
         model.setLoanCity(processCity(orderDO.getLoanCity()));
         model.setOrderId(orderDO.getOrderId());
         model.setLoanDeadline(orderDO.getLoanDeadline());
@@ -72,10 +71,15 @@ public class LoanUtil {
             model.setBorrowerPhoneNo(orderDO.getBorrowerPhoneNo());
             // model.setProcessResult(orderDO.getProcessResult());
             //TODO 这里
-            model.setGrabTime(orderDO.getCreateTime().toString());
+            model.setGrabTime(processApplyTime(orderDO));
         }
 
         return model;
+    }
+
+    private static String processApplyTime(OrderDO orderDO) {
+
+        return orderDO.getCreateTime().toString().split(" ")[0];
     }
 
     public static void initBorrowerInfo(LoanOrderViewModel model, BorrowerDO borrowerDO,
@@ -156,6 +160,10 @@ public class LoanUtil {
         }
         model.setProvidentFundTaskId(object.getString("task_id"));
         model.setProvidentFundCity(object.getString("city"));
+        if (LoanTypeEnum.PROVIDENT_FUND.getDesc().equals(model.getLoanTypeDesc())) {
+
+            model.setMessageId(providentFundDO.getFundMessageId());
+        }
     }
 
     public static void initSocialInfo(LoanOrderViewModel model, SocialSecurityDO socialSecurityDO) {
@@ -170,6 +178,10 @@ public class LoanUtil {
         }
         model.setSocialSecurityTaskId(object.getString("task_id"));
         model.setSocialSecurityCity(object.getString("city"));
+
+        if (LoanTypeEnum.SOCIAL_SECURITY.getDesc().equals(model.getLoanTypeDesc())) {
+            model.setMessageId(socialSecurityDO.getSocialMessageId());
+        }
     }
 
     private static String maskBorrowerPhone(OrderDO orderDO) {

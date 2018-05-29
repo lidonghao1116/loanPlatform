@@ -70,7 +70,7 @@ public class CallBackController {
     @RequestMapping(value = "/callback/providentfund/bill", method = RequestMethod.POST)
     public void providentFundBill(@RequestBody CallBackRequest callBackRequest,
                                   HttpServletResponse response) throws IOException {
-        //数据采集完成
+
         LoanLogUtil.getLogger(CallBackController.class).info("/callback/providentfund/bill",
             callBackRequest);
 
@@ -117,8 +117,18 @@ public class CallBackController {
     @RequestMapping(value = "/callback/providentfund/report", method = RequestMethod.POST)
     public BaseResult providentFundReport(@RequestBody CallBackRequest callBackRequest,
                                           HttpServletResponse response) {
-        //报告处理完成
-        System.out.println(callBackRequest);
+
+        LoanLogUtil.getLogger(CallBackController.class).info("/callback/providentfund/report",
+            callBackRequest);
+
+        ProvidentFundDO providentFundDO = providentFundRepository
+            .findProvidentFundDoByPhoneNo(callBackRequest.getUser_id());
+
+        if (null != providentFundDO) {
+            providentFundDO.setFundMessageId(callBackRequest.getMessage());
+            providentFundRepository.save(providentFundDO);
+        }
+
         response.setStatus(201);
         return new BaseResult();
     }
@@ -136,7 +146,7 @@ public class CallBackController {
     @RequestMapping(value = "/callback/socialsecurity/finish", method = RequestMethod.POST)
     public BaseResult socialSecurityFinish(@RequestBody CallBackRequest callBackRequest,
                                            HttpServletResponse response) {
-        //报告处理完成
+
         System.out.println(callBackRequest);
         response.setStatus(201);
         return new BaseResult();
@@ -194,8 +204,16 @@ public class CallBackController {
     @RequestMapping(value = "/callback/socialsecurity/report", method = RequestMethod.POST)
     public BaseResult socialSecurityReport(@RequestBody CallBackRequest callBackRequest,
                                            HttpServletResponse response) {
-        //报告处理完成
-        System.out.println(callBackRequest);
+        LoanLogUtil.getLogger(CallBackController.class).info("/callback/socialsecurity/report",
+            callBackRequest);
+
+        SocialSecurityDO socialSecurityDO = socialSecurityRepository
+            .findSocialSecurityDoByPhoneNo(callBackRequest.getUser_id());
+        if (null != socialSecurityDO) {
+            socialSecurityDO.setSocialMessageId(callBackRequest.getMessage());
+            socialSecurityRepository.save(socialSecurityDO);
+        }
+
         response.setStatus(201);
         return new BaseResult();
     }

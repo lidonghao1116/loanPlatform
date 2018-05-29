@@ -23,6 +23,8 @@ public class ProvidentFundDO {
     /** 关联用户的手机号 */
     private String    phoneNo;
 
+    private String    fundMessageId;
+
     /** 公积金详情 json格式 */
     @Column(columnDefinition = "TEXT")
     private String    fundDetail;
@@ -34,6 +36,14 @@ public class ProvidentFundDO {
     /** json格式,扩展字段 */
     @Column(columnDefinition = "TEXT")
     private String    extData;
+
+    public String getFundMessageId() {
+        return fundMessageId;
+    }
+
+    public void setFundMessageId(String fundMessageId) {
+        this.fundMessageId = fundMessageId;
+    }
 
     public String getFundReport() {
         return fundReport;

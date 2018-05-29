@@ -86,6 +86,10 @@ public class QueryLoginManagerOrderProcessor
             conditions.add(grabRecordDO.getOrderId());
         }
 
+        if (conditions.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        }
+
         return orderRepository.findOrders(conditions);
 
     }

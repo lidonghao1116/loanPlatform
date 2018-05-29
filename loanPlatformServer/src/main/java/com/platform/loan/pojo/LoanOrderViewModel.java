@@ -28,8 +28,6 @@ public class LoanOrderViewModel implements Serializable {
     private String houseInfo;
     private String carInfo;
     private String price;
-    /** BorrowerOrderStatusEnum */
-    private String orderStatus;
     private String loanTypeDesc;
     /** 公积金taskId,用于显示用户公积金信息 */
     private String providentFundTaskId;
@@ -50,8 +48,6 @@ public class LoanOrderViewModel implements Serializable {
 
     private String maskBorrowerIdNo;
 
-    private String processResult;
-
     private String notLoginIndexDesc;
 
     private String personalnsurance;
@@ -69,6 +65,16 @@ public class LoanOrderViewModel implements Serializable {
     private String providentFundCity;
 
     private String socialSecurityCity;
+
+    private String messageId;
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
 
     public String getProvidentFundCity() {
         return providentFundCity;
@@ -148,14 +154,6 @@ public class LoanOrderViewModel implements Serializable {
 
     public void setNotLoginIndexDesc(String notLoginIndexDesc) {
         this.notLoginIndexDesc = notLoginIndexDesc;
-    }
-
-    public String getProcessResult() {
-        return processResult;
-    }
-
-    public void setProcessResult(String processResult) {
-        this.processResult = processResult;
     }
 
     public String getBorrowerIdNo() {
@@ -327,14 +325,6 @@ public class LoanOrderViewModel implements Serializable {
 
     public void setPrice(String price) {
         this.price = price;
-    }
-
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
     }
 
     public String getLoanTypeDesc() {
